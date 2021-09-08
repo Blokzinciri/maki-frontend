@@ -44,10 +44,6 @@ export default function LimitUpdater() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokens, chainId, dispatch])
 
-  if((status === 'loading' || status === 'idle') && canGetOrders){
-    getOrders(false)
-  }
-
   useEffect(() => {
     if(account && status !== 'idle'){
       dispatch(limitRestart())
@@ -136,7 +132,7 @@ export default function LimitUpdater() {
       contract.on('0xc54564d8bb24f7208de85ab88c9e3373a39a2813ec2954267e5feee6c83d6344', handlerRemOrder)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, status, contract, dispatch])
+  }, [account, contract, dispatch, canGetOrders])
 
   useEffect(() => {
     if(gas && gas.prices){
