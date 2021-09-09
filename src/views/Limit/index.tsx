@@ -3,7 +3,7 @@ import { CurrencyAmount, JSBI, Token, Trade } from 'maki-sdk'
 import { useDispatch, useSelector } from 'react-redux'
 import { ArrowDown } from 'react-feather'
 import { CardBody, ArrowDownIcon, Button, IconButton, Text } from 'maki-uikit-v2'
-import { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import AddressInputPanel from 'components/AddressInputPanel'
 import Card, { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
@@ -19,16 +19,17 @@ import TradePrice from 'components/Swap/TradePrice'
 import TokenWarningModal from 'components/TokenWarningModal'
 import SyrupWarningModal from 'components/SyrupWarningModal'
 import ProgressSteps from 'components/ProgressSteps'
-
+import { useHusdPriceFromPid } from 'state/hooks'
 
 import { INITIAL_ALLOWED_SLIPPAGE } from 'config/constants'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrency, useTokenBySymbolOrName } from 'hooks/Tokens'
+import { useTradeExactIn } from 'hooks/Trades'
 import { ApprovalState, useApproveCallbackFromTrade } from 'hooks/useApproveCallback'
 import { useSwapCallback } from 'hooks/useSwapCallback'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { Field } from 'state/swap/actions'
-import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
+import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState, tryParseAmount } from 'state/swap/hooks'
 import { useExpertModeManager, useUserDeadline, useUserSlippageTolerance } from 'state/user/hooks'
 import { LinkStyledButton } from 'components/Shared'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
@@ -39,8 +40,6 @@ import PriceInput from 'components/PriceInput'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { cancelOrder, createOrder } from 'state/limit/'
 import { BigNumber } from 'ethers'
-import { useHusdPrices } from 'state/hooks'
-
 
 import { IToken } from 'state/limit/types/token.interface'
 import { AppState } from 'state'
@@ -48,13 +47,27 @@ import { remOrder, updateStatus } from 'state/limit/actions'
 import { useAddPopup } from 'state/application/hooks'
 import { PopupContent } from 'state/application/actions'
 import AppBody from 'components/AppBody'
+import defaultTokenJson from 'config/constants/token/makiswap.json'
 import TableOrders from './tables'
 import CancelOrderModal from './dialogs'
+
+const InputWrapper = styled.div`
+  position: relative;
+  & > p {
+    position: absolute;
+    top: 36px;
+    left: 1rem;
+    z-index: 2;
+  }
+`
 
 const Limit = () => {
   const loadedUrlParams = useDefaultsFromURLSearch()
   const dispatch = useDispatch()
   const [openCancelModal, setOpenCancelModal] = useState(false)
+  const makiPriceUsd = useHusdPriceFromPid(3)
+  const makiData = defaultTokenJson.tokens.filter(val => val.symbol === 'MAKI')[0]
+  const makiToken = new Token(makiData.chainId, makiData.address, makiData.decimals, makiData.symbol, makiData.name)
 
   // token warning stuff
   const [loadedInputCurrency, loadedOutputCurrency] = [
@@ -77,9 +90,6 @@ const Limit = () => {
     setSyrupTransactionType('')
   }, [])
 
-  const husdPrices = useHusdPrices()
-  console.log('bbb', husdPrices)
-  
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
@@ -311,6 +321,14 @@ const Limit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price1])
 
+  const parsedAmountInput = tryParseAmount('1', currencies[Field.INPUT])
+  const tradeInput = useTradeExactIn(parsedAmountInput, makiToken)
+  const parsedAmountOutPut = tryParseAmount('1', currencies[Field.OUTPUT])
+  const tradeOutput = useTradeExactIn(parsedAmountOutPut, makiToken)
+
+  const inputUSD = Number(makiPriceUsd) * (tradeInput ? Number(tradeInput.executionPrice.toSignificant()) : 0) * Number(formattedAmounts[Field.INPUT] ?? 0)
+  const outputUSD = Number(makiPriceUsd) * (tradeOutput ? Number(tradeOutput.executionPrice.toSignificant()) : 0) * Number(amount1)
+
   // const handleTypeOutput2 = useCallback(
   //   (value: string) => {
   //     const _outputAmount = Number.isNaN(Number(value)) ? 0 : Number(value)
@@ -386,17 +404,20 @@ const Limit = () => {
           <CardBody>
             <AutoColumn gap="md">
               <Text fontSize="14px">You Pay</Text>
-              <CurrencyInputPanel
-                label='Amount'
-                value={formattedAmounts[Field.INPUT]}
-                showMaxButton={!atMaxAmountInput}
-                currency={currencies[Field.INPUT]}
-                onUserInput={handleTypeInput}
-                onMax={handleMaxInput}
-                onCurrencySelect={handleInputSelect}
-                otherCurrency={currencies[Field.OUTPUT]}
-                id="swap-currency-input"
-              />
+              <InputWrapper>
+                <CurrencyInputPanel
+                  label='Amount'
+                  value={formattedAmounts[Field.INPUT]}
+                  showMaxButton={!atMaxAmountInput}
+                  currency={currencies[Field.INPUT]}
+                  onUserInput={handleTypeInput}
+                  onMax={handleMaxInput}
+                  onCurrencySelect={handleInputSelect}
+                  otherCurrency={currencies[Field.OUTPUT]}
+                  id="swap-currency-input"
+                />
+                <p>~${ inputUSD.toLocaleString() }</p>
+              </InputWrapper>
               <Text fontSize="14px">
                 {`${currencies[Field.INPUT]?.name?.toUpperCase()} Price`}
               </Text>
@@ -429,17 +450,19 @@ const Limit = () => {
                   ) : null}
                 </AutoRow>
               </AutoColumn>
-              <CurrencyInputPanel
-                value={Number(amount1 ?? 0).toString()}
-                onUserInput={handleTypeOutput}
-                label='You Receive'
-                showMaxButton={false}
-                currency={currencies[Field.OUTPUT]}
-                onCurrencySelect={handleOutputSelect}
-                otherCurrency={currencies[Field.INPUT]}
-                id="swap-currency-output"
-              />
-
+              <InputWrapper>
+                <CurrencyInputPanel
+                  value={Number(amount1 ?? 0).toString()}
+                  onUserInput={handleTypeOutput}
+                  label='You Receive'
+                  showMaxButton={false}
+                  currency={currencies[Field.OUTPUT]}
+                  onCurrencySelect={handleOutputSelect}
+                  otherCurrency={currencies[Field.INPUT]}
+                  id="swap-currency-output"
+                />
+                <p style={{ top: 33 }}>~${ outputUSD.toLocaleString() }</p>
+              </InputWrapper>
               {recipient !== null && !showWrap ? (
                 <>
                   <AutoRow justify="space-between" style={{ padding: '0 1rem' }}>

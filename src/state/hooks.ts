@@ -79,25 +79,6 @@ export const useFarms = (): FarmsState => {
   return farms
 }
 
-export const useHusdPrices = () => {
-  const allTokens: any[] = Object.values(useAllTokens())
-  const tokens = allTokens.concat(HUOBI)
-  const farms = useSelector((state: State) => state.farms.data)
-  const prices = tokens.map(token => {
-    const filteredFarms = farms.filter(farm => farm.token.symbol === token.symbol)
-    const filteredFarm = filterFarmsByQuoteToken(filteredFarms)
-    let price;
-    if (filteredFarm) {
-      const farmfromPID = farms.find(farm => farm.pid === filteredFarm.pid)
-      price = farmfromPID.token.husdPrice
-    } else {
-      price = -1
-    }
-    return price
-  })
-  return prices
-}
-
 export const useFarmFromPid = (pid): Farm => {
   const farm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid))
   return farm
