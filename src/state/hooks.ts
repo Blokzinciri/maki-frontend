@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import { HUOBI } from 'maki-sdk'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -11,6 +12,7 @@ import web3NoAccount from 'utils/web3'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
+import { useAllTokens } from 'hooks/Tokens'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import {
   fetchFarmsPublicDataAsync,
@@ -75,6 +77,25 @@ export const usePollBlockNumber = () => {
 export const useFarms = (): FarmsState => {
   const farms = useSelector((state: State) => state.farms)
   return farms
+}
+
+export const useHusdPrices = () => {
+  const allTokens: any[] = Object.values(useAllTokens())
+  const tokens = allTokens.concat(HUOBI)
+  const farms = useSelector((state: State) => state.farms.data)
+  const prices = tokens.map(token => {
+    const filteredFarms = farms.filter(farm => farm.token.symbol === token.symbol)
+    const filteredFarm = filterFarmsByQuoteToken(filteredFarms)
+    let price;
+    if (filteredFarm) {
+      const farmfromPID = farms.find(farm => farm.pid === filteredFarm.pid)
+      price = farmfromPID.token.husdPrice
+    } else {
+      price = -1
+    }
+    return price
+  })
+  return prices
 }
 
 export const useFarmFromPid = (pid): Farm => {

@@ -39,6 +39,7 @@ import PriceInput from 'components/PriceInput'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { cancelOrder, createOrder } from 'state/limit/'
 import { BigNumber } from 'ethers'
+import { useHusdPrices } from 'state/hooks'
 
 
 import { IToken } from 'state/limit/types/token.interface'
@@ -76,6 +77,9 @@ const Limit = () => {
     setSyrupTransactionType('')
   }, [])
 
+  const husdPrices = useHusdPrices()
+  console.log('bbb', husdPrices)
+  
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
