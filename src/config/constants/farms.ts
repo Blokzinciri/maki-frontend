@@ -443,8 +443,8 @@ const farms: FarmConfig[] = [
       256: '',
       128: '0xb5D65D8Af937ee8037Deb996BD57b96b37C60cf8'
     },
-    token: tokens.husd,
-    quoteToken: tokens.tusd
+    token: tokens.tusd,
+    quoteToken: tokens.husd
   },
   {
     pid: 44,
@@ -453,8 +453,8 @@ const farms: FarmConfig[] = [
       256: '',
       128: '0x4A0246C791fAd59AD071de53CE591Cdf396A1560'
     },
-    token: tokens.husd,
-    quoteToken: tokens.dai
+    token: tokens.dai,
+    quoteToken: tokens.husd
   }
 ]
 
