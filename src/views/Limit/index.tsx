@@ -160,6 +160,7 @@ const Limit = () => {
       : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
+  const [price1, setPrice1] = useState('')
   const [amount1, setAmount1] = useState(0)
 
   const route = trade?.route
@@ -291,11 +292,20 @@ const Limit = () => {
     [onCurrencySelection, checkForSyrup]
   )
   useEffect(() => {
-    const _outputAmount = Number(formattedAmounts[Field.OUTPUT] ?? 0)
     const _inputAmount = Number(formattedAmounts[Field.INPUT] ?? 0)
-    setAmount1(_inputAmount * _outputAmount)
-  }, [formattedAmounts])
+    const _outputAmount = Number(formattedAmounts[Field.OUTPUT] ?? 0)
+    if (_inputAmount > 0) {
+      setPrice1((_outputAmount / _inputAmount).toString())
+    }
+    setAmount1(_outputAmount)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formattedAmounts[Field.INPUT], formattedAmounts[Field.OUTPUT]])
 
+  useEffect(() => {
+    const _inputAmount = Number(formattedAmounts[Field.INPUT] ?? 0)
+    setAmount1(Number(price1) * _inputAmount)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [price1])
 
   // const handleTypeOutput2 = useCallback(
   //   (value: string) => {
@@ -389,8 +399,8 @@ const Limit = () => {
               <PriceInput
                 // label={`${currencies[Field.INPUT]?.name} Price`}
                 id='price-input'
-                value={formattedAmounts[Field.OUTPUT]}
-                onChange={handleTypeOutput}
+                value={price1}
+                onChange={(value) => { setPrice1( value) }}
                 currency={currencies[Field.OUTPUT]}
               />
               <AutoColumn justify="space-between">
@@ -523,7 +533,7 @@ const Limit = () => {
                           _token0,
                           _token1,
                           Number(formattedAmounts[Field.INPUT] ?? '0'),
-                          Number(formattedAmounts[Field.OUTPUT] ?? '0'),
+                          amount1,
                           gasPrice,
                           BigNumber.from(feeStake),
                           BigNumber.from(feeExecutor),
