@@ -435,6 +435,26 @@ const farms: FarmConfig[] = [
     },
     token: tokens.ptd,
     quoteToken: tokens.wht
+  },
+  {
+    pid: 43,
+    lpSymbol: 'TUSD-HUSD',
+    lpAddresses: {
+      256: '',
+      128: '0xb5D65D8Af937ee8037Deb996BD57b96b37C60cf8'
+    },
+    token: tokens.tusd,
+    quoteToken: tokens.husd
+  },
+  {
+    pid: 44,
+    lpSymbol: 'DAI-HUSD',
+    lpAddresses: {
+      256: '',
+      128: '0x4A0246C791fAd59AD071de53CE591Cdf396A1560'
+    },
+    token: tokens.dai,
+    quoteToken: tokens.husd
   }
 ]
 
