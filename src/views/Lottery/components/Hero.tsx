@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { Box, Text, Flex, Heading, Skeleton, Button, LinkExternal } from 'maki-uikit-v2'
+import { Box, Text, Flex, Heading, Skeleton, Button, useModal } from 'maki-uikit-v2'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceMakiHusd } from 'state/hooks'
@@ -8,6 +8,7 @@ import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
 import BuyTicketsButton from './BuyTicketsButton'
+import SOYBridgeModal from './SOYBridgeModal'
 
 const mainTicketAnimation = keyframes`
   from {
@@ -78,6 +79,7 @@ const Hero = () => {
   const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
   const prizeTotal = getBalanceNumber(prizeInBusd)
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
+  const [onPresentBridgeModal] = useModal(<SOYBridgeModal />)
 
   const getHeroHeading = () => {
     if (status === LotteryStatus.OPEN) {
@@ -94,7 +96,7 @@ const Hero = () => {
           <Text color='white' fontSize="20px" maxWidth='680px' mx='32px' mb='12px' textAlign='center'>
             {t('In order to participate in the MakiSwap lottery you need to bridge your SOY tokens from HECO Chain to Polygon Network (MATIC) to begin playing.')}
           </Text>
-          <a href='https://anyswap.exchange/bridge' target='_blank' rel='noreferrer'><BridgeButton>Bridge</BridgeButton></a>
+          <BridgeButton onClick={onPresentBridgeModal}>Bridge</BridgeButton>
         </>
       )
     }
