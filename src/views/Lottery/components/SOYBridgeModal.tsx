@@ -1,14 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { Token } from 'maki-sdk'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import useWeb3 from 'hooks/useWeb3'
-import { Modal, Text, Flex, Box, Button, Input } from 'maki-uikit-v2'
+import BigNumber from 'bignumber.js'
+import { useTokenBalanceNew } from 'hooks/useTokenBalance'
+import { formatNumber, getFullDisplayBalance, getBalanceNumber } from 'utils/formatBalance'
+import { Modal, Text, Flex, Box, Button, BalanceInput } from 'maki-uikit-v2'
 import { useTranslation } from 'contexts/Localization'
+import { usePriceMakiHusd } from 'state/hooks'
+import defaultTokenJson from 'config/constants/token/makiswap.json'
 
-const StyledInput = styled(Input)`
-  border-radius: 16px;
-  margin-left: auto;
-`
 const InputWrapper = styled.div`
   position: relative;
   margin-top: 16px;
@@ -25,9 +27,17 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
   const { account } = useWeb3React()
   const web3 = useWeb3()
   const [bridgeAmount, setBridgeAmount] = useState('')
+  const soyData = defaultTokenJson.tokens.filter(val => val.symbol === 'SOY')[0]
+  const { balance: soyBalance, fetchStatus } = useTokenBalanceNew(soyData.address)
+  const userSOYDisplayBalance = getFullDisplayBalance(soyBalance, 18, 3)
+
   const isEligible = useMemo(() => {
     return !Number.isNaN(bridgeAmount) && Number(bridgeAmount) >= 50
   }, [bridgeAmount])
+
+  const makiPriceHusd = usePriceMakiHusd()
+  const usdValueBridge =
+    makiPriceHusd.gt(0) && bridgeAmount ? formatNumber(new BigNumber(bridgeAmount).times(makiPriceHusd).toNumber()) : ''
 
   const error = useMemo(() => {
     if (Number.isNaN(bridgeAmount) || Number(bridgeAmount) < 50) {
@@ -36,8 +46,8 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
     return ''
   }, [bridgeAmount])
 
-  const handleInputChange = (evt: any) => {
-    setBridgeAmount(evt.target.value)
+  const handleBridgeAmount = (input: string) => {
+    setBridgeAmount(input)
   }
 
   const bridgeSOYHecoToPolygon = () => {
@@ -52,11 +62,20 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
             {t('Bridge SOY from HECO to Polygon mainnet')}
           </Text>
           <InputWrapper>
-            <StyledInput
-              scale="lg"
+            {
+              fetchStatus === 'success' &&
+                <Flex justifyContent='space-between' alignItems='center' mb='8px'>
+                  <Text fontSize='14px'>Balance: {userSOYDisplayBalance}</Text>
+                  <Button scale="xs" mx="2px" p="4px 16px" variant="tertiary" onClick={() => setBridgeAmount(getBalanceNumber(soyBalance, soyData.decimals).toString())}>
+                    {t('Max')}
+                  </Button>
+                </Flex>
+            }
+            <BalanceInput
               value={bridgeAmount}
-              placeholder="0"
-              onChange={handleInputChange}
+              onUserInput={handleBridgeAmount}
+              currencyValue={makiPriceHusd.gt(0) && `~${usdValueBridge || 0} USD`}
+              decimals={soyData.decimals}
             />
           </InputWrapper>
           <Flex justifyContent='space-between' alignItems='center' mt='8px'>

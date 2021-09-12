@@ -50,6 +50,38 @@ const useTokenBalance = (tokenAddress: string) => {
   return balanceState
 }
 
+export const useTokenBalanceNew = (tokenAddress: string) => {
+  const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
+  const [balanceState, setBalanceState] = useState<UseTokenBalanceState>({
+    balance: BIG_ZERO,
+    fetchStatus: NOT_FETCHED,
+  })
+  const { account } = useWeb3React()
+  const { fastRefresh } = useRefresh()
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const contract = getHrc20Contract(tokenAddress)
+      try {
+        const res = await contract.balanceOf(account)
+        setBalanceState({ balance: new BigNumber(res.toString()), fetchStatus: SUCCESS })
+      } catch (e) {
+        console.error(e)
+        setBalanceState((prev) => ({
+          ...prev,
+          fetchStatus: FAILED,
+        }))
+      }
+    }
+
+    if (account) {
+      fetchBalance()
+    }
+  }, [account, tokenAddress, fastRefresh, SUCCESS, FAILED])
+
+  return balanceState
+}
+
 export const useCakeBalanceMatic = () => {
   const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
   const [cakeBalanceState, setCakeBalanceState] = useState<any>({
