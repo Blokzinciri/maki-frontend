@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react'
-import { Token } from 'maki-sdk'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import useWeb3 from 'hooks/useWeb3'
@@ -51,7 +50,11 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
   }
 
   const bridgeSOYHecoToPolygon = () => {
-    console.log('bbb')
+    fetch('https://bridgeapi.anyswap.exchange/v2/serverinfo/137')
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.soyv5)
+      })
   }
 
   return (

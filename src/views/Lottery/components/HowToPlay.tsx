@@ -349,7 +349,7 @@ const HowToPlay: React.FC = () => {
           </Heading>
           <Text>
             {t('Check our in-depth guide on')}{' '}
-            <InlineLink href="#">
+            <InlineLink href="https://docs.makiswap.com/jiro-ono/exchange/lottery-guide" target='_blank'>
               {t('how to play the MakiSwap lottery!')}
             </InlineLink>
           </Text>
