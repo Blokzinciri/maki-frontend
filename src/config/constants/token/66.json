@@ -1,0 +1,205 @@
+{
+  "name": "makiswap",
+  "timestamp": "2021-09-02T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 1,
+    "patch": 0
+  },
+  "logoURI": "https://raw.githubusercontent.com/makiswap-protocol/heco-token-list/main/src/tokens/maki.png",
+  "keywords": ["makiswap", "maki", "huobi", "heco", "hrc20", "default", "token", "list"],
+  "tokens": [
+    {
+      "address": "0x97513e975a7fA9072c72C92d8000B0dB90b163c5",
+      "chainId": 66,
+      "decimals": 9,
+      "logoURI": "/icons/66/0x97513e975a7fA9072c72C92d8000B0dB90b163c5.png",
+      "name": "babydoge",
+      "symbol": "BabyDoge"
+    },
+    {
+      "address": "0x5cE01aa1528A6A0C8EDEcC4cEe909F0a24CF54de",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x5cE01aa1528A6A0C8EDEcC4cEe909F0a24CF54de.png",
+      "name": "boring",
+      "symbol": "BORING"
+    },
+    {
+      "address": "0x54e4622DC504176b3BB432dCCAf504569699a7fF",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x54e4622DC504176b3BB432dCCAf504569699a7fF.png",
+      "name": "btck",
+      "symbol": "BTCK"
+    },
+    {
+      "address": "0xFcd4d15f09548cd90EfcAF0B1d9531BBa670B7B1",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xFcd4d15f09548cd90EfcAF0B1d9531BBa670B7B1.png",
+      "name": "cfxk",
+      "symbol": "CFXK"
+    },
+    {
+      "address": "0xabc732f6f69a519F6d508434481376B6221eb7d5",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xabc732f6f69a519F6d508434481376B6221eb7d5.png",
+      "name": "dotk",
+      "symbol": "DOTK"
+    },
+    {
+      "address": "0xEF71CA2EE68F45B9Ad6F72fbdb33d707b872315C",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xEF71CA2EE68F45B9Ad6F72fbdb33d707b872315C.png",
+      "name": "ethk",
+      "symbol": "ETHK"
+    },
+    {
+      "address": "0x3F8969Be2FC0770dCc174968e4B4ff146E0ACDaF",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x3F8969Be2FC0770dCc174968e4B4ff146E0ACDaF.png",
+      "name": "filk",
+      "symbol": "FILK"
+    },
+    {
+      "address": "0x8D3573f24c0aa3819A2f5b02b2985dD82B487715",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x8D3573f24c0aa3819A2f5b02b2985dD82B487715.png",
+      "name": "fin",
+      "symbol": "FIN"
+    },
+    {
+      "address": "0xd0C6821aba4FCC65e8f1542589e64BAe9dE11228",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xd0C6821aba4FCC65e8f1542589e64BAe9dE11228.png",
+      "name": "flux",
+      "symbol": "FLUX"
+    },
+    {
+      "address": "0x39071D9E7a52e8685F1385d6fA17babfc58ce9C3",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x39071D9E7a52e8685F1385d6fA17babfc58ce9C3.png",
+      "name": "klt",
+      "symbol": "KLT"
+    },
+    {
+      "address": "0xab0d1578216A545532882e420A8C61Ea07B00B12",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xab0d1578216A545532882e420A8C61Ea07B00B12.png",
+      "name": "kst",
+      "symbol": "KST"
+    },
+    {
+      "address": "0xfA520efC34C81bfC1E3DD48b7fE9fF326049f986",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xfA520efC34C81bfC1E3DD48b7fE9fF326049f986.png",
+      "name": "ltck",
+      "symbol": "LTCK"
+    },
+    {
+      "address": "0x8CD6e29d3686d24d3C2018CEe54621eA0f89313B",
+      "chainId": 66,
+      "decimals": 8,
+      "logoURI": "/icons/66/0x8CD6e29d3686d24d3C2018CEe54621eA0f89313B.png",
+      "name": "nuls",
+      "symbol": "NULS"
+    },
+    {
+      "address": "0xdF54B6c6195EA4d948D03bfD818D365cf175cFC2",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xdF54B6c6195EA4d948D03bfD818D365cf175cFC2.png",
+      "name": "okb",
+      "symbol": "OKB"
+    },
+    {
+      "address": "0x79B627bC95fa5B36ecA53eB39c3cdf43AaFDD10f",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x79B627bC95fa5B36ecA53eB39c3cdf43AaFDD10f.png",
+      "name": "org",
+      "symbol": "ORG"
+    },
+    {
+      "address": "0x311aEA58Ca127B955890647413846E351df32554",
+      "chainId": 66,
+      "decimals": 8,
+      "logoURI": "/icons/66/0x311aEA58Ca127B955890647413846E351df32554.png",
+      "name": "pdaik",
+      "symbol": "pDAIK"
+    },
+    {
+      "address": "0x82Ce2bF9729d92D5B6aa34031B1C7c68CE0adab9",
+      "chainId": 66,
+      "decimals": 8,
+      "logoURI": "/icons/66/0x82Ce2bF9729d92D5B6aa34031B1C7c68CE0adab9.png",
+      "name": "pgo",
+      "symbol": "PGO"
+    },
+    {
+      "address": "0x20415e2D1FEF61026A18D3324747BBd205c8608c",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x20415e2D1FEF61026A18D3324747BBd205c8608c.png",
+      "name": "spx",
+      "symbol": "SPX"
+    },
+    {
+      "address": "0x0a3c69b510eA47624eE4D4C5b630ae06cd33eB73",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x0a3c69b510eA47624eE4D4C5b630ae06cd33eB73.png",
+      "name": "sxc",
+      "symbol": "SXC"
+    },
+    {
+      "address": "0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85.png",
+      "name": "usdc",
+      "symbol": "USDC"
+    },
+    {
+      "address": "0xdCAC52E001f5bd413aa6ea83956438F29098166b",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0xdCAC52E001f5bd413aa6ea83956438F29098166b.png",
+      "name": "usdk",
+      "symbol": "USDK"
+    },
+    {
+      "address": "0x382bB369d343125BfB2117af9c149795C6C65C50",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x382bB369d343125BfB2117af9c149795C6C65C50.png",
+      "name": "usdt",
+      "symbol": "USDT"
+    },
+    {
+      "address": "0x7A47ab305b8a2A3F4020d13FA9EF73cDdCc0e7D4",
+      "chainId": 66,
+      "decimals": 9,
+      "logoURI": "/icons/66/0x7A47ab305b8a2A3F4020d13FA9EF73cDdCc0e7D4.png",
+      "name": "wing",
+      "symbol": "WING"
+    },
+    {
+      "address": "0x8F8526dbfd6E38E3D8307702cA8469Bae6C56C15",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "/icons/66/0x8F8526dbfd6E38E3D8307702cA8469Bae6C56C15.png",
+      "name": "wokt",
+      "symbol": "WOKT"
+    }
+  ]
+}

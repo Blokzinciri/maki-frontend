@@ -16,6 +16,7 @@ import { filterTokens, useSortedTokensByQuery } from './filtering'
 import useTokenComparator from './sorting'
 
 import ImportRow from './ImportRow'
+import ChainSelector from './ChainSelector'
 
 interface CurrencySearchProps {
   selectedCurrency?: Currency | null
@@ -46,8 +47,9 @@ function CurrencySearch({
   const debouncedQuery = useDebounce(searchQuery, 200)
 
   const [invertSearchOrder] = useState<boolean>(false)
+  const [selectedChain, setSelectedChain] = useState('128')
 
-  const allTokens = useAllTokens()
+  const allTokens = useAllTokens(selectedChain)
 
   // if they input an address, use it
   const searchToken = useToken(debouncedQuery)
@@ -118,6 +120,9 @@ function CurrencySearch({
     <>
       <div>
         <AutoColumn gap="16px">
+          <Row>
+            <ChainSelector selectedChainId={selectedChain} handleChangeChain={setSelectedChain} />
+          </Row>
           <Row>
             <Input
               id="token-search-input"

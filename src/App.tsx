@@ -13,6 +13,7 @@ import history from './routerHistory'
 // import EasterEgg from './components/EasterEgg'
 import Pools from './views/Pools'
 import Swap from './views/Swap'
+import Bridge from './views/Bridge'
 import { RedirectDuplicateTokenIds, RedirectOldAddLiquidityPathStructure } from './views/AddLiquidity/redirects'
 import { RedirectOldRemoveLiquidityPathStructure } from './views/RemoveLiquidity/redirects'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
@@ -97,6 +98,7 @@ const App: React.FC = () => {
             <Route exact strict path="/pool" component={Liquidity} />
             <Route exact path="/add" component={AddLiquidity} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+            <Route exact strict path="/bridge" component={Bridge} />
 
             {/* Redirection: These old routes are still used in the code base */}
             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />

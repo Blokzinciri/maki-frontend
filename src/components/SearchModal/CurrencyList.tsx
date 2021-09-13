@@ -68,9 +68,9 @@ function CurrencyRow({
   otherSelected: boolean
   style: CSSProperties
 }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const key = currencyKey(currency)
-  const selectedTokenList = useCombinedActiveList()
+  const selectedTokenList = useCombinedActiveList(chainId)
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
@@ -177,16 +177,7 @@ export default function CurrencyList({
         />
       )
     },
-    [
-      chainId,
-      onCurrencySelect,
-      otherCurrency,
-      selectedCurrency,
-      setImportToken,
-      showImportView,
-      breakIndex,
-      t,
-    ],
+    [chainId, onCurrencySelect, otherCurrency, selectedCurrency, setImportToken, showImportView, breakIndex, t],
   )
 
   const itemKey = useCallback((index: number, data: any) => currencyKey(data[index]), [])

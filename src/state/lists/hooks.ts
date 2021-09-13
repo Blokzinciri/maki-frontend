@@ -5,6 +5,19 @@ import { useSelector } from 'react-redux'
 import { DEFAULT_LIST_OF_LISTS, UNSUPPORTED_LIST_URLS, UNSUPPORTED_TOKEN_LIST } from 'config/constants/lists'
 import { AppState } from 'state'
 import DEFAULT_TOKEN_LIST from 'config/constants/token/makiswap.json'
+import ETH_TOKEN_LIST from 'config/constants/token/1.json'
+import BNB_TOKEN_LIST from 'config/constants/token/56.json'
+import OKT_TOKEN_LIST from 'config/constants/token/66.json'
+import HUOBI_TOKEN_LIST from 'config/constants/token/128.json'
+import POLYGON_TOKEN_LIST from 'config/constants/token/137.json'
+
+const TOKENS = {
+  1: ETH_TOKEN_LIST,
+  56: BNB_TOKEN_LIST,
+  66: OKT_TOKEN_LIST,
+  128: HUOBI_TOKEN_LIST,
+  137: POLYGON_TOKEN_LIST,
+}
 
 type TagDetails = Tags[keyof Tags]
 export interface TagInfo extends TagDetails {
@@ -41,9 +54,9 @@ export class WrappedTokenInfo extends Token {
   }
 }
 
-export type TokenAddressMap = Readonly<
-  { [chainId in ChainId]: Readonly<{ [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList } }> }
->
+export type TokenAddressMap = Readonly<{
+  [chainId: string]: Readonly<{ [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList } }>
+}>
 
 /**
  * An empty result, useful as a default.
@@ -57,6 +70,10 @@ const listCache: WeakMap<TokenList, TokenAddressMap> | null =
   typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, TokenAddressMap>() : null
 
 export function listToTokenMap(list: TokenList): TokenAddressMap {
+  const LIST = {
+    [String(list.tokens[0].chainId)]: {},
+  }
+
   const result = listCache?.get(list)
   if (result) return result
 
@@ -69,6 +86,7 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
             return { ...list.tags[tagId], id: tagId }
           })
           ?.filter((x): x is TagInfo => Boolean(x)) ?? []
+      console.log('ggggggggggggggg', tokenInfo)
       const token = new WrappedTokenInfo(tokenInfo, tags)
       if (tokenMap[token.chainId][token.address] !== undefined) throw Error('Duplicate tokens.')
       return {
@@ -82,7 +100,7 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
         },
       }
     },
-    { ...EMPTY_LIST },
+    { ...LIST },
   )
   listCache?.set(list, map)
   return map
@@ -147,10 +165,11 @@ export function useInactiveListUrls(): string[] {
 }
 
 // get all the tokens from active lists, combine with local default tokens
-export function useCombinedActiveList(): TokenAddressMap {
+export function useCombinedActiveList(chainId): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  const defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST)
+  const defaultTokenMap = useDefaultTokenList(chainId)
+
   return combineMaps(activeTokens, defaultTokenMap)
 }
 
@@ -161,8 +180,8 @@ export function useCombinedInactiveList(): TokenAddressMap {
 }
 
 // used to hide warnings on import for default tokens
-export function useDefaultTokenList(): TokenAddressMap {
-  return listToTokenMap(DEFAULT_TOKEN_LIST)
+export function useDefaultTokenList(chainId): TokenAddressMap {
+  return listToTokenMap(TOKENS[String(chainId)])
 }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds
@@ -183,7 +202,7 @@ export function useIsListActive(url: string): boolean {
 }
 
 export function useTokenList(url: string | undefined): TokenAddressMap {
-  const lists = useSelector<AppState, AppState['lists']['byUrl']>(state => state.lists.byUrl)
+  const lists = useSelector<AppState, AppState['lists']['byUrl']>((state) => state.lists.byUrl)
   return useMemo(() => {
     if (!url) return EMPTY_LIST
     const current = lists[url]?.current
@@ -198,7 +217,7 @@ export function useTokenList(url: string | undefined): TokenAddressMap {
 }
 
 export function useSelectedListUrl(): string | undefined {
-  return useSelector<AppState, AppState['lists']['selectedListUrl']>(state => state.lists.selectedListUrl)
+  return useSelector<AppState, AppState['lists']['selectedListUrl']>((state) => state.lists.selectedListUrl)
 }
 
 export function useSelectedTokenList(): TokenAddressMap {
