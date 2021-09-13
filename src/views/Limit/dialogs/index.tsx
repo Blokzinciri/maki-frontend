@@ -29,12 +29,12 @@ export default function CancelOrderModal({ onDismiss, onConfirm, isOpen }: Cance
       <Wrapper>
         <StyledModalHeader>
           <ContentHeader onDismiss={defaultOnDismiss}>
-            Recent Transaction
+            Cancel Order
           </ContentHeader>
         </StyledModalHeader>
         <Section>
           <Flex justifyContent="center" flexDirection="column" alignItems="center">
-            <Text bold marginBottom={20}>Would you like to cancel yout order?</Text>
+            <Text bold marginBottom={20}>Would you like to cancel your order?</Text>
             <AutoRow justify="center">
               <Button marginX={20} onClick={($e) => {
                 $e.preventDefault()
