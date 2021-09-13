@@ -57,7 +57,7 @@ export default function ({ modalAction }: TableLimitOrderProp) {
           return activeIndex === 0 ? (order.state === EOrderState.CREATED || order.state === EOrderState.FINISHED) :
             order.state === EOrderState.CANCELLED
         })
-        .map(order => {
+        .map((order) => {
           return {
             id: order.id,
             type: EOrderType[order.type === EOrderType.BUY ? order.type : EOrderType.SELL],
@@ -98,13 +98,14 @@ export default function ({ modalAction }: TableLimitOrderProp) {
                 Header: 'Amount',
                 accessor: 'mount',
                 Cell: ({ value, row }) => {
-                  const { index } = row
+                  const orderId = row.original.id
+                  const bOrder = orders.find(item => item.id === orderId)
                   return (
                     <p>
                       {value}
-                      {orders[index] && (
+                      {bOrder && (
                         <span style={{ marginLeft: 5 }}>
-                          {orders[index]?.tokenOut?.symbol}
+                          {bOrder?.tokenOut?.symbol}
                         </span>
                       )}
                     </p>
@@ -114,13 +115,14 @@ export default function ({ modalAction }: TableLimitOrderProp) {
                 Header: 'Price',
                 accessor: 'price',
                 Cell: ({ value, row }) => {
-                  const { index } = row
+                  const orderId = row.original.id
+                  const bOrder = orders.find(item => item.id === orderId)
                   return (
                     <p>
                       {value}
-                      {orders[index] && (
+                      {bOrder && (
                         <span style={{ marginLeft: 5 }}>
-                          {orders[index]?.tokenIn?.symbol}
+                          {bOrder?.tokenIn?.symbol}
                         </span>
                       )}
                     </p>
