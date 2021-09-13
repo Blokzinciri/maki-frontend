@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SwitchTransition, CSSTransition } from "react-transition-group";
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components';
-import { Text } from 'maki-uikit-v2'
+import { Button } from 'maki-uikit-v2'
 import { darken } from 'polished'
 
 import { DisableCard } from 'components/Card'
@@ -19,23 +19,18 @@ import { limitSelectOrder } from 'state/limit/actions';
 
 const activeClassName = 'ACTIVE'
 
-const CancelButton = styled.button`
+const CancelButton = styled(Button)`
   outline: none;
   cursor: pointer;
   text-decoration: none;
-  color: ${({ theme }) => theme.colors.textDisabled};
   font-size: 16px;
   border: none;
-  background-color: inherit;
+  padding: 8px 12px;
+  height: 32px;
 
   &.${activeClassName} {
     font-weight: 500;
     color: ${({ theme }) => theme.colors.text};
-  }
-
-  :hover,
-  :focus {
-    color: ${({ theme }) => darken(0.1, theme.colors.text)};
   }
 `
 
@@ -62,8 +57,9 @@ export default function ({ modalAction }: TableLimitOrderProp) {
             id: order.id,
             type: EOrderType[order.type === EOrderType.BUY ? order.type : EOrderType.SELL],
             pair: `${order.tokenOut.symbol} / ${order.tokenIn.symbol}`,
-            mount: order.tokenOutAmount.toFixed(8),
-            price: order.price.toFixed(10),
+            ramount: order.tokenOutAmount.toFixed(8),
+            price: order.price.toFixed(8),
+            pamount: order.tokenInAmount.toFixed(8),
             // transaction: shortenAddress(order.trader),
             // eslint-disable-next-line eqeqeq
             actions: order.status.toString() != EOrderStatus.PROCESSING.toString() && order.state != EOrderState.CANCELLED && order.state != EOrderState.FINISHED
@@ -95,8 +91,8 @@ export default function ({ modalAction }: TableLimitOrderProp) {
                 accessor: 'pair'
               },
               {
-                Header: 'Amount',
-                accessor: 'mount',
+                Header: 'Receive Amount',
+                accessor: 'ramount',
                 Cell: ({ value, row }) => {
                   const orderId = row.original.id
                   const bOrder = orders.find(item => item.id === orderId)
@@ -114,6 +110,23 @@ export default function ({ modalAction }: TableLimitOrderProp) {
               }, {
                 Header: 'Price',
                 accessor: 'price',
+                Cell: ({ value, row }) => {
+                  const orderId = row.original.id
+                  const bOrder = orders.find(item => item.id === orderId)
+                  return (
+                    <p>
+                      {value}
+                      {/* {bOrder && (
+                        <span style={{ marginLeft: 5 }}>
+                          {bOrder?.tokenIn?.symbol}
+                        </span>
+                      )} */}
+                    </p>
+                  )
+                }
+              }, {
+                Header: 'Pay Amount',
+                accessor: 'pamount',
                 Cell: ({ value, row }) => {
                   const orderId = row.original.id
                   const bOrder = orders.find(item => item.id === orderId)
@@ -144,7 +157,7 @@ export default function ({ modalAction }: TableLimitOrderProp) {
                       value === ' - ' ?
                       <div style={{ cursor: 'pointer' }}>{value}</div>
                       :
-                      <CancelButton type="button"
+                      <CancelButton
                         onClick={
                           ($e) => {
                             $e.preventDefault()
