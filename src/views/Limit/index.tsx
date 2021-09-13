@@ -368,12 +368,10 @@ const Limit = () => {
               })
               .catch(e => {
                 console.error('cancel order error: ', e)
-                dispatch(
-                  updateStatus({
-                    status: 'failed',
-                    error: e
-                  })
-                )
+              }).finally(() => {
+                dispatch(updateStatus({
+                  status: 'succeeded'
+                }))
               })
           }
           setOpenCancelModal(false)

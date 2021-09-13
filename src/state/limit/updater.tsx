@@ -93,11 +93,6 @@ export default function LimitUpdater() {
   useEffect(() => {
     if (contract && status === 'succeeded') {
       if (account && canGetOrders) {
-        dispatch(
-          updateStatus({
-            status: 'loading'
-          })
-        )
         findOrdersByAddressFromTokens( account, contract, tokens ?? ([] as any)) // o primeiro parametro eh o address da carteira
           .then((orders) => {
             orders.forEach(order => dispatch(addOrder(order)))
@@ -132,7 +127,7 @@ export default function LimitUpdater() {
       contract.on('0xc54564d8bb24f7208de85ab88c9e3373a39a2813ec2954267e5feee6c83d6344', handlerRemOrder)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, contract, dispatch, canGetOrders])
+  }, [account, contract, status, canGetOrders])
 
   useEffect(() => {
     if(gas && gas.prices){
