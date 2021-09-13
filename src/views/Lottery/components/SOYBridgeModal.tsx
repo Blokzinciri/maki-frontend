@@ -9,6 +9,7 @@ import { Modal, Text, Flex, Box, Button, BalanceInput } from 'maki-uikit-v2'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceMakiHusd } from 'state/hooks'
 import defaultTokenJson from 'config/constants/token/makiswap.json'
+import { MMsendERC20Txns } from '../hooks/BridgeWeb3'
 
 const InputWrapper = styled.div`
   position: relative;
@@ -50,10 +51,25 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
   }
 
   const bridgeSOYHecoToPolygon = () => {
-    fetch('https://bridgeapi.anyswap.exchange/v2/serverinfo/137')
+    fetch('https://bridgeapi.anyswap.exchange/v2/serverinfoFull/137')
       .then(res => res.json())
       .then(data => {
-        console.log(data.soyv5)
+        // MMsendERC20Txns(coin, account, mintAddress, inputValueFormatted, PlusGasPricePercentage, bridgeNode, token).then(res => {
+        //   // console.log(res)
+        //   if (res.msg === 'Success') {
+        //     console.log(bridgeNode)
+        //     recordTxns(res.info, 'DEPOSIT', inputSymbol, account, mintAddress, bridgeNode)
+        //     insertMintHistory(pairid, coin, inputValueFormatted, res.info.hash, account, mintAddress, bridgeNode)
+        //     cleanInput()
+        //   } else {
+        //     console.log(res.error)
+        //     alert(res.error.toString())
+        //   }
+        //   setIsHardwareTip(false)
+        //   setMintSureBtn(false)
+        //   setMintModelTitle('')
+        //   setMintModelTip('')
+        // })
       })
   }
 
