@@ -66,7 +66,7 @@ export default function ({ modalAction }: TableLimitOrderProp) {
             price: order.price.toFixed(10),
             // transaction: shortenAddress(order.trader),
             // eslint-disable-next-line eqeqeq
-            actions: order.status.toString() != EOrderStatus.PROCESSING.toString() && order.state != EOrderState.CANCELLED
+            actions: order.status.toString() != EOrderStatus.PROCESSING.toString() && order.state != EOrderState.CANCELLED && order.state != EOrderState.FINISHED
               ? 'Cancel Order' : ' - '
           } as TableData
         }) : []
@@ -139,18 +139,25 @@ export default function ({ modalAction }: TableLimitOrderProp) {
                 Cell: ({ value, row }) => {
                   const { original } = row
                   return (
-                    <CancelButton type="button"
-                      onClick={
-                        ($e) => {
-                          $e.preventDefault()
-                          if (original) {
-                            dispatch(limitSelectOrder(original?.id))
+                    <>
+                    {
+                      value === ' - ' ?
+                      <div style={{ cursor: 'pointer' }}>{value}</div>
+                      :
+                      <CancelButton type="button"
+                        onClick={
+                          ($e) => {
+                            $e.preventDefault()
+                            if (original) {
+                              dispatch(limitSelectOrder(original?.id))
+                            }
+                            modalAction?.()
                           }
-                          modalAction?.()
-                        }
-                      }>
-                      {value}
-                    </CancelButton>
+                        }>
+                        {value}
+                      </CancelButton>
+                    }
+                    </>
                   )
                 }
               },
