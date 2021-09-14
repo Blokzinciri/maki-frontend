@@ -631,7 +631,7 @@ const Limit = () => {
                         _token0,
                         _token1,
                         Number(formattedAmounts[Field.INPUT] ?? '0'),
-                        Number(formattedAmounts[Field.OUTPUT] ?? '0'),
+                        amount1,
                         gasPrice,
                         BigNumber.from(feeStake),
                         BigNumber.from(feeExecutor),
