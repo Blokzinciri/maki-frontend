@@ -16,6 +16,7 @@ import { EOrderStatus, EOrderType, EOrderState } from 'state/limit/enums';
 import { shortenAddress } from 'utils';
 import CancelOrderModal from '../dialogs';
 import { limitSelectOrder } from 'state/limit/actions';
+import { useWeb3React } from '@web3-react/core';
 
 const activeClassName = 'ACTIVE'
 
@@ -41,6 +42,7 @@ interface TableLimitOrderProp {
 export default function ({ modalAction }: TableLimitOrderProp) {
   const { search } = useLocation()
   const dispatch = useDispatch()
+  const { account } = useWeb3React()
   const params = new URLSearchParams(search)
   // const _table = params.get('table')
   const activeIndex = params.get('table') === 'closed-orders' ? 2 : params.get('table') === 'completed-orders' ? 1 : 0
@@ -49,9 +51,9 @@ export default function ({ modalAction }: TableLimitOrderProp) {
     return orders ?
       orders
         .filter(order => {
-          return activeIndex === 0 ? (order.state === EOrderState.CREATED) :
+          return order.trader.toLowerCase() === account.toLowerCase() && (activeIndex === 0 ? (order.state === EOrderState.CREATED) :
             activeIndex === 1 ? (order.state === EOrderState.FINISHED) :
-            order.state === EOrderState.CANCELLED
+            order.state === EOrderState.CANCELLED)
         })
         .map((order) => {
           return {
@@ -67,7 +69,7 @@ export default function ({ modalAction }: TableLimitOrderProp) {
               ? 'Cancel Order' : ' - '
           } as TableData
         }) : []
-  }, [orders, activeIndex])
+  }, [orders, activeIndex, account])
   return (
     <DisableCard marginTop="24px">
       <TableNav
