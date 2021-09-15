@@ -43,13 +43,14 @@ export default function ({ modalAction }: TableLimitOrderProp) {
   const dispatch = useDispatch()
   const params = new URLSearchParams(search)
   // const _table = params.get('table')
-  const activeIndex = params.get('table') === 'closed-orders' ? 1 : 0
+  const activeIndex = params.get('table') === 'closed-orders' ? 2 : params.get('table') === 'completed-orders' ? 1 : 0
   const { status, orders, error } = useSelector<AppState, AppState['limit']>((s) => s.limit)
   const getData = useCallback((): TableData[] => {
     return orders ?
       orders
         .filter(order => {
-          return activeIndex === 0 ? (order.state === EOrderState.CREATED || order.state === EOrderState.FINISHED) :
+          return activeIndex === 0 ? (order.state === EOrderState.CREATED) :
+            activeIndex === 1 ? (order.state === EOrderState.FINISHED) :
             order.state === EOrderState.CANCELLED
         })
         .map((order) => {
@@ -74,7 +75,7 @@ export default function ({ modalAction }: TableLimitOrderProp) {
       />
       <SwitchTransition mode="out-in">
         <CSSTransition
-          key={activeIndex > 0 ? "closed-orders" : "my-orders"}
+          key={activeIndex > 1 ? "closed-orders" : activeIndex === 1 ? "completed-orders" : "my-orders"}
           in={activeIndex}
           addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
           classNames="fade"
