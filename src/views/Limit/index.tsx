@@ -59,6 +59,9 @@ const InputWrapper = styled.div`
     left: 1rem;
     z-index: 2;
   }
+  & input {
+    font-weight: bold;
+  }
 `
 
 const Limit = () => {
