@@ -51,7 +51,7 @@ export default function ({ modalAction }: TableLimitOrderProp) {
     return orders ?
       orders
         .filter(order => {
-          return order.trader === account && (activeIndex === 0 ? (order.state === EOrderState.CREATED) :
+          return order.trader.toLowerCase() === account.toLowerCase() && (activeIndex === 0 ? (order.state === EOrderState.CREATED) :
             activeIndex === 1 ? (order.state === EOrderState.FINISHED) :
             order.state === EOrderState.CANCELLED)
         })
