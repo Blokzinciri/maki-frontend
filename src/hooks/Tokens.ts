@@ -183,3 +183,19 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   const token = useToken(isHT ? undefined : currencyId)
   return isHT ? HUOBI : token
 }
+
+export function useTokenBySymbolOrName(symbolOrName?: string){
+  const tokens = useAllTokens()
+  const query = symbolOrName?.normalize().toLowerCase()
+  if(query && (query === HUOBI.name?.normalize().toLowerCase() || 
+    query === HUOBI.symbol?.normalize().toLowerCase()))
+  {
+    const wht = Object.values(tokens).find( token => token.symbol?.normalize().toLowerCase() === 'wht')
+    return wht ? [wht] : []
+  }
+  return query ? Object.values(tokens)
+  .filter((token) => {
+    return token?.symbol?.normalize().toLowerCase() === query ||
+    token?.name?.normalize().toLowerCase() === query
+  }): []
+}

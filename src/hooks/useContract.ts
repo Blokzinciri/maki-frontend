@@ -15,6 +15,7 @@ import profile from 'config/abi/pancakeProfile.json'
 import lottery from 'config/abi/lottery.json'
 import lotteryTicket from 'config/abi/lotteryNft.json'
 import ENS_ABI from 'config/abi/ens-registrar.json'
+import LIMIT_ABI from 'config/abi/limit-order.abi.json'
 import ENS_PUBLIC_RESOLVER_ABI from 'config/abi/ens-public-resolver.json'
 import {HRC20_BYTES32_ABI } from 'config/abi/hrc20'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from 'config/abi/migrator'
@@ -48,6 +49,11 @@ function useContract(address: string | undefined, ABI: any, withSignerIfPossible
       return null
     }
   }, [address, ABI, library, withSignerIfPossible, account])
+}
+
+export function useLimitContract(): Contract | null {
+  const contract = useContract("0xFa311750A0E1d2b8B979678Ec1A04F56aC8DB866", LIMIT_ABI, true);
+  return contract
 }
 
 /**

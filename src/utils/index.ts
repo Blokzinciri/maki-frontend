@@ -100,3 +100,16 @@ export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currenc
   if (currency === HUOBI) return true
   return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
 }
+
+export function convertHexToRGB(hexColor: string): string[] | null {
+  const r = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/gi
+  const match = r.exec(hexColor)
+  if (!match || match.length < 2) {
+    return null
+  }
+  const aRgbHex = match[1].match(/.{1,2}/g);
+  if (aRgbHex) {
+    return aRgbHex.map(str => parseInt(str, 16).toString())
+  }
+  return aRgbHex;
+}
