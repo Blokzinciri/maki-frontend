@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import { HUOBI } from 'maki-sdk'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -11,6 +12,7 @@ import web3NoAccount from 'utils/web3'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
+import { useAllTokens } from 'hooks/Tokens'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import {
   fetchFarmsPublicDataAsync,

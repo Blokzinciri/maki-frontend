@@ -20,6 +20,10 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
           label: t('Liquidity'),
           href: '/pool',
         },
+        {
+          label: t('Limit'),
+          href: '/limit',
+        },
       ],
   },
   {
