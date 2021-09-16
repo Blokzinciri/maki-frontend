@@ -14,6 +14,7 @@ import history from './routerHistory'
 import Pools from './views/Pools'
 import Swap from './views/Swap'
 import Bridge from './views/Bridge'
+import Limit from './views/Limit'
 import { RedirectDuplicateTokenIds, RedirectOldAddLiquidityPathStructure } from './views/AddLiquidity/redirects'
 import { RedirectOldRemoveLiquidityPathStructure } from './views/RemoveLiquidity/redirects'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
@@ -94,6 +95,7 @@ const App: React.FC = () => {
             {/* Exchange routes */}
             <Route exact strict path="/swap" component={Swap} />
             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+            <Route exact strict path="/limit" component={Limit} />
             <Route exact strict path="/find" component={PoolFinder} />
             <Route exact strict path="/pool" component={Liquidity} />
             <Route exact path="/add" component={AddLiquidity} />

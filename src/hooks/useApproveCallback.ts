@@ -99,11 +99,12 @@ export function useApproveCallback(
 }
 
 // wraps useApproveCallback in the context of a swap
-export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) {
+export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0, isStake = true) {
   const amountToApprove = useMemo(
     () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
     [trade, allowedSlippage]
   )
+  const router = isStake ? ROUTER_ADDRESS : "0xFa311750A0E1d2b8B979678Ec1A04F56aC8DB866";
 
-return useApproveCallback(amountToApprove, ROUTER_ADDRESS)
+return useApproveCallback(amountToApprove, router)
 }
