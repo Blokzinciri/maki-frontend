@@ -16,6 +16,7 @@ import lists from './lists/reducer'
 import burn from './burn/reducer'
 import limit from './limit/reducer'
 import multicall from './multicall/reducer'
+import bridge from './bridge/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
@@ -36,6 +37,7 @@ const store = configureStore({
     multicall,
     lists,
     limit,
+    bridge,
   },
   middleware: [...getDefaultMiddleware({ thunk: true }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS }),

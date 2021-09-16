@@ -8,7 +8,7 @@ import Logo from 'components/Logo'
 import CoinLogo from 'components/Maki/CoinLogo'
 
 const getTokenLogoURL = (address: string) =>
-`https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/hecochain/assets/${address}/logo.png`
+  `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/hecochain/assets/${address}/logo.png`
 
 const StyledBnbLogo = styled.img<{ size: string }>`
   width: ${({ size }) => size};
@@ -39,13 +39,18 @@ export default function CurrencyLogo({
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, `/images/coins/${currency?.symbol ?? 'token'}.png`, getTokenLogoURL(currency.address)]
+        return [
+          ...uriLocations,
+          `/images/coins/${currency?.symbol ?? 'token'}.png`,
+          getTokenLogoURL(currency.address),
+          currency.logoURI,
+        ]
       }
 
       return [
         ...(userTokenLogo ? [userTokenLogo] : []),
         `/images/coins/${currency?.symbol ?? 'token'}.png`,
-        getTokenLogoURL(currency.address)
+        getTokenLogoURL(currency.address),
       ]
     }
     return []

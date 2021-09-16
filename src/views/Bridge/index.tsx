@@ -26,7 +26,7 @@ import { useSwapCallback } from 'hooks/useSwapCallback'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import useWeb3 from 'hooks/useWeb3'
 import { Field } from 'state/swap/actions'
-import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
+import { useBridgeState, useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers } from 'state/bridge/hooks'
 import { useExpertModeManager, useUserDeadline, useUserSlippageTolerance } from 'state/user/hooks'
 import { LinkStyledButton } from 'components/Shared'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
@@ -75,7 +75,7 @@ const Bridge = () => {
   const [allowedSlippage] = useUserSlippageTolerance()
 
   // swap state
-  const { independentField, typedValue, recipient } = useSwapState()
+  const { independentField, typedValue, recipient } = useBridgeState()
   const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
   const {
     wrapType,
@@ -266,6 +266,8 @@ const Bridge = () => {
     const makiToken = new Token(makiData.chainId, makiData.address, makiData.decimals, makiData.symbol, makiData.name)
     onCurrencySelection(Field.OUTPUT, makiToken)
   }, [makiData, onCurrencySelection])
+
+  console.log('fffffffffffffffff', currencies[Field.OUTPUT])
 
   return (
     <ExchangePage>

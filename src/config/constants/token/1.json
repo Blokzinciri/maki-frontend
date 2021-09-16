@@ -10,14 +10,6 @@
   "keywords": ["makiswap", "maki", "huobi", "heco", "hrc20", "default", "token", "list"],
   "tokens": [
     {
-      "address": "",
-      "chainId": 1,
-      "decimals": 18,
-      "logoURI": "/icons/1/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.png",
-      "name": "eth",
-      "symbol": "ETH"
-    },
-    {
       "address": "0xfF20817765cB7f73d4bde2e66e067E58D11095C2",
       "chainId": 1,
       "decimals": 18,
