@@ -71,7 +71,7 @@ const listCache: WeakMap<TokenList, TokenAddressMap> | null =
 
 export function listToTokenMap(list: TokenList): TokenAddressMap {
   const LIST = {
-    [String(list.tokens[0].chainId)]: {},
+    [Number(list.tokens[0].chainId)]: {},
   }
 
   const result = listCache?.get(list)
@@ -86,7 +86,6 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
             return { ...list.tags[tagId], id: tagId }
           })
           ?.filter((x): x is TagInfo => Boolean(x)) ?? []
-      console.log('ggggggggggggggg', tokenInfo)
       const token = new WrappedTokenInfo(tokenInfo, tags)
       if (tokenMap[token.chainId][token.address] !== undefined) throw Error('Duplicate tokens.')
       return {
@@ -117,19 +116,22 @@ export function useAllLists(): {
   return useSelector<AppState, AppState['lists']['byUrl']>((state) => state.lists.byUrl)
 }
 
-function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddressMap {
+function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap, chainId = 128): TokenAddressMap {
   return {
-    [ChainId.MAINNET]: { ...map1[ChainId.MAINNET], ...map2[ChainId.MAINNET] },
+    [chainId]: { ...map1[chainId], ...map2[chainId] },
     [ChainId.TESTNET]: { ...map1[ChainId.TESTNET], ...map2[ChainId.TESTNET] },
   }
 }
 
 // merge tokens contained within lists from urls
-function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMap {
+function useCombinedTokenMapFromUrls(urls: string[] | undefined, chainId = 128): TokenAddressMap {
   const lists = useAllLists()
 
   return useMemo(() => {
-    if (!urls) return EMPTY_LIST
+    const LIST = {
+      [chainId]: {},
+    }
+    if (!urls) return LIST
 
     return (
       urls
@@ -141,14 +143,14 @@ function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMa
           if (!current) return allTokens
           try {
             const newTokens = Object.assign(listToTokenMap(current))
-            return combineMaps(allTokens, newTokens)
+            return combineMaps(allTokens, newTokens, chainId)
           } catch (error) {
             console.error('Could not show token list due to error', error)
             return allTokens
           }
-        }, EMPTY_LIST)
+        }, LIST)
     )
-  }, [lists, urls])
+  }, [lists, urls, chainId])
 }
 
 // filter out unsupported lists
@@ -170,7 +172,7 @@ export function useCombinedActiveList(chainId): TokenAddressMap {
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
   const defaultTokenMap = useDefaultTokenList(chainId)
 
-  return combineMaps(activeTokens, defaultTokenMap)
+  return combineMaps(activeTokens, defaultTokenMap, chainId)
 }
 
 // all tokens from inactive lists

@@ -23,6 +23,7 @@ interface CurrencySearchProps {
   onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
   showCommonBases?: boolean
+  showChainSelector?: boolean
   showImportView: () => void
   setImportToken: (token: Token) => void
 }
@@ -34,6 +35,7 @@ function CurrencySearch({
   onCurrencySelect,
   otherSelectedCurrency,
   showCommonBases,
+  showChainSelector = false,
   showImportView,
   setImportToken,
 }: CurrencySearchProps) {
@@ -47,7 +49,7 @@ function CurrencySearch({
   const debouncedQuery = useDebounce(searchQuery, 200)
 
   const [invertSearchOrder] = useState<boolean>(false)
-  const [selectedChain, setSelectedChain] = useState('128')
+  const [selectedChain, setSelectedChain] = useState(128)
 
   const allTokens = useAllTokens(selectedChain)
 
@@ -120,9 +122,11 @@ function CurrencySearch({
     <>
       <div>
         <AutoColumn gap="16px">
-          <Row>
-            <ChainSelector selectedChainId={selectedChain} handleChangeChain={setSelectedChain} />
-          </Row>
+          {showChainSelector && (
+            <Row>
+              <ChainSelector selectedChainId={selectedChain} handleChangeChain={setSelectedChain} />
+            </Row>
+          )}
           <Row>
             <Input
               id="token-search-input"

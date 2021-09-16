@@ -18,8 +18,8 @@ const Tab = styled.div<{ isActive: boolean }>`
 `
 
 interface Props {
-  selectedChainId: string
-  handleChangeChain: (chainId: string) => void
+  selectedChainId: number
+  handleChangeChain: (chainId: number) => void
 }
 
 const ChainSelector: React.FC<Props> = ({ selectedChainId, handleChangeChain }) => {
@@ -27,7 +27,11 @@ const ChainSelector: React.FC<Props> = ({ selectedChainId, handleChangeChain }) 
     <Tabs>
       {Object.keys(chainNames).map((chainId) => {
         return (
-          <Tab key={chainId} onClick={() => handleChangeChain(chainId)} isActive={selectedChainId === chainId}>
+          <Tab
+            key={chainId}
+            onClick={() => handleChangeChain(Number(chainId))}
+            isActive={selectedChainId === Number(chainId)}
+          >
             {chainNames[chainId]}
           </Tab>
         )

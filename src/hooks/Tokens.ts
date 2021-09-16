@@ -18,12 +18,22 @@ import { useBytes32TokenContract, useTokenContract } from './useContract'
 import { filterTokens } from '../components/SearchModal/filtering'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
-function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean): { [address: string]: Token } {
-  const { chainId } = useActiveWeb3React()
+function useTokensFromMap(
+  tokenMap: TokenAddressMap,
+  includeUserAdded: boolean,
+  chainIdParam = 128,
+): { [address: string]: Token } {
+  const { chainId: walletChainId } = useActiveWeb3React()
   const userAddedTokens = useUserAddedTokens()
 
   return useMemo(() => {
-    if (!chainId) return {}
+    let chainId = chainIdParam
+    if (!chainIdParam) {
+      if (!walletChainId) {
+        return {}
+      }
+      chainId = walletChainId
+    }
 
     // reduce to just tokens
     const mapWithoutUrls = Object.keys(tokenMap[chainId]).reduce<{ [address: string]: Token }>((newMap, address) => {
@@ -48,17 +58,18 @@ function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean):
     }
 
     return mapWithoutUrls
-  }, [chainId, userAddedTokens, tokenMap, includeUserAdded])
+  }, [chainIdParam, walletChainId, userAddedTokens, tokenMap, includeUserAdded])
 }
 
 export function useDefaultTokens(chainId): { [address: string]: Token } {
   const defaultList = useDefaultTokenList(chainId)
-  return useTokensFromMap(defaultList, false)
+  return useTokensFromMap(defaultList, false, chainId)
 }
 
-export function useAllTokens(chainId = '128'): { [address: string]: Token } {
+export function useAllTokens(chainId = 128): { [address: string]: Token } {
   const allTokens = useCombinedActiveList(chainId)
-  return useTokensFromMap(allTokens, true)
+
+  return useTokensFromMap(allTokens, true, chainId)
 }
 
 export function useAllInactiveTokens(): { [address: string]: Token } {
@@ -184,18 +195,16 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   return isHT ? HUOBI : token
 }
 
-export function useTokenBySymbolOrName(symbolOrName?: string){
+export function useTokenBySymbolOrName(symbolOrName?: string) {
   const tokens = useAllTokens()
   const query = symbolOrName?.normalize().toLowerCase()
-  if(query && (query === HUOBI.name?.normalize().toLowerCase() || 
-    query === HUOBI.symbol?.normalize().toLowerCase()))
-  {
-    const wht = Object.values(tokens).find( token => token.symbol?.normalize().toLowerCase() === 'wht')
+  if (query && (query === HUOBI.name?.normalize().toLowerCase() || query === HUOBI.symbol?.normalize().toLowerCase())) {
+    const wht = Object.values(tokens).find((token) => token.symbol?.normalize().toLowerCase() === 'wht')
     return wht ? [wht] : []
   }
-  return query ? Object.values(tokens)
-  .filter((token) => {
-    return token?.symbol?.normalize().toLowerCase() === query ||
-    token?.name?.normalize().toLowerCase() === query
-  }): []
+  return query
+    ? Object.values(tokens).filter((token) => {
+        return token?.symbol?.normalize().toLowerCase() === query || token?.name?.normalize().toLowerCase() === query
+      })
+    : []
 }

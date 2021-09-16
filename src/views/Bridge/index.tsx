@@ -339,6 +339,7 @@ const Bridge = () => {
                 onCurrencySelect={handleOutputSelect}
                 otherCurrency={currencies[Field.INPUT]}
                 id="swap-currency-output"
+                showChainSelector
               />
 
               {recipient !== null && !showWrap ? (
