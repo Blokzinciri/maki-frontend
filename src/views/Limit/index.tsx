@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { CurrencyAmount, JSBI, Token, Trade } from 'maki-sdk'
+import { CurrencyAmount, Currency, JSBI, Token, Trade } from 'maki-sdk'
 import { useDispatch, useSelector } from 'react-redux'
 import { ArrowDown } from 'react-feather'
 import { CardBody, ArrowDownIcon, Button, IconButton, Text } from 'maki-uikit-v2'
@@ -179,6 +179,8 @@ const Limit = () => {
 
   const [price1, setPrice1] = useState('')
   const [amount1, setAmount1] = useState(0)
+  const [prevInputCurrency, setPrevInputCurrency] = useState<Currency | undefined>()
+  const [prevOutputCurrency, setPrevOutputCurrency] = useState<Currency | undefined>()
 
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
@@ -311,10 +313,12 @@ const Limit = () => {
   useEffect(() => {
     const _inputAmount = Number(formattedAmounts[Field.INPUT] ?? 0)
     const _outputAmount = Number(formattedAmounts[Field.OUTPUT] ?? 0)
-    if (_inputAmount > 0) {
+    if (_inputAmount > 0 && _outputAmount > 0 && (!prevInputCurrency || !prevOutputCurrency || prevInputCurrency.symbol !== currencies[Field.INPUT].symbol || prevOutputCurrency.symbol !== currencies[Field.OUTPUT].symbol)) {
       setPrice1((_outputAmount / _inputAmount).toString())
+      setAmount1(_outputAmount)
+      setPrevInputCurrency(currencies[Field.INPUT])
+      setPrevOutputCurrency(currencies[Field.OUTPUT])  
     }
-    setAmount1(_outputAmount)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formattedAmounts[Field.INPUT], formattedAmounts[Field.OUTPUT]])
 
