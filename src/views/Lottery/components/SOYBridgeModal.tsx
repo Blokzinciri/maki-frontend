@@ -9,7 +9,7 @@ import { Modal, Text, Flex, Box, Button, BalanceInput } from 'maki-uikit-v2'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceMakiHusd } from 'state/hooks'
 import defaultTokenJson from 'config/constants/token/makiswap.json'
-import { MMsendERC20Txns } from '../hooks/BridgeWeb3'
+import MMsendERC20Txns from '../hooks/BridgeWeb3'
 
 const InputWrapper = styled.div`
   position: relative;
@@ -25,7 +25,6 @@ interface SOYBridgeModalProps {
 const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const web3 = useWeb3()
   const [bridgeAmount, setBridgeAmount] = useState('')
   const soyData = defaultTokenJson.tokens.filter(val => val.symbol === 'SOY')[0]
   const { balance: soyBalance, fetchStatus } = useTokenBalanceNew(soyData.address)
@@ -54,22 +53,22 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
     fetch('https://bridgeapi.anyswap.exchange/v2/serverinfoFull/137')
       .then(res => res.json())
       .then(data => {
-        // MMsendERC20Txns(coin, account, mintAddress, inputValueFormatted, PlusGasPricePercentage, bridgeNode, token).then(res => {
-        //   // console.log(res)
-        //   if (res.msg === 'Success') {
-        //     console.log(bridgeNode)
-        //     recordTxns(res.info, 'DEPOSIT', inputSymbol, account, mintAddress, bridgeNode)
-        //     insertMintHistory(pairid, coin, inputValueFormatted, res.info.hash, account, mintAddress, bridgeNode)
-        //     cleanInput()
-        //   } else {
-        //     console.log(res.error)
-        //     alert(res.error.toString())
-        //   }
-        //   setIsHardwareTip(false)
-        //   setMintSureBtn(false)
-        //   setMintModelTitle('')
-        //   setMintModelTip('')
-        // })
+        MMsendERC20Txns(data.soyv5.symbol, account, data.soyv5.SrcToken.DepositAddress, bridgeAmount, data.soyv5.SrcToken.PlusGasPricePercentage, Number(data.soyv5.srcChainID), data.soyv5.DestToken.ContractAddress).then(res => {
+          console.log(res)
+          // if (res.msg === 'Success') {
+          //   console.log(bridgeNode)
+          //   recordTxns(res.info, 'DEPOSIT', inputSymbol, account, mintAddress, bridgeNode)
+          //   insertMintHistory(pairid, coin, inputValueFormatted, res.info.hash, account, mintAddress, bridgeNode)
+          //   cleanInput()
+          // } else {
+          //   console.log(res.error)
+          //   alert(res.error.toString())
+          // }
+          // setIsHardwareTip(false)
+          // setMintSureBtn(false)
+          // setMintModelTitle('')
+          // setMintModelTip('')
+        })
       })
   }
 

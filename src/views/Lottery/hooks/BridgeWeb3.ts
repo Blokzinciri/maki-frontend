@@ -1,39 +1,37 @@
 import ERC20_ABI from 'config/abi/erc20.json'
 import { ethers } from 'ethers'
+import { simpleRpcProvider } from 'utils/providers'
+import Web3 from 'web3'
+import Tx from 'ethereumjs-tx'
 
-const Web3 = require('web3')
-const Tx  = require("ethereumjs-tx")
 const nodeRPC = 'https://maticnode1.anyswap.exchange'
 
 const web3 = new Web3()
-let contract = new web3.eth.Contract(ERC20_ABI)
 
-let mmWeb3
+let mmWeb3;
 if (typeof window.ethereum !== 'undefined'|| (typeof window.web3 !== 'undefined')) {
   // Web3 browser user detected. You can now use the provider.
-  mmWeb3 = window['ethereum'] || window.web3.currentProvider
+  mmWeb3 = window.ethereum || window.web3.currentProvider
 }
 
 function MMsign (from, msg, node) {
   return new Promise(resolve => {
-    var params = [from, msg]
-    var method = 'eth_sign'
+    const params = [from, msg]
+    const method = 'eth_sign'
     mmWeb3.sendAsync({
       method,
       params,
-      // from,
-    }, (err, rsv) => {
-      // console.log(rsv)
+    }, (err, rsv: any) => {
+      let rsv1;
       if (!err || rsv.result) {
-        rsv = rsv.result.indexOf('0x') === 0 ? rsv.result.replace('0x', '') : rsv.result
-        let v = '0x' + rsv.substr(128)
+        rsv1 = rsv.result.indexOf('0x') === 0 ? rsv.result.replace('0x', '') : rsv.result
+        let v = `0x${rsv1.substr(128)}`
         v = (Number(node) * 2 + 35 + parseInt(v) - 27).toString()
-        // console.log(v)
         resolve({
           msg: 'Success',
           info: {
-            r: '0x' + rsv.substr(0, 64),
-            s: '0x' + rsv.substr(64, 64),
+            r: `0x${rsv1.substr(0, 64)}`,
+            s: `0x${rsv1.substr(64, 64)}`,
             v: web3.utils.toHex(v)
           }
         })
@@ -48,34 +46,28 @@ function MMsign (from, msg, node) {
   })
 }
 
-export function MMsendERC20Txns(coin, from, to, value, PlusGasPricePercentage, node, inputCurrency) {
+export default function MMsendERC20Txns(coin, from, to, value, PlusGasPricePercentage, node, inputCurrency) {
   return new Promise(resolve => {
     getBaseInfo(coin, from, to, value, PlusGasPricePercentage, node).then((res: any) => {
+      console.log('res', res);
       if (res.msg === 'Success') {
-        // let eTx = new Tx(res.info)
-        // console.log(eTx)
-        // console.log(res.info)
-        let tx = new Tx(res.info)
+        const tx = new Tx(res.info)
 
         let hash = Buffer.from(tx.hash(false)).toString('hex')
-        hash = hash.indexOf('0x') === 0 ? hash : '0x' + hash
-        // console.log(hash)
+        hash = hash.indexOf('0x') === 0 ? hash : `0x${hash}`
 
         MMsign(from, hash, node).then((rsv: any) => {
-          // console.log(rsv)
           if (res.msg === 'Success') {
-            let rawTx = {
+            const rawTx = {
               ...res.info,
               ...rsv.info
             }
-            let tx2 = new Tx(rawTx)
+            const tx2 = new Tx(rawTx)
             let signTx = tx2.serialize().toString("hex")
-            signTx = signTx.indexOf("0x") === 0 ? signTx : ("0x" + signTx)
-            // console.log(rawTx)
-            // console.log(signTx)
-            sendTxns(signTx, node).then((hash: any) => {
-              if (hash.msg === 'Success') {
-                res.info.hash = hash.info
+            signTx = signTx.indexOf("0x") === 0 ? signTx : (`0x${signTx}`)
+            sendTxns(signTx, node).then((hash1: any) => {
+              if (hash1.msg === 'Success') {
+                res.info.hash = hash1.info
                 resolve({
                   msg: 'Success',
                   info: res.info
@@ -83,7 +75,7 @@ export function MMsendERC20Txns(coin, from, to, value, PlusGasPricePercentage, n
               } else {
                 resolve({
                   msg: 'Error',
-                  error: hash.error
+                  error: hash1.error
                 })
               }
             })
@@ -106,7 +98,7 @@ export function MMsendERC20Txns(coin, from, to, value, PlusGasPricePercentage, n
 
 function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
   let input = ''
-  let BridgeToken = {
+  const BridgeToken = {
     'XNFT': { // 
       'name': 'XNFT',
       'token': '0xE5944B50DF84001a36c7DE0d5Cb4da7ab21407D2',
@@ -143,7 +135,6 @@ function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
       'decimals': 18
     },
   }
-  console.log(node)
   let isBridgeBaseCoin = false
   if (
     (coin === 'ETH' && (node === 1 || node === 4)) || 
@@ -157,68 +148,57 @@ function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
     isBridgeBaseCoin = true
   }
   if (!isBridgeBaseCoin) {
-    contract.options.address = BridgeToken[coin].token
+    const contract = new ethers.Contract(BridgeToken[coin].token, ERC20_ABI, simpleRpcProvider)
     value = ethers.utils.parseUnits(value.toString(), BridgeToken[coin].decimals)
-    input = contract.methods.transfer(to, value).encodeABI()
+    input = contract.transfer(to, value).encodeABI()
   } else {
     value = ethers.utils.parseUnits(value.toString(), 18)
   }
-  // console.log(value)
-  let data = {
+  const data = {
     from,
-    chainId: web3.utils.toHex(node),
+    chainId: Number(web3.utils.toHex(node)),
     gas: '',
     gasPrice: "",
-    nonce: "",
+    nonce: 0,
     to: isBridgeBaseCoin ? to : BridgeToken[coin].token,
     value: isBridgeBaseCoin ? value.toHexString() : "0x0",
     data: input
   }
   web3.setProvider(nodeRPC)
-  // console.log(data)
   return new Promise(resolve => {
-    let count = 0, time = Date.now()
-    const batch = new web3.BatchRequest()
-    batch.add(web3.eth.estimateGas.request(data, (err, res) => {
+    let count = 0;
+    const time = Date.now();
+    web3.eth.estimateGas(data, (err, res) => {
       if (err) {
-        // console.log(err)
         data.gas = web3.utils.toHex(90000)
         count ++
       } else {
-        // console.log(parseInt(Number(res) * 1.1))
         data.gas = web3.utils.toHex(Number(res) * 1.2)
         count ++
       }
-    }))
-    batch.add(web3.eth.getTransactionCount.request(from, (err, res) => {
+    })
+    web3.eth.getTransactionCount(from, (err, res) => {
       if (err) {
         console.log(err)
       } else {
-        // console.log(2)
-        // let nonce = web3.utils.hexToNumber(res)
-        // data.nonce = web3.utils.toHex(nonce + 1)
-        data.nonce = web3.utils.toHex(res)
-        // data.nonce = web3.utils.toHex(2)
+        data.nonce = Number(web3.utils.toHex(res))
         count ++
       }
-    }))
-    batch.add(web3.eth.getGasPrice.request((err, res) => {
+    })
+    web3.eth.getGasPrice((err, res) => {
       if (err) {
         console.log(err)
       } else {
-        // console.log(res)
-        // console.log(PlusGasPricePercentage)
         let pecent = 1
         if (PlusGasPricePercentage) {
           pecent = (100 + PlusGasPricePercentage) / 100
         }
-        let _gasPrice = pecent * parseInt(res)
+        const _gasPrice = pecent * parseInt(res)
         data.gasPrice = web3.utils.toHex(_gasPrice)
         count ++
       }
-    }))
-    batch.execute()
-    let getDataIntervel = setInterval(() => {
+    })
+    const getDataIntervel = setInterval(() => {
       if (count >= 3 && ( (Date.now() - time) <= 30000 )) {
         resolve({
           msg: 'Success',
