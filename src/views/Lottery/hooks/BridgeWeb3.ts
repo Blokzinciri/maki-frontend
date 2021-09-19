@@ -1,10 +1,10 @@
 import ERC20_ABI from 'config/abi/erc20.json'
 import { ethers } from 'ethers'
-import { simpleRpcProvider } from 'utils/providers'
 import Web3 from 'web3'
 import Tx from 'ethereumjs-tx'
 
-const nodeRPC = 'https://maticnode1.anyswap.exchange'
+const nodeRPC = 'https://rpc-mainnet.matic.quiknode.pro/'
+const bridgeProvider = new ethers.providers.JsonRpcProvider(nodeRPC)
 
 const web3 = new Web3()
 
@@ -96,7 +96,7 @@ export default function MMsendERC20Txns(coin, from, to, value, PlusGasPricePerce
   })
 }
 
-function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
+async function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
   let input = ''
   const BridgeToken = {
     'XNFT': { // 
@@ -148,9 +148,17 @@ function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
     isBridgeBaseCoin = true
   }
   if (!isBridgeBaseCoin) {
-    const contract = new ethers.Contract(BridgeToken[coin].token, ERC20_ABI, simpleRpcProvider)
-    value = ethers.utils.parseUnits(value.toString(), BridgeToken[coin].decimals)
-    input = contract.transfer(to, value).encodeABI()
+    const signer = bridgeProvider.getSigner(from)
+    const contract = new ethers.Contract(BridgeToken[coin].token, ERC20_ABI, signer)
+    try {
+      const transferToken = await contract.transfer(to, value)
+      input = transferToken.data  
+    } catch (e) {
+      return {
+        msg: 'Error',
+        error: e
+      }
+    }
   } else {
     value = ethers.utils.parseUnits(value.toString(), 18)
   }
@@ -164,56 +172,47 @@ function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node) {
     value: isBridgeBaseCoin ? value.toHexString() : "0x0",
     data: input
   }
-  web3.setProvider(nodeRPC)
-  return new Promise(resolve => {
-    let count = 0;
-    const time = Date.now();
-    web3.eth.estimateGas(data, (err, res) => {
-      if (err) {
-        data.gas = web3.utils.toHex(90000)
-        count ++
-      } else {
-        data.gas = web3.utils.toHex(Number(res) * 1.2)
-        count ++
-      }
-    })
-    web3.eth.getTransactionCount(from, (err, res) => {
-      if (err) {
-        console.log(err)
-      } else {
-        data.nonce = Number(web3.utils.toHex(res))
-        count ++
-      }
-    })
-    web3.eth.getGasPrice((err, res) => {
-      if (err) {
-        console.log(err)
-      } else {
-        let pecent = 1
-        if (PlusGasPricePercentage) {
-          pecent = (100 + PlusGasPricePercentage) / 100
-        }
-        const _gasPrice = pecent * parseInt(res)
-        data.gasPrice = web3.utils.toHex(_gasPrice)
-        count ++
-      }
-    })
-    const getDataIntervel = setInterval(() => {
-      if (count >= 3 && ( (Date.now() - time) <= 30000 )) {
-        resolve({
-          msg: 'Success',
-          info: data
-        })
-        clearInterval(getDataIntervel)
-      } else if (count < 3 && ( (Date.now() - time) > 30000 )) {
-        resolve({
-          msg: 'Error',
-          error: 'Timeout'
-        })
-        clearInterval(getDataIntervel)
-      }
-    }, 1000)
-  })
+  let count = 0;
+
+  try {
+    const gasData = await bridgeProvider.estimateGas(data)
+    data.gas = web3.utils.toHex(Number(gasData) * 1.2)
+  } catch (e) {
+    data.gas = web3.utils.toHex(90000)
+  } finally {
+    count++
+  }
+
+  try {
+    const transactionCount = await bridgeProvider.getTransactionCount(from)
+    data.nonce = Number(web3.utils.toHex(transactionCount))
+    count++
+  } catch (e) {
+    return {
+      msg: 'Error',
+      error: e
+    }
+  }
+
+  try {
+    const gasPrice = await bridgeProvider.getGasPrice()
+    let percent = 1;
+    if (PlusGasPricePercentage) {
+      percent = (100 + PlusGasPricePercentage) / 100
+    }
+    data.gasPrice = gasPrice.toString()
+    count ++
+  } catch (e) {
+    return {
+      msg: 'Error',
+      error: e
+    }
+  }
+
+  return {
+    msg: 'Success',
+    info: data
+  }
 }
 
 function sendTxns (signedTx, node) {
