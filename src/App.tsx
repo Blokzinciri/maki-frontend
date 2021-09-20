@@ -14,6 +14,7 @@ import history from './routerHistory'
 import Pools from './views/Pools'
 import Swap from './views/Swap'
 import Limit from './views/Limit'
+import Bridge from './views/Bridge'
 import { RedirectDuplicateTokenIds, RedirectOldAddLiquidityPathStructure } from './views/AddLiquidity/redirects'
 import { RedirectOldRemoveLiquidityPathStructure } from './views/RemoveLiquidity/redirects'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
@@ -100,6 +101,7 @@ const App: React.FC = () => {
             <Route exact path="/add" component={AddLiquidity} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
 
+            <Route exact path="/bridge" component={Bridge} />
             {/* Redirection: These old routes are still used in the code base */}
             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
             <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />

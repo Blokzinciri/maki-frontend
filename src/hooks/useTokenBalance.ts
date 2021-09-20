@@ -26,13 +26,14 @@ const useTokenBalance = (tokenAddress: string) => {
   })
   const { account } = useWeb3React()
   const { fastRefresh } = useRefresh()
+  const web3 = useWeb3()
 
   useEffect(() => {
     const fetchBalance = async () => {
       const contract = getHrc20Contract(tokenAddress)
       try {
         const res = await contract.balanceOf(account)
-        setBalanceState({ balance: new BigNumber(res), fetchStatus: SUCCESS })
+        setBalanceState({ balance: res, fetchStatus: SUCCESS })
       } catch (e) {
         console.error(e)
         setBalanceState((prev) => ({
@@ -45,7 +46,7 @@ const useTokenBalance = (tokenAddress: string) => {
     if (account) {
       fetchBalance()
     }
-  }, [account, tokenAddress, fastRefresh, SUCCESS, FAILED])
+  }, [account, tokenAddress, fastRefresh, SUCCESS, FAILED, web3])
 
   return balanceState
 }
