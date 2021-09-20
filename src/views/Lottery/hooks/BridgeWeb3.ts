@@ -1,10 +1,11 @@
 import ERC20_ABI from 'config/abi/erc20.json'
+import getNodeUrl from 'utils/getRpcUrl'
 import { ethers } from 'ethers'
 import Web3 from 'web3'
 import Tx from 'ethereumjs-tx'
 
 const nodeRPC = 'https://rpc-mainnet.matic.quiknode.pro/'
-const bridgeProvider = new ethers.providers.JsonRpcProvider(nodeRPC)
+const bridgeProvider = new ethers.providers.JsonRpcProvider(getNodeUrl())
 
 const web3 = new Web3()
 
@@ -151,8 +152,9 @@ async function getBaseInfo (coin, from, to, value, PlusGasPricePercentage, node)
     const signer = bridgeProvider.getSigner(from)
     const contract = new ethers.Contract(BridgeToken[coin].token, ERC20_ABI, signer)
     try {
-      const transferToken = await contract.transfer(to, value)
-      input = transferToken.data  
+      const tAmount = ethers.utils.parseUnits(value.toString(), BridgeToken[coin].decimals)
+      const transferToken = await contract.transfer(to, tAmount)
+      input = transferToken.data
     } catch (e) {
       return {
         msg: 'Error',
