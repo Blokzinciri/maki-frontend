@@ -26,10 +26,12 @@ const BridgeSummary: FunctionComponent = () => {
         },
         {
           label: 'Minimum received',
-          value: `${fixed(
-            new BigNumber(bridgeInfo.outToken.amountOut).times((100 - inTolerance / 100) / 100),
-            outToken.decimals,
-          )} ${outToken.symbol}`,
+          value: `${Number(
+            fixed(
+              new BigNumber(bridgeInfo.outToken.amountOut).times((100 - inTolerance / 100) / 100),
+              outToken.decimals,
+            ),
+          ).toFixed(8)} ${outToken.symbol}`,
           after: '%',
           tip: 'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
         },

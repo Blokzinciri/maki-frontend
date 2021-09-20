@@ -1,9 +1,12 @@
 import { currencyEquals, Trade } from 'maki-sdk'
 import React, { useCallback } from 'react'
-import { useBridgeState } from 'state/bridge/hooks'
-import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
+import { useBridgeActionHandlers, useBridgeState } from 'state/bridge/hooks'
+import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
+import { useActiveWeb3React } from 'hooks'
+
 import BridgeModalHeader from './BridgeModalHeader'
 import BridgeSummary from '../BridgeSummary'
+import BridgeModalFooter from './BridgeModalFooter'
 
 /**
  * Returns true if the trade requires a confirmation of details before we can submit it
@@ -26,7 +29,9 @@ interface ConfirmBridgeModalProps {
 }
 
 const ConfirmBridgeModal: React.FunctionComponent<ConfirmBridgeModalProps> = ({ isOpen, onDismiss }) => {
-  const { bridgeInfo } = useBridgeState()
+  const { bridgeInfo, swap, inToken, outToken } = useBridgeState()
+  const { onSwap } = useBridgeActionHandlers()
+  const { chainId } = useActiveWeb3React()
 
   const modalHeader = useCallback(() => {
     if (bridgeInfo) {
@@ -38,22 +43,35 @@ const ConfirmBridgeModal: React.FunctionComponent<ConfirmBridgeModalProps> = ({ 
 
   const modalBottom = useCallback(() => {
     if (bridgeInfo) {
-      return <BridgeSummary />
+      return <BridgeModalFooter onConfirm={() => onSwap(chainId)} disableConfirm={swap.isSwapping} />
     }
 
     return null
-  }, [bridgeInfo])
+  }, [bridgeInfo, chainId, swap, onSwap])
 
-  const confirmationContent = useCallback(() => <div>test</div>, [])
+  const confirmationContent = useCallback(
+    () => (
+      <ConfirmationModalContent
+        title="Confirm Bridge"
+        onDismiss={onDismiss}
+        topContent={modalHeader}
+        bottomContent={modalBottom}
+      />
+    ),
+    [onDismiss, modalHeader, modalBottom],
+  )
+
+  const pendingText = `Swapping ${inToken?.symbol}
+   for ${outToken?.symbol}`
 
   return (
     <TransactionConfirmationModal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      hash="txHash"
+      hash={swap.txhash}
       content={confirmationContent}
-      pendingText=""
-      attemptingTxn
+      pendingText={pendingText}
+      attemptingTxn={swap.isSwapping}
     />
   )
 }

@@ -30,3 +30,5 @@ export const setUserDeadline = createAction<number>('bridge/setUserDeadline')
 
 export const updateTradeLimit =
   createAction<{ chainId: number; data: { max: number; min: number } }>('bridge/updateTradeLimit')
+
+export const setSwapState = createAction<{ isSwapping: boolean; txhash: string }>('bridge/setSwapState')

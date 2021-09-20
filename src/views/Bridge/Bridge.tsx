@@ -69,9 +69,7 @@ const Bridge: FunctionComponent = () => {
       approving: true,
     })
 
-    setConfirmModalOpen(true)
-
-    /* approve(inToken.address, PROVIDERS[chainId].BRIDGE, account, chainId).then(([err, data]) => {
+    approve(inToken.address, PROVIDERS[chainId].BRIDGE, account, chainId).then(([err, data]) => {
       if (err === FetchStatus.SUCCESS) {
         setApprovalState({
           show: false,
@@ -79,17 +77,18 @@ const Bridge: FunctionComponent = () => {
           approving: false,
         })
       }
-    }) */
-  }, [setApprovalState, approvalState])
+    })
+  }, [setApprovalState, approvalState, chainId, account, inToken])
 
   const handleSwap = useCallback(() => {
-    setIsSwapping(true)
-    swap(bridgeState, account, chainId).then(([err, data]) => {
+    // setIsSwapping(true)
+    setConfirmModalOpen(true)
+    /* swap(bridgeState, account, chainId).then(([err, data]) => {
       if (err === FetchStatus.SUCCESS) {
         setIsSwapping(false)
       }
-    })
-  }, [setIsSwapping, account, bridgeState, chainId])
+    }) */
+  }, [setConfirmModalOpen])
 
   const handleRenderButtons = useCallback((): JSX.Element => {
     if (account) {
@@ -145,7 +144,11 @@ const Bridge: FunctionComponent = () => {
       }
     }
 
-    return <ConnectWalletButton width="100%" />
+    if (!account) {
+      return <ConnectWalletButton width="100%" />
+    }
+
+    return null
   }, [
     account,
     bridgeInfo,

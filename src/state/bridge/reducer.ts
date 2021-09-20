@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { Token } from 'views/Bridge/constant'
-import { BridgeInfo, TradeLimit } from './types'
+import { BridgeInfo, SwapState, TradeLimit } from './types'
 
 import {
   addCustomToken,
@@ -14,6 +14,7 @@ import {
   setOutAmount,
   setOutToken,
   setOutTolerance,
+  setSwapState,
   setUserDeadline,
   updateTradeLimit,
 } from './actions'
@@ -39,6 +40,7 @@ export interface BrideState {
   userDeadline: number
   tradeLimit: TradeLimit
   infoLoading: boolean
+  swap: SwapState
 }
 
 const initialState: BrideState = {
@@ -66,6 +68,10 @@ const initialState: BrideState = {
     1: { max: 0, min: 0 },
   },
   infoLoading: false,
+  swap: {
+    isSwapping: false,
+    txhash: null,
+  },
 }
 
 export default createReducer<BrideState>(initialState, (builder) =>
@@ -151,6 +157,14 @@ export default createReducer<BrideState>(initialState, (builder) =>
       return {
         ...state,
         infoLoading: payload,
+      }
+    })
+    .addCase(setSwapState, (state, { payload }) => {
+      return {
+        ...state,
+        swap: {
+          ...payload,
+        },
       }
     }),
 )

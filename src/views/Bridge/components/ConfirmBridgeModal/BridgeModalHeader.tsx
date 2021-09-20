@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useContext } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 import { Text } from 'maki-uikit-v2'
 import { ArrowDown } from 'react-feather'
 import { TYPE } from 'components/Shared'
@@ -24,6 +24,7 @@ const PriceInfoText = styled(Text)`
 
 const BridgeModalHeader: React.FunctionComponent = () => {
   const { bridgeInfo, inToken, outToken } = useBridgeState()
+  const theme = useContext(ThemeContext)
 
   return (
     <AutoColumn gap="md" style={{ marginTop: '20px' }}>
@@ -31,7 +32,7 @@ const BridgeModalHeader: React.FunctionComponent = () => {
         <RowFixed gap="0px">
           <CoinLogo srcs={[inToken.logo]} size="24px" style={{ marginRight: '12px' }} />
           <Text fontSize="24px" color="primary">
-            {getFullDisplayBalance(new BigNumber(bridgeInfo.inToken.amount), inToken.decimals)}
+            {Number(bridgeInfo.inToken.amount).toFixed(3)}
           </Text>
         </RowFixed>
         <RowFixed gap="0px">
@@ -41,13 +42,13 @@ const BridgeModalHeader: React.FunctionComponent = () => {
         </RowFixed>
       </RowBetween>
       <RowFixed>
-        <ArrowDown size="16" color="textSubtle" style={{ marginLeft: '4px', minWidth: '16px' }} />
+        <ArrowDown size="16" color={theme.colors.textSubtle} style={{ marginLeft: '4px', minWidth: '16px' }} />
       </RowFixed>
       <RowBetween align="flex-end">
         <RowFixed gap="0px">
           <CoinLogo srcs={[outToken.logo]} size="24px" style={{ marginRight: '12px' }} />
           <Text fontSize="24px" style={{ marginLeft: '10px', fontWeight: 500 }} color="primary">
-            {getFullDisplayBalance(new BigNumber(bridgeInfo.outToken.amountOut), outToken.decimals)}
+            {Number(bridgeInfo.outToken.amount).toFixed(3)}
           </Text>
         </RowFixed>
         <RowFixed gap="0px">
@@ -56,13 +57,13 @@ const BridgeModalHeader: React.FunctionComponent = () => {
           </Text>
         </RowFixed>
       </RowBetween>
-      <AutoColumn justify="flex-start" gap="sm" style={{ padding: '16px 0 0' }}>
+      {/* <AutoColumn justify="flex-start" gap="sm" style={{ padding: '16px 0 0' }}>
         <PriceInfoText>
           {`Output is estimated. You will receive at least `}
           <span>{getFullDisplayBalance(new BigNumber(bridgeInfo.outToken.amountOut), outToken.decimals)}</span>
           {' or the transaction will revert.'}
         </PriceInfoText>
-      </AutoColumn>
+      </AutoColumn> */}
     </AutoColumn>
   )
 }

@@ -40,3 +40,8 @@ export interface TradeLimit {
     min: number
   }
 }
+
+export interface SwapState {
+  isSwapping: boolean
+  txhash: string
+}

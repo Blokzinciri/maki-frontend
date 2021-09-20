@@ -2,8 +2,10 @@ import { useCallback } from 'react'
 import axios from 'axios'
 import { AppState, AppDispatch } from 'state'
 import { useSelector, useDispatch } from 'react-redux'
-import { Token, ISWAP_API_URL, mapChainIdToNames, PROVIDERS } from 'views/Bridge/constant'
-import { aggCall } from 'views/Bridge/utils'
+import { Token, ISWAP_API_URL, mapChainIdToNames, PROVIDERS, FetchStatus } from 'views/Bridge/constant'
+import { aggCall, swap } from 'views/Bridge/utils'
+import { useActiveWeb3React } from 'hooks'
+
 import {
   setInAmount,
   setOutAmount,
@@ -15,6 +17,7 @@ import {
   setUserDeadline,
   updateTradeLimit,
   setBridgeInfoLoading,
+  setSwapState,
 } from './actions'
 
 export const useBridgeState = (): AppState['bridge'] => {
@@ -48,18 +51,21 @@ export const useBridgeActionHandlers = (): {
   onMax: (maxAmount: string) => void
   onChangeInTokenAmount: (amount: string) => void
   onChangeOutTokenAmount: (amount: string) => void
-  handleGetTradeInfo: (params: any) => void
+  handleGetTradeInfo: (params: any, tokenIn: Token, tokenOut: Token) => void
   setTradeLimit: (chainId: number, data: { max: number; min: number }) => void
+  onSwap: (chainId: number) => void
 } => {
   const dispatch = useDispatch<AppDispatch>()
-  const { inToken, outToken, inAmount, outAmount } = useBridgeState()
+  const bridgeState = useBridgeState()
+  const { inToken, outToken, inAmount, outAmount } = bridgeState
+  const { account } = useActiveWeb3React()
 
   const handleGetTradeInfo = useCallback(
-    (params: any) => {
+    (params: any, tokenIn: Token, tokenOut: Token) => {
       dispatch(setBridgeInfoLoading(true))
       axios.post(`${ISWAP_API_URL}/get-trade-info`, params).then((result) => {
         if (result.data.code === 0) {
-          if (inToken.chainId === outToken.chainId) {
+          if (tokenIn.chainId === tokenOut.chainId) {
             dispatch(
               setBridgeInfo({
                 code: result.data.code,
@@ -84,7 +90,7 @@ export const useBridgeActionHandlers = (): {
         }
       })
     },
-    [dispatch, inToken, outToken],
+    [dispatch],
   )
 
   const onSelectInToken = useCallback(
@@ -110,7 +116,7 @@ export const useBridgeActionHandlers = (): {
           direct: 'src',
         }
 
-        handleGetTradeInfo(params)
+        handleGetTradeInfo(params, token, outToken)
       }
     },
     [dispatch, outToken, inAmount, handleGetTradeInfo],
@@ -138,7 +144,7 @@ export const useBridgeActionHandlers = (): {
           direct: 'dest',
         }
 
-        handleGetTradeInfo(params)
+        handleGetTradeInfo(params, inToken, token)
       }
     },
     [dispatch, inToken, outAmount, handleGetTradeInfo],
@@ -167,7 +173,7 @@ export const useBridgeActionHandlers = (): {
           direct: 'src',
         }
 
-        handleGetTradeInfo(params)
+        handleGetTradeInfo(params, inToken, outToken)
       }
     },
     [dispatch, inToken, outToken, handleGetTradeInfo],
@@ -195,7 +201,7 @@ export const useBridgeActionHandlers = (): {
           direct: 'dest',
         }
 
-        handleGetTradeInfo(params)
+        handleGetTradeInfo(params, inToken, outToken)
       }
     },
     [dispatch, inToken, outToken, handleGetTradeInfo],
@@ -224,7 +230,7 @@ export const useBridgeActionHandlers = (): {
           direct: 'src',
         }
 
-        handleGetTradeInfo(params)
+        handleGetTradeInfo(params, inToken, outToken)
       }
     },
     [dispatch, inToken, outToken, handleGetTradeInfo],
@@ -242,6 +248,18 @@ export const useBridgeActionHandlers = (): {
     [dispatch],
   )
 
+  const onSwap = useCallback(
+    (chainId: number) => {
+      dispatch(setSwapState({ isSwapping: true, txhash: null }))
+      swap(bridgeState, account, chainId).then(([err, data]) => {
+        if (err === FetchStatus.SUCCESS) {
+          dispatch(setSwapState({ isSwapping: false, txhash: data }))
+        }
+      })
+    },
+    [bridgeState, account, dispatch],
+  )
+
   return {
     onSelectInToken,
     onSelectOutToken,
@@ -250,6 +268,7 @@ export const useBridgeActionHandlers = (): {
     onChangeOutTokenAmount,
     handleGetTradeInfo,
     setTradeLimit,
+    onSwap,
   }
 }
 
