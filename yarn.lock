@@ -14700,6 +14700,19 @@ maki-swap-periphery@^3.3.0:
     truffle-hdwallet-provider "^1.0.17"
     truffle-plugin-verify "^0.4.0"
 
+maki-toolkit@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/maki-toolkit/-/maki-toolkit-1.0.2.tgz#5e992e3a5f69ea0ef042075fc5d15eea8ab744d1"
+  integrity sha512-j9GaKdmjmVNxecdfWSJ/TlQmnst75LYk+bxjes1edh3J06LL1k/7aPtaBGRsHtVgbkJF8PfwYqor8jlDI2jzjA==
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+    "@types/lodash" "^4.14.162"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    react-popper "^2.2.5"
+    react-transition-group "^4.4.1"
+    styled-system "^5.1.5"
+
 maki-uikit-v2@^2.4.4:
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/maki-uikit-v2/-/maki-uikit-v2-2.4.4.tgz#f38c63fe8442f494e623c1e149581ea0c6fd2b1e"
