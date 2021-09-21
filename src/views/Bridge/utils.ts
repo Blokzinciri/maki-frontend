@@ -642,7 +642,7 @@ const encodeFunc = (provider, storeData: BrideState, account, chainId): { data?:
       // to
       account,
       // toChain
-      mapChainIdToNames[chainId],
+      mapChainIdToNames[outToken.chainId],
       // channel
       'BUTTER',
     ]
@@ -723,9 +723,12 @@ export const getTradeStatus = async (tx: string, fromChain: number, toChain: num
     const result = await getTradeStatus(tx, fromChain, toChain)
     return result
   }
-  if (res.code === 4 || res.code === -1) {
+  if (Number(res.data.code) === 4 || Number(res.data.code) === -1) {
     const result = await getTradeStatus(tx, fromChain, toChain)
     return result
   }
-  return Promise.resolve(res.code === 5 ? [FetchStatus.SUCCESS] : [FetchStatus.RETURN, 'Not found transaction hash'])
+
+  return Promise.resolve(
+    Number(res.data.code) === 5 ? [FetchStatus.SUCCESS] : [FetchStatus.RETURN, 'Not found transaction hash'],
+  )
 }

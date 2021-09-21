@@ -62,10 +62,11 @@ export const useBridgeActionHandlers = (): {
   handleGetTradeInfo: (params: any, tokenIn: Token, tokenOut: Token) => void
   setTradeLimit: (chainId: number, data: { max: number; min: number }) => void
   onSwap: (chainId: number) => void
+  finishSwap: () => void
 } => {
   const dispatch = useDispatch<AppDispatch>()
   const bridgeState = useBridgeState()
-  const { inToken, outToken, inAmount, outAmount } = bridgeState
+  const { inToken, outToken, inAmount, outAmount, swap: swapState } = bridgeState
   const { account } = useActiveWeb3React()
 
   const handleGetTradeInfo = useCallback(
@@ -268,7 +269,7 @@ export const useBridgeActionHandlers = (): {
       dispatch(setSwapState({ isSwapping: true, txhash: null }))
       swap(bridgeState, account, chainId).then(([err, data]) => {
         if (err === FetchStatus.SUCCESS) {
-          dispatch(setSwapState({ isSwapping: false, txhash: data }))
+          dispatch(setSwapState({ isSwapping: true, txhash: data }))
           return
         }
 
@@ -277,6 +278,8 @@ export const useBridgeActionHandlers = (): {
     },
     [bridgeState, account, dispatch],
   )
+
+  const finishSwap = () => dispatch(setSwapState({ ...swapState, isSwapping: false }))
 
   return {
     onSelectInToken,
@@ -287,6 +290,7 @@ export const useBridgeActionHandlers = (): {
     handleGetTradeInfo,
     setTradeLimit,
     onSwap,
+    finishSwap,
   }
 }
 

@@ -144,8 +144,10 @@ const TradeItem: FunctionComponent<Props> = ({
   }, [balance, account, selectedToken])
 
   const handleClickMax = useCallback(() => {
-    if (balance.fetchStatus === FetchStatus.SUCCESS) {
-      onMax(getFullDisplayBalance(balance.amount, selectedToken.decimals).toString())
+    if (onMax) {
+      if (balance.fetchStatus === FetchStatus.SUCCESS) {
+        onMax(getFullDisplayBalance(balance.amount, selectedToken.decimals).toString())
+      }
     }
   }, [onMax, balance, selectedToken])
 

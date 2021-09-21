@@ -30,9 +30,9 @@ interface ConfirmBridgeModalProps {
 }
 
 const ConfirmBridgeModal: React.FunctionComponent<ConfirmBridgeModalProps> = ({ isOpen, onDismiss }) => {
-  const [showTx, setShowTx] = useState(false)
   const { bridgeInfo, swap, inToken, outToken } = useBridgeState()
-  const { onSwap } = useBridgeActionHandlers()
+  const [showTx, setShowTx] = useState(false)
+  const { onSwap, finishSwap } = useBridgeActionHandlers()
   const { chainId } = useActiveWeb3React()
 
   const modalHeader = useCallback(() => {
@@ -65,19 +65,29 @@ const ConfirmBridgeModal: React.FunctionComponent<ConfirmBridgeModalProps> = ({ 
 
   useEffect(() => {
     if (bridgeInfo) {
-      getTradeStatus(swap.txhash, inToken.chainId, outToken.chainId).then(([err, data]) => {
-        if (err === FetchStatus.SUCCESS) {
-          setShowTx(true)
+      if (swap.txhash) {
+        if (inToken.chainId !== outToken.chainId) {
+          getTradeStatus(swap.txhash, inToken.chainId, outToken.chainId).then(([err, data]) => {
+            console.log('gggg', err)
+            if (err === FetchStatus.SUCCESS) {
+              setShowTx(true)
+              finishSwap()
+            }
+          })
+          return
         }
-      })
+        setShowTx(true)
+        finishSwap()
+      }
     }
-  }, [swap, inToken, outToken, bridgeInfo])
+  }, [swap, inToken, outToken, bridgeInfo, finishSwap])
   const pendingText = `Swapping ${inToken?.symbol}
    for ${outToken?.symbol}`
 
   const txToShow = useMemo(() => {
     return showTx ? swap.txhash : ''
   }, [showTx, swap.txhash])
+  console.log('ffffff', swap, showTx)
   return (
     <TransactionConfirmationModal
       isOpen={isOpen}
