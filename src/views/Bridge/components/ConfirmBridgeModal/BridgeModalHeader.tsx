@@ -3,12 +3,14 @@ import styled, { ThemeContext } from 'styled-components'
 import { Text } from 'maki-uikit-v2'
 import { ArrowDown } from 'react-feather'
 import { TYPE } from 'components/Shared'
-import { AutoColumn } from 'components/Column'
+import Column, { AutoColumn } from 'components/Column'
 import { RowBetween, RowFixed } from 'components/Row'
 import { useBridgeState } from 'state/bridge/hooks'
 import CoinLogo from 'components/Maki/CoinLogo'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { useActiveWeb3React } from 'hooks'
+import { mapChainIdToNames } from 'views/Bridge/constant'
 
 const { main: Main } = TYPE
 
@@ -24,17 +26,20 @@ const PriceInfoText = styled(Text)`
 
 const BridgeModalHeader: React.FunctionComponent = () => {
   const { bridgeInfo, inToken, outToken } = useBridgeState()
+  const { account } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
   return (
     <AutoColumn gap="md" style={{ marginTop: '20px' }}>
       <RowBetween align="flex-end">
-        <RowFixed gap="0px">
-          <CoinLogo srcs={[inToken.logo]} size="24px" style={{ marginRight: '12px' }} />
-          <Text fontSize="24px" color="primary">
-            {Number(bridgeInfo.inToken.amount).toFixed(3)}
-          </Text>
-        </RowFixed>
+        <Column>
+          <RowFixed gap="0px">
+            <CoinLogo srcs={[inToken.logo]} size="24px" style={{ marginRight: '12px' }} />
+            <Text fontSize="24px" color="primary">
+              {Number(bridgeInfo.inToken.amount).toFixed(3)}
+            </Text>
+          </RowFixed>
+        </Column>
         <RowFixed gap="0px">
           <Text fontSize="24px" style={{ marginLeft: '10px', fontWeight: 500 }}>
             {inToken.symbol}

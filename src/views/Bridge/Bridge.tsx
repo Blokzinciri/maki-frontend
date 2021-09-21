@@ -26,14 +26,13 @@ const Bridge: FunctionComponent = () => {
   const { onSelectInToken, onSelectOutToken, onMax, onChangeInTokenAmount, onChangeOutTokenAmount, setTradeLimit } =
     useBridgeActionHandlers()
   const bridgeState = useBridgeState()
-  const { inToken, outToken, inAmount, outAmount, bridgeInfo, tradeLimit, infoLoading } = bridgeState
+  const { inToken, outToken, inAmount, outAmount, bridgeInfo, tradeLimit, infoLoading, swap: swapState } = bridgeState
   const [approvalState, setApprovalState] = useState({
     show: true,
     approving: false,
     approved: false,
   })
 
-  const [isSwapping, setIsSwapping] = useState(false)
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
 
   useEffect(() => {
@@ -81,13 +80,7 @@ const Bridge: FunctionComponent = () => {
   }, [setApprovalState, approvalState, chainId, account, inToken])
 
   const handleSwap = useCallback(() => {
-    // setIsSwapping(true)
     setConfirmModalOpen(true)
-    /* swap(bridgeState, account, chainId).then(([err, data]) => {
-      if (err === FetchStatus.SUCCESS) {
-        setIsSwapping(false)
-      }
-    }) */
   }, [setConfirmModalOpen])
 
   const handleRenderButtons = useCallback((): JSX.Element => {
@@ -137,7 +130,7 @@ const Bridge: FunctionComponent = () => {
         }
 
         return (
-          <Button onClick={handleSwap} variant="primary" width="100%" disabled={isSwapping || infoLoading}>
+          <Button onClick={handleSwap} variant="primary" width="100%" disabled={swapState.isSwapping || infoLoading}>
             Swap
           </Button>
         )
@@ -156,7 +149,7 @@ const Bridge: FunctionComponent = () => {
     tradeLimit,
     outToken,
     approvalState,
-    isSwapping,
+    swapState,
     infoLoading,
     handleApprove,
     handleSwap,
@@ -169,11 +162,15 @@ const Bridge: FunctionComponent = () => {
         return
       }
       if (inToken.address === '') {
+        setApprovalState({
+          show: false,
+          approving: false,
+          approved: true,
+        })
         return
       }
 
       getAllowance(inToken.address, PROVIDERS[chainId].BRIDGE, account, chainId).then(([err, data]) => {
-        console.log(err, data)
         if (err === FetchStatus.SUCCESS) {
           setApprovalState({
             show: parseInt(data) < Number(inAmount),

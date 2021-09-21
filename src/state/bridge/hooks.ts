@@ -269,7 +269,10 @@ export const useBridgeActionHandlers = (): {
       swap(bridgeState, account, chainId).then(([err, data]) => {
         if (err === FetchStatus.SUCCESS) {
           dispatch(setSwapState({ isSwapping: false, txhash: data }))
+          return
         }
+
+        dispatch(setSwapState({ isSwapping: false, txhash: null }))
       })
     },
     [bridgeState, account, dispatch],

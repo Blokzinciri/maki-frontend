@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import ABI from 'web3-eth-abi/src'
 import { BrideState } from 'state/bridge/reducer'
 
-import { FetchStatus, mapChainIdToNames, PROVIDERS } from './constant'
+import { FetchStatus, mapChainIdToNames, PROVIDERS, ISWAP_API_URL } from './constant'
 
 const axiosPost = (url) => {
   return (...args) => axios.post(url, ...args)
@@ -566,7 +566,7 @@ const token2token = () => ({
 })
 
 const encodeFunc = (provider, storeData: BrideState, account, chainId): { data?: any; value?: any; meta?: any } => {
-  const { inToken, outToken, bridgeInfo, inAmount, outAmount, inTolerance, outTolerance, userDeadline } = storeData
+  const { inToken, outToken, bridgeInfo, outAmount, inTolerance, outTolerance, userDeadline } = storeData
 
   if (outToken.chainId === inToken.chainId) {
     let result = null
@@ -614,7 +614,7 @@ const encodeFunc = (provider, storeData: BrideState, account, chainId): { data?:
 
     return result
   }
-  console.log('fffffffffff', bridgeInfo, inTolerance, outTolerance, userDeadline)
+
   const amount0Out = new BigNumber(bridgeInfo.inToken.amountOut).times(10 ** provider.USDT.decimals)
   const amount1Out = new BigNumber(bridgeInfo.outToken.amountOut).times(10 ** outToken.decimals)
   let result = {}
@@ -709,4 +709,23 @@ export const swap = async (bridgeInfo: BrideState, account: string, chainId: num
   if (err !== FetchStatus.SUCCESS) return Promise.resolve([err, txHash])
 
   return Promise.resolve([FetchStatus.SUCCESS, txHash])
+}
+
+export const getTradeStatus = async (tx: string, fromChain: number, toChain: number) => {
+  const res = await axios
+    .post(`${ISWAP_API_URL}/get-tx-status`, {
+      fromChain,
+      toChain,
+      tx,
+    })
+    .catch((e) => e)
+  if (res instanceof Error) {
+    const result = await getTradeStatus(tx, fromChain, toChain)
+    return result
+  }
+  if (res.code === 4 || res.code === -1) {
+    const result = await getTradeStatus(tx, fromChain, toChain)
+    return result
+  }
+  return Promise.resolve(res.code === 5 ? [FetchStatus.SUCCESS] : [FetchStatus.RETURN, 'Not found transaction hash'])
 }

@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { useLastTruthy } from 'hooks/useLast'
 import { BridgeInfo } from 'state/bridge/types'
 import BridgeSummary from './BridgeSummary'
 

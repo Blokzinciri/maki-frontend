@@ -1,12 +1,13 @@
 import { currencyEquals, Trade } from 'maki-sdk'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { useBridgeActionHandlers, useBridgeState } from 'state/bridge/hooks'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'components/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'hooks'
+import { FetchStatus } from 'views/Bridge/constant'
 
 import BridgeModalHeader from './BridgeModalHeader'
-import BridgeSummary from '../BridgeSummary'
 import BridgeModalFooter from './BridgeModalFooter'
+import { getTradeStatus } from '../../utils'
 
 /**
  * Returns true if the trade requires a confirmation of details before we can submit it
@@ -29,6 +30,7 @@ interface ConfirmBridgeModalProps {
 }
 
 const ConfirmBridgeModal: React.FunctionComponent<ConfirmBridgeModalProps> = ({ isOpen, onDismiss }) => {
+  const [showTx, setShowTx] = useState(false)
   const { bridgeInfo, swap, inToken, outToken } = useBridgeState()
   const { onSwap } = useBridgeActionHandlers()
   const { chainId } = useActiveWeb3React()
@@ -61,14 +63,26 @@ const ConfirmBridgeModal: React.FunctionComponent<ConfirmBridgeModalProps> = ({ 
     [onDismiss, modalHeader, modalBottom],
   )
 
+  useEffect(() => {
+    if (bridgeInfo) {
+      getTradeStatus(swap.txhash, inToken.chainId, outToken.chainId).then(([err, data]) => {
+        if (err === FetchStatus.SUCCESS) {
+          setShowTx(true)
+        }
+      })
+    }
+  }, [swap, inToken, outToken, bridgeInfo])
   const pendingText = `Swapping ${inToken?.symbol}
    for ${outToken?.symbol}`
 
+  const txToShow = useMemo(() => {
+    return showTx ? swap.txhash : ''
+  }, [showTx, swap.txhash])
   return (
     <TransactionConfirmationModal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      hash={swap.txhash}
+      hash={txToShow}
       content={confirmationContent}
       pendingText={pendingText}
       attemptingTxn={swap.isSwapping}
