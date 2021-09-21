@@ -3,7 +3,7 @@ import axios from 'axios'
 import { AppState, AppDispatch } from 'state'
 import { useSelector, useDispatch } from 'react-redux'
 import { Token, ISWAP_API_URL, mapChainIdToNames, PROVIDERS, FetchStatus } from 'views/Bridge/constant'
-import { aggCall, swap } from 'views/Bridge/utils'
+import { swap } from 'views/Bridge/utils'
 import { useActiveWeb3React } from 'hooks'
 
 import {
@@ -45,6 +45,14 @@ export const useOutToken = (): Token => {
   return outToken
 }
 
+const isSameToken = (tokenA: Token, tokenB: Token): boolean => {
+  if (tokenA && tokenB) {
+    return tokenA.address === tokenB.address && tokenA.chainId === tokenB.chainId
+  }
+
+  return false
+}
+
 export const useBridgeActionHandlers = (): {
   onSelectInToken: (token: Token) => void
   onSelectOutToken: (token: Token) => void
@@ -77,7 +85,6 @@ export const useBridgeActionHandlers = (): {
                 },
               }),
             )
-            dispatch(setBridgeInfoLoading(false))
             return
           }
 
@@ -95,9 +102,12 @@ export const useBridgeActionHandlers = (): {
 
   const onSelectInToken = useCallback(
     (token) => {
+      if (isSameToken(token, outToken)) {
+        return
+      }
       dispatch(setInToken(token))
-
       if (outToken) {
+        const isDest = inAmount.length === 0
         const params = {
           inToken: {
             chain: token.chainId,
@@ -111,28 +121,33 @@ export const useBridgeActionHandlers = (): {
             address: outToken.address,
             decimals: outToken.decimals,
             symbol: outToken.symbol,
-            amount: '',
+            amountOut: isDest ? outAmount : '',
           },
-          direct: 'src',
+          direct: isDest ? 'dest' : 'src',
         }
 
         handleGetTradeInfo(params, token, outToken)
       }
     },
-    [dispatch, outToken, inAmount, handleGetTradeInfo],
+    [dispatch, outToken, inAmount, outAmount, handleGetTradeInfo],
   )
 
   const onSelectOutToken = useCallback(
     (token) => {
+      if (isSameToken(token, inToken)) {
+        return
+      }
       dispatch(setOutToken(token))
 
       if (inToken) {
+        const isSrc = outAmount.length === 0
         const params = {
           inToken: {
             chain: inToken.chainId,
             address: inToken.address,
             decimals: inToken.decimals,
             symbol: inToken.symbol,
+            amount: isSrc ? inAmount : '',
           },
           outToken: {
             chain: token.chainId,
@@ -141,13 +156,13 @@ export const useBridgeActionHandlers = (): {
             symbol: token.symbol,
             amountOut: outAmount,
           },
-          direct: 'dest',
+          direct: isSrc ? 'src' : 'dest',
         }
 
         handleGetTradeInfo(params, inToken, token)
       }
     },
-    [dispatch, inToken, outAmount, handleGetTradeInfo],
+    [dispatch, inToken, outAmount, inAmount, handleGetTradeInfo],
   )
 
   const onChangeInTokenAmount = useCallback(

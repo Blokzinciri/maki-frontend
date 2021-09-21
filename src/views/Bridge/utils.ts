@@ -302,13 +302,11 @@ export const sendTransaction = async (params, returnHash, account, chainId) => {
     params: [{ ...all, gas: `0x${Number(new BigNumber(gasLimit).times(1.3).toFixed(0)).toString(16)}` }],
   })
 
-  console.log('ffffffffffffff', transerr, txhash)
   if (transerr !== FetchStatus.SUCCESS) return Promise.resolve([transerr, txhash])
   if (returnHash) {
     return Promise.resolve([FetchStatus.SUCCESS, txhash])
   }
 
-  console.log('ffffffffffffff', transerr, txhash)
   return watchTx(txhash, chainId)
 }
 
@@ -568,14 +566,6 @@ const token2token = () => ({
 })
 
 const encodeFunc = (provider, storeData: BrideState, account, chainId): { data?: any; value?: any; meta?: any } => {
-  /* const {
-    inToken: { symbol, router, amountOut, amount, decimals },
-    outToken: { chainId },
-    slippage,
-    deadline,
-    wallet,
-  } = storeData; */
-
   const { inToken, outToken, bridgeInfo, inAmount, outAmount, inTolerance, outTolerance, userDeadline } = storeData
 
   if (outToken.chainId === inToken.chainId) {
@@ -624,7 +614,7 @@ const encodeFunc = (provider, storeData: BrideState, account, chainId): { data?:
 
     return result
   }
-
+  console.log('fffffffffff', bridgeInfo, inTolerance, outTolerance, userDeadline)
   const amount0Out = new BigNumber(bridgeInfo.inToken.amountOut).times(10 ** provider.USDT.decimals)
   const amount1Out = new BigNumber(bridgeInfo.outToken.amountOut).times(10 ** outToken.decimals)
   let result = {}
@@ -685,11 +675,11 @@ const encodeFunc = (provider, storeData: BrideState, account, chainId): { data?:
       // to
       account,
       // toChain
-      mapChainIdToNames[chainId],
+      mapChainIdToNames[outToken.chainId],
       // channel
       'BUTTER',
     ]
-    console.log(params)
+
     result = {
       data: ABI.encodeFunctionCall(token2token(), params),
       value: '0x0',

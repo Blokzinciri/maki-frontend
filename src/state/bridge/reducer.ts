@@ -129,6 +129,7 @@ export default createReducer<BrideState>(initialState, (builder) =>
         inAmount: payload.inToken.amount,
         outAmount: payload.outToken.amountOut,
         bridgeInfo: payload,
+        infoLoading: false,
       }
     })
     .addCase(setInTolerance, (state, { payload }) => {

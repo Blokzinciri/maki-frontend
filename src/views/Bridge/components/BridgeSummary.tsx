@@ -88,49 +88,20 @@ const BridgeSummary: FunctionComponent = () => {
   return (
     <Card>
       <CardBody>
-        <RowBetween>
-          <RowFixed>
-            <Text fontSize="14px">Price Impact</Text>
-            <QuestionHelper text="" />
-          </RowFixed>
-          <RowFixed>
-            <Text fontSize="14px">{bridgeInfo.inToken.impact}%</Text>
-          </RowFixed>
-        </RowBetween>
-        <RowBetween>
-          <RowFixed>
-            <Text fontSize="14px">Slippage Tolerance</Text>
-            <QuestionHelper text="Current slippage tolerance." />
-          </RowFixed>
-          <RowFixed>
-            <Text fontSize="14px">{inTolerance / 100}%</Text>
-          </RowFixed>
-        </RowBetween>
-        <RowBetween>
-          <RowFixed>
-            <Text fontSize="14px">Minimum received</Text>
-            <QuestionHelper text="Your transaction will revert if there is a large, unfavorable price movement before it is confirmed." />
-          </RowFixed>
-          <RowFixed>
-            <Text fontSize="14px">
-              {fixed(
-                new BigNumber(bridgeInfo.outToken.amountOut).times((100 - inTolerance / 100) / 100),
-                outToken.decimals,
-              )}{' '}
-              {outToken.symbol}
-            </Text>
-          </RowFixed>
-        </RowBetween>
-
-        <RowBetween>
-          <RowFixed>
-            <Text fontSize="14px">Trade Fee</Text>
-            <QuestionHelper text="" />
-          </RowFixed>
-          <Text fontSize="14px">
-            {bridgeInfo.inToken.dexFee} {inToken.symbol}
-          </Text>
-        </RowBetween>
+        {details.map((detail) => (
+          <RowBetween key={detail.label}>
+            <RowFixed>
+              <Text fontSize="14px">{detail.label}</Text>
+              {detail.tip.length > 0 && <QuestionHelper text={detail.tip} />}
+            </RowFixed>
+            <RowFixed>
+              <Text fontSize="14px">
+                {detail.value}
+                {detail.after}
+              </Text>
+            </RowFixed>
+          </RowBetween>
+        ))}
       </CardBody>
     </Card>
   )
