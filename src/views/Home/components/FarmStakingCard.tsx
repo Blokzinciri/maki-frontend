@@ -10,6 +10,7 @@ import UnlockButton from 'components/UnlockButton'
 import ClaimButton from 'components/ClaimButton'
 import MakiHarvestBalance from './MakiHarvestBalance'
 import MakiWalletBalance from './MakiWalletBalance'
+import FaucetButton from '../../../components/FaucetButton'
 
 const StyledFarmStakingCard = styled(Card)`
   background-image: url('/images/farm-bg.svg');
@@ -88,6 +89,7 @@ const FarmedStakingCard = () => {
                     })}
               </Button>
               <ClaimButton width="100%" mt="10px" />
+              <FaucetButton width="100%" mt="10px" />
             </>
           ) : (
             <UnlockButton width="100%" />
