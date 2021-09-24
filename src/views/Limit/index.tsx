@@ -40,6 +40,7 @@ import PriceInput from 'components/PriceInput'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { cancelOrder, createOrder } from 'state/limit/'
 import { BigNumber } from 'ethers'
+import TradingChart from 'components/TradingChart/TradingChart'
 
 import { IToken } from 'state/limit/types/token.interface'
 import { AppState } from 'state'
@@ -406,6 +407,7 @@ const Limit = () => {
             description="Trade tokens in an instant"
           // displayIcons={false} 
           />
+          <TradingChart inputCurrency={currencies[Field.INPUT]} outputCurrency={currencies[Field.OUTPUT]} />
           <CardBody>
             <AutoColumn gap="md">
               <Text fontSize="14px">You Pay</Text>

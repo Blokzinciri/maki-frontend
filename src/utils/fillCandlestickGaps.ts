@@ -5,14 +5,14 @@ import { CandlePeriod, NumericalCandlestickDatum } from 'config/constants/types'
  */
 export default function fillCandlestickGap(candleData: NumericalCandlestickDatum[], candlePeriod: CandlePeriod) {
   const formattedCandleData: NumericalCandlestickDatum[] = candleData.length > 0 ? [candleData[0]] : []
-  if (formattedCandleData.length == 0) return formattedCandleData
+  if (formattedCandleData.length === 0) return formattedCandleData
   for (let i = 1; i < candleData.length; i++) {
     const cur = candleData[i]
     const prev = candleData[i - 1]
     const timeGap = cur.time - prev.time
     if (timeGap === candlePeriod) {
       formattedCandleData.push(cur)
-      continue
+      break
     }
     for (let j = 1; j < timeGap / candlePeriod; j++) {
       const emptyCandle = {

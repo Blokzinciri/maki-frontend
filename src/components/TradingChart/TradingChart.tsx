@@ -6,15 +6,12 @@ import TVChart from 'kaktana-react-lightweight-charts'
 import { darken } from 'polished'
 import { BusinessDay, TickMarkType, UTCTimestamp } from 'lightweight-charts'
 
-// components
-import { RowBetween } from '../../components/Row'
+import { RowBetween } from 'components/Row'
 import { formatNumber } from 'utils/formatBalance'
-import CurrencyLogo from '../CurrencyLogo'
+import CurrencyLogo from 'components/CurrencyLogo'
 
-//hooks
 import { useActiveWeb3React } from 'hooks'
 import { CandlePeriod, NumericalCandlestickDatum } from 'config/constants/types'
-import useDexCandles from 'hooks/useDexCandles'
 import fillCandlestickGaps from 'utils/fillCandlestickGaps'
 import useWindowDimensions from 'hooks/useWindowDimensions'
 
@@ -101,7 +98,7 @@ const MAJOR_HIERARCHY = [
   '0xc7198437980c041c805A1EDcbA50c1Ce5db95118'.toLowerCase() // USDT.e
 ]
 
-export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
+export default function TradingChart({ inputCurrency, outputCurrency }: ChartProps) {
   const { chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
   const [candlePeriod, setCandlePeriod] = useState(CandlePeriod.OneHour)
@@ -115,13 +112,13 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
     inputCurrency instanceof Token
       ? inputCurrency.address
       : inputCurrency === HUOBI
-      ? WHT[chainId ? chainId : ChainId.MAINNET]?.address
+      ? WHT[chainId || ChainId.MAINNET]?.address
       : ''
   const outputAddress =
     outputCurrency instanceof Token
       ? outputCurrency.address
       : outputCurrency === HUOBI
-      ? WHT[chainId ? chainId : ChainId.MAINNET]?.address
+      ? WHT[chainId || ChainId.MAINNET]?.address
       : ''
 
   // Chart should always show alt/major, e.g. JOE/AVAX.
@@ -136,10 +133,10 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
   const majorCurrency = token0Index < token1Index ? outputCurrency : inputCurrency
 
   // A greater index denotes a greater major. -1 denotes altcoin.
-  const token0LCase = token0Index < token1Index ? inputAddress.toLowerCase() : outputAddress.toLowerCase()
-  const token1LCase = token0Index < token1Index ? outputAddress.toLowerCase() : inputAddress.toLowerCase()
+  // const token0LCase = token0Index < token1Index ? inputAddress.toLowerCase() : outputAddress.toLowerCase()
+  // const token1LCase = token0Index < token1Index ? outputAddress.toLowerCase() : inputAddress.toLowerCase()
 
-  const candleData: NumericalCandlestickDatum[] = useDexCandles(token0LCase, token1LCase, candlePeriod)
+  // const candleData: NumericalCandlestickDatum[] = useDexCandles(token0LCase, token1LCase, candlePeriod)
 
   const chartOptions = {
     // General chart options
@@ -152,12 +149,12 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
     },
     priceFormat: {
       type: 'custom',
-      minMove: 1 / Math.pow(10, 10),
+      minMove: 1 / (10 ** 10),
       formatter: (price: any) => {
         if (price < 0) return 0
-        else if (price < 0.001) return parseFloat(price).toFixed(10)
-        else if (price >= 0.001 && price < 1) return parseFloat(price).toFixed(6)
-        else return parseFloat(price).toFixed(3)
+        if (price < 0.001) return parseFloat(price).toFixed(10)
+        if (price >= 0.001 && price < 1) return parseFloat(price).toFixed(6)
+        return parseFloat(price).toFixed(3)
       }
     },
     priceScale: {
@@ -174,35 +171,33 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
         const year = date.getFullYear()
         const month = monthNames[date.getMonth()]
         const day = date.getDate()
-        const hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours().toString()
-        const minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes().toString()
-        const second = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds().toString()
-        if (tickMarkType === TickMarkType.Year) {
+        const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours().toString()
+        const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes().toString()
+        const second = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds().toString()
+        if (tickMarkType === TickMarkType.Year)
           return year
-        } else if (tickMarkType === TickMarkType.Month) {
+        if (tickMarkType === TickMarkType.Month)
           return month
-        } else if (tickMarkType === TickMarkType.DayOfMonth) {
+        if (tickMarkType === TickMarkType.DayOfMonth)
           return day
-        } else if (tickMarkType === TickMarkType.Time) {
+        if (tickMarkType === TickMarkType.Time)
           return `${hour}:${minute}`
-        } else {
-          return `${hour}:${minute}:${second}`
-        }
+        return `${hour}:${minute}:${second}`
       }
     },
     localization: {
       timeFormatter: (time: BusinessDay | UTCTimestamp) => {
         const date = new Date((time as UTCTimestamp) * 1000)
-        const hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours().toString()
-        const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes().toString()
-        return hours + ':' + minutes
+        const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours().toString()
+        const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes().toString()
+        return `${hours}:${minutes}`
       },
       priceFormatter: (price: any) => {
         if (price < 0) return 0
-        else if (price < 0.001) return parseFloat(price).toFixed(10)
-        else if (price >= 0.001 && price < 0.01) return parseFloat(price).toFixed(8)
-        else if (price >= 0.01 && price < 1) return parseFloat(price).toFixed(6)
-        else return parseFloat(price).toFixed(3)
+        if (price < 0.001) return parseFloat(price).toFixed(10)
+        if (price >= 0.001 && price < 0.01) return parseFloat(price).toFixed(8)
+        if (price >= 0.01 && price < 1) return parseFloat(price).toFixed(6)
+        return parseFloat(price).toFixed(3)
       }
     },
     crosshair: {
@@ -243,9 +238,10 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
   }
 
   useEffect(() => {
+    const candleData: NumericalCandlestickDatum[] = []
     const formattedCandleData: NumericalCandlestickDatum[] = fillCandlestickGaps(candleData, candlePeriod)
     setCandlestickSeries([{ data: formattedCandleData }])
-  }, [candlePeriod, candleData])
+  }, [candlePeriod])
 
   const hasData = candlestickSeries[0].data.length > 0
   const lastClose = hasData ? candlestickSeries[0].data[candlestickSeries[0].data.length - 1].close : undefined
@@ -262,7 +258,7 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
         <ChartHeaderWrapper>
           {altCurrency ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CurrencyLogo currency={altCurrency} size={'30px'} />
+              <CurrencyLogo currency={altCurrency} size='30px' />
               <Text style={{ marginLeft: '0.5rem' }}>{altCurrency?.symbol}</Text>
             </div>
           ) : (
@@ -277,7 +273,7 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
 
           {majorCurrency ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CurrencyLogo currency={majorCurrency} size={'30px'} />
+              <CurrencyLogo currency={majorCurrency} size='30px' />
               <Text style={{ marginLeft: '0.5rem' }}>{majorCurrency?.symbol}</Text>
             </div>
           ) : (
@@ -333,7 +329,7 @@ export default function Chart({ inputCurrency, outputCurrency }: ChartProps) {
           <Text
             fontSize='14px'
             textAlign='center'
-          >{`Unforunately, this pair doesn't have enough data.`}</Text>
+          >Unforunately, this pair doesn&rsquo;t have enough data.</Text>
         )}
       </FlexColumnWrapper>
     </div>
