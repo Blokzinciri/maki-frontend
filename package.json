@@ -60,6 +60,7 @@
     "ethers": "^5.3.1",
     "jazzicon": "^1.5.0",
     "js-cookie": "^2.2.1",
+    "kaktana-react-lightweight-charts": "^2.0.0",
     "lodash": "^4.17.20",
     "maki-sdk": "^4.4.1",
     "maki-swap-periphery": "^3.3.0",
