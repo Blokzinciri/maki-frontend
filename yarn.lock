@@ -3948,9 +3948,9 @@
     "@types/node" "*"
 
 "@types/lodash@^4.14.162":
-  version "4.14.171"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.171.tgz#f01b3a5fe3499e34b622c362a46a609fdb23573b"
-  integrity sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg==
+  version "4.14.173"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.173.tgz#9d3b674c67a26cf673756f6aca7b429f237f91ed"
+  integrity sha512-vv0CAYoaEjCw/mLy96GBTnRoZrSxkGE0BKzKimdR8P3OzrNYNvBgtW7p055A+E8C31vXNUhWKoFCbhq7gbyhFg==
 
 "@types/long@^4.0.0", "@types/long@^4.0.1":
   version "4.0.1"
@@ -4148,9 +4148,9 @@
     csstype "^3.0.2"
 
 "@types/styled-system@^5.1.10":
-  version "5.1.12"
-  resolved "https://registry.yarnpkg.com/@types/styled-system/-/styled-system-5.1.12.tgz#4f3ca8da3dffe3c5a6cc3b2a97f51b41464c104a"
-  integrity sha512-7x4BYKKfK9QewfsFC2x5r9BK/OrfX+JF/1P21jKPMHruawDw9gvG7bTZgTVk6YkzDO2JUlsk4i8hdiAepAhD0g==
+  version "5.1.13"
+  resolved "https://registry.yarnpkg.com/@types/styled-system/-/styled-system-5.1.13.tgz#9ad667534d3bd75720dd7778c94c783449cb5c14"
+  integrity sha512-RtpV6zXnnMQNcxKjC06BUM4MUER5o9uZ6b7xAc2OzhWxSsmQ3jXyW8ohuXdEJRKypEe0EqAzbSGx2Im0NXfdKA==
   dependencies:
     csstype "^3.0.2"
 
@@ -14683,10 +14683,10 @@ maki-swap-periphery@^3.3.0:
     truffle-hdwallet-provider "^1.0.17"
     truffle-plugin-verify "^0.4.0"
 
-maki-uikit-v2@^2.4.4:
-  version "2.4.4"
-  resolved "https://registry.yarnpkg.com/maki-uikit-v2/-/maki-uikit-v2-2.4.4.tgz#f38c63fe8442f494e623c1e149581ea0c6fd2b1e"
-  integrity sha512-EJJXp927iWDB0tu7byCoAmjHD8ANc4JpCGJ9D7Kn/rQGk2fFmY8oUuiAbLYUIjYG4tuNWfknt/3ujcq8mKKSgA==
+maki-toolkit@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/maki-toolkit/-/maki-toolkit-1.0.2.tgz#5e992e3a5f69ea0ef042075fc5d15eea8ab744d1"
+  integrity sha512-j9GaKdmjmVNxecdfWSJ/TlQmnst75LYk+bxjes1edh3J06LL1k/7aPtaBGRsHtVgbkJF8PfwYqor8jlDI2jzjA==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.162"
