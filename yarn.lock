@@ -14713,19 +14713,6 @@ maki-toolkit@^1.0.2:
     react-transition-group "^4.4.1"
     styled-system "^5.1.5"
 
-maki-uikit-v2@^2.4.4:
-  version "2.4.4"
-  resolved "https://registry.yarnpkg.com/maki-uikit-v2/-/maki-uikit-v2-2.4.4.tgz#f38c63fe8442f494e623c1e149581ea0c6fd2b1e"
-  integrity sha512-EJJXp927iWDB0tu7byCoAmjHD8ANc4JpCGJ9D7Kn/rQGk2fFmY8oUuiAbLYUIjYG4tuNWfknt/3ujcq8mKKSgA==
-  dependencies:
-    "@popperjs/core" "^2.9.2"
-    "@types/lodash" "^4.14.162"
-    "@types/styled-system" "^5.1.10"
-    lodash "^4.17.20"
-    react-popper "^2.2.5"
-    react-transition-group "^4.4.1"
-    styled-system "^5.1.5"
-
 makiswap-core@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/makiswap-core/-/makiswap-core-4.1.0.tgz#1737b7aaf6bd2771891a40f6e60c9bed2f32abd4"
