@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import { Text } from 'maki-uikit-v2'
+import { Text, Flex } from 'maki-uikit-v2'
 import { Currency, Token, HUOBI, WHT, ChainId } from 'maki-sdk'
-import TVChart from 'kaktana-react-lightweight-charts'
 import { darken } from 'polished'
 import { BusinessDay, TickMarkType, UTCTimestamp } from 'lightweight-charts'
 
-import { RowBetween } from 'components/Row'
 import { formatNumber } from 'utils/formatBalance'
 import CurrencyLogo from 'components/CurrencyLogo'
 
@@ -14,6 +12,7 @@ import { useActiveWeb3React } from 'hooks'
 import { CandlePeriod, NumericalCandlestickDatum } from 'config/constants/types'
 import fillCandlestickGaps from 'utils/fillCandlestickGaps'
 import useWindowDimensions from 'hooks/useWindowDimensions'
+import TVChart from './kaktana-react-lightweight-charts'
 
 interface ChartProps {
   inputCurrency: Currency | Token | undefined
@@ -22,18 +21,20 @@ interface ChartProps {
 
 const ChartHeaderWrapper = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    justify-content: center;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content: flex-start;
   }
 `
 
-const ChartSubHeader = styled(RowBetween)`
+const ChartSubHeader = styled(Flex)`
   margin-top: 1rem;
-  ${({ theme }) => theme.mediaQueries.md}{
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
+  ${({ theme }) => theme.mediaQueries.sm}{
+    flex-direction: row;
+    align-items: flex-end;
   }
 `
 
@@ -42,7 +43,6 @@ const ChartSubHeader = styled(RowBetween)`
 // `
 
 const LastPriceHeaderWrapper = styled.div`
-  font-family: 'Averta CY Bold';
   font-size: 46px;
 `
 
@@ -238,7 +238,13 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
   }
 
   useEffect(() => {
-    const candleData: NumericalCandlestickDatum[] = []
+    const candleData: NumericalCandlestickDatum[] = [
+      { time: 1632661577, open: 173.16, high: 176.43, low: 172.64, close: 176.24 },
+      { time: 1632662577, open: 177.98, high: 178.85, low: 175.59, close: 175.88 },
+      { time: 1632663577, open: 176.84, high: 180.86, low: 175.90, close: 180.46 },
+      { time: 1632664577, open: 182.47, high: 183.01, low: 177.39, close: 179.93 },
+      { time: 1632665577, open: 181.02, high: 182.41, low: 179.30, close: 182.19 }
+    ]
     const formattedCandleData: NumericalCandlestickDatum[] = fillCandlestickGaps(candleData, candlePeriod)
     setCandlestickSeries([{ data: formattedCandleData }])
   }, [candlePeriod])
