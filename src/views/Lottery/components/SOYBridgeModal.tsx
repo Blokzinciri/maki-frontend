@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
-import useWeb3 from 'hooks/useWeb3'
 import BigNumber from 'bignumber.js'
 import { useTokenBalanceNew } from 'hooks/useTokenBalance'
 import { formatNumber, getFullDisplayBalance, getBalanceNumber } from 'utils/formatBalance'
@@ -9,7 +8,9 @@ import { Modal, Text, Flex, Box, Button, BalanceInput } from 'maki-uikit-v2'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceMakiHusd } from 'state/hooks'
 import defaultTokenJson from 'config/constants/token/makiswap.json'
-import MMsendERC20Txns from '../hooks/BridgeWeb3'
+import { parseUnits } from '@ethersproject/units'
+import useToast from 'hooks/useToast'
+import useTokenTransfer from '../hooks/useTokenTransfer'
 
 const InputWrapper = styled.div`
   position: relative;
@@ -24,11 +25,14 @@ interface SOYBridgeModalProps {
 
 const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const [bridgeAmount, setBridgeAmount] = useState('')
   const soyData = defaultTokenJson.tokens.filter(val => val.symbol === 'SOY')[0]
   const { balance: soyBalance, fetchStatus } = useTokenBalanceNew(soyData.address)
+  const [ bridgeData, setBridgeData ] = useState<any>(null)
+  const [ depositAddress, setDepositAddress ] = useState('')
   const userSOYDisplayBalance = getFullDisplayBalance(soyBalance, 18, 3)
+  const tokenTransfer = useTokenTransfer(depositAddress);
+  const { toastSuccess, toastError } = useToast()
 
   const isEligible = useMemo(() => {
     return !Number.isNaN(bridgeAmount) && Number(bridgeAmount) >= 50
@@ -49,27 +53,25 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
     setBridgeAmount(input)
   }
 
-  const bridgeSOYHecoToPolygon = () => {
+  useEffect(() => {
     fetch('https://bridgeapi.anyswap.exchange/v2/serverinfoFull/137')
       .then(res => res.json())
       .then(data => {
-        MMsendERC20Txns(data.soyv5.symbol, account, data.soyv5.SrcToken.DepositAddress, bridgeAmount, data.soyv5.SrcToken.PlusGasPricePercentage, Number(data.soyv5.srcChainID), data.soyv5.DestToken.ContractAddress).then(res => {
-          console.log(res)
-          // if (res.msg === 'Success') {
-          //   console.log(bridgeNode)
-          //   recordTxns(res.info, 'DEPOSIT', inputSymbol, account, mintAddress, bridgeNode)
-          //   insertMintHistory(pairid, coin, inputValueFormatted, res.info.hash, account, mintAddress, bridgeNode)
-          //   cleanInput()
-          // } else {
-          //   console.log(res.error)
-          //   alert(res.error.toString())
-          // }
-          // setIsHardwareTip(false)
-          // setMintSureBtn(false)
-          // setMintModelTitle('')
-          // setMintModelTip('')
-        })
+        setBridgeData(data.soyv5)
+        setDepositAddress(data.soyv5.SrcToken.ContractAddress)
       })
+  })
+
+  const bridgeSOYHecoToPolygon = () => {
+    const transferArgs = {
+      address: bridgeData.SrcToken.DepositAddress,
+      amount: parseUnits(bridgeAmount, bridgeData.DestToken.Decimals)
+    }
+    tokenTransfer(transferArgs).then(res => {
+      toastSuccess(`${bridgeAmount} SOY successfully bridged to Polygon network`)
+    }).catch(e => {
+      toastError('There was an error while bridging SOY')
+    })
   }
 
   return (
@@ -116,7 +118,7 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
             <Text fontSize='14px'>10m+ SOY Estimated Arrival</Text>
             <Text fontSize='14px'>Up to 12 hrs</Text>
           </Flex>
-          <Button width="100%" mt="16px" disabled={!isEligible} onClick={bridgeSOYHecoToPolygon}>Approve</Button>
+          <Button width="100%" mt="16px" disabled={depositAddress === '' || !isEligible} onClick={bridgeSOYHecoToPolygon}>Approve</Button>
           {
             !isEligible &&
               <Text color="red" fontSize='14px' mt='6px'>{error}</Text>
