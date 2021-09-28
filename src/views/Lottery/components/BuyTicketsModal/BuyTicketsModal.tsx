@@ -23,7 +23,7 @@ import { usePriceMakiHusd } from 'state/hooks'
 import { useLottery } from 'state/lottery/hooks'
 import { fetchUserTicketsAndLotteries } from 'state/lottery'
 import useTheme from 'hooks/useTheme'
-import { useCakeBalanceMatic, FetchStatus } from 'hooks/useTokenBalance'
+import { useSOYBalanceMatic, FetchStatus } from 'hooks/useTokenBalance'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCake, useLotteryContract } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
@@ -80,15 +80,15 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
   const lotteryContract = useLotteryContract()
   const cakeContract = useCake()
   const { toastSuccess } = useToast()
-  const { balance: userCake, fetchStatus } = useCakeBalanceMatic()
+  const { balance: userSOYBalance, fetchStatus } = useSOYBalanceMatic()
   // balance from useTokenBalance causes rerenders in effects as a new BigNumber is instanciated on each render, hence memoising it using the stringified value below.
-  const stringifiedUserCake = userCake.toJSON()
+  const stringifiedUserCake = userSOYBalance.toJSON()
   const memoisedUserCake = useMemo(() => new BigNumber(stringifiedUserCake), [stringifiedUserCake])
 
   const cakePriceBusd = usePriceMakiHusd()
   const dispatch = useAppDispatch()
   const hasFetchedBalance = fetchStatus === FetchStatus.SUCCESS
-  const userCakeDisplayBalance = getFullDisplayBalance(userCake, 18, 3)
+  const userSOYDisplayBalance = getFullDisplayBalance(userSOYBalance, 18, 3)
 
   const TooltipComponent = () => (
     <>
@@ -142,7 +142,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
       const limitedNumberTickets = limitNumberByMaxTicketsPerBuy(inputNumber)
       const cakeCostAfterDiscount = getTicketCostAfterDiscount(limitedNumberTickets)
 
-      if (cakeCostAfterDiscount.gt(userCake)) {
+      if (cakeCostAfterDiscount.gt(userSOYBalance)) {
         setUserNotEnoughCake(true)
       } else if (limitedNumberTickets.eq(maxNumberTicketsPerBuyOrClaim)) {
         setMaxTicketPurchaseExceeded(true)
@@ -151,7 +151,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
         setMaxTicketPurchaseExceeded(false)
       }
     },
-    [limitNumberByMaxTicketsPerBuy, getTicketCostAfterDiscount, maxNumberTicketsPerBuyOrClaim, userCake],
+    [limitNumberByMaxTicketsPerBuy, getTicketCostAfterDiscount, maxNumberTicketsPerBuyOrClaim, userSOYBalance],
   )
 
   useEffect(() => {
@@ -337,7 +337,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
             </Text>
             {hasFetchedBalance ? (
               <Text fontSize="12px" color="textSubtle">
-                {userCakeDisplayBalance}
+                {userSOYDisplayBalance}
               </Text>
             ) : (
               <Skeleton width={50} height={12} />

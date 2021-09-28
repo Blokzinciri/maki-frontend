@@ -7,6 +7,7 @@ import Merkle from 'config/constants/merkle'
 
 // ABIs
 import HRC20_ABI from 'config/abi/hrc20.json'
+import ANYERC20_ABI from 'config/abi/anyErc20.json'
 import masterChef from 'config/abi/masterchef.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefHt from 'config/abi/sousChefHt.json'
@@ -138,6 +139,10 @@ export function useV2MigratorContract(): Contract | null {
 
 export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(tokenAddress, HRC20_ABI, withSignerIfPossible)
+}
+
+export function useAnyTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(tokenAddress, ANYERC20_ABI, withSignerIfPossible)
 }
 
 export function useWHTContract(withSignerIfPossible?: boolean): Contract | null {

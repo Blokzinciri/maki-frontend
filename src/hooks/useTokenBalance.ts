@@ -82,7 +82,7 @@ export const useTokenBalanceNew = (tokenAddress: string) => {
   return balanceState
 }
 
-export const useCakeBalanceMatic = () => {
+export const useSOYBalanceMatic = () => {
   const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
   const [cakeBalanceState, setCakeBalanceState] = useState<any>({
     balance: BIG_ZERO,
@@ -114,7 +114,7 @@ export const useCakeBalanceMatic = () => {
   return cakeBalanceState
 }
 
-export const useCakeBalanceMumbai = () => {
+export const useSOYBalanceMumbai = () => {
   const { NOT_FETCHED, SUCCESS, FAILED } = FetchStatus
   const [cakeBalanceState, setCakeBalanceState] = useState<any>({
     balance: BIG_ZERO,

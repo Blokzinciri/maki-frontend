@@ -7,6 +7,7 @@ export default function useTokenTransfer(address) {
   const tokenContract = useTokenContract(tokenAddress)
 
   return async function tokenTransfer(state) {
-    await tokenContract?.transfer(state.address, state.amount)
+    const tx = await tokenContract?.transfer(state.address, state.amount)
+    return tx.wait()
   }
 }
