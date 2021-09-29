@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
-import { Flex, Text } from 'maki-uikit-v2'
+import { Flex, Text } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { Ticket, UpdateTicketAction } from './useTicketsReducer'
 

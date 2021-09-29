@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Heading } from 'maki-uikit-v2'
+import { Flex, Heading } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 
 export interface TimerProps {

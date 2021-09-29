@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { Box, Text, Flex, Heading, Skeleton, Button, useModal } from 'maki-uikit-v2'
+import { Box, Text, Flex, Heading, Skeleton, Button, useModal } from 'maki-toolkit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceMakiHusd } from 'state/hooks'

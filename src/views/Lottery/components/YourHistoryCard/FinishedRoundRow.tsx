@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Flex, ChevronRightIcon, Box, PrizeIcon } from 'maki-uikit-v2'
+import { Text, Flex, ChevronRightIcon, Box, PrizeIcon } from 'maki-toolkit'
 import { SmallDotIcon } from '../Svg'
 import { dateOptions, timeOptions } from '../../helpers'
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { Heading, ModalContainer, ModalHeader, ModalTitle, ModalBody, ModalCloseButton } from 'maki-uikit-v2'
+import { Heading, ModalContainer, ModalHeader, ModalTitle, ModalBody, ModalCloseButton } from 'maki-toolkit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { delay } from 'lodash'

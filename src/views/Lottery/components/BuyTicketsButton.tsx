@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, useModal, ButtonProps } from 'maki-uikit-v2'
+import { Button, useModal, ButtonProps } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { useLottery } from 'state/lottery/hooks'
 import { LotteryStatus } from 'config/constants/types'

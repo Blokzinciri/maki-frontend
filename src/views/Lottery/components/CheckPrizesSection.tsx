@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Heading, Flex, useModal, AutoRenewIcon } from 'maki-uikit-v2'
+import { Button, Heading, Flex, useModal, AutoRenewIcon } from 'maki-toolkit'
 import { useWeb3React } from '@web3-react/core'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'

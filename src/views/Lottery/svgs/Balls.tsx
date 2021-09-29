@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Svg, SvgProps, Text, Flex } from 'maki-uikit-v2'
+import { Svg, SvgProps, Text, Flex } from 'maki-toolkit'
 
 export const PinkBall: React.FC<SvgProps> = (props) => {
   return (

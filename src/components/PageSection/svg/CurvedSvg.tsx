@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css, DefaultTheme } from 'styled-components'
-import { Box } from 'maki-uikit-v2'
+import { Box } from 'maki-toolkit'
 import { ClipFill } from '../types'
 
 interface CurveProps {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Heading, Skeleton } from 'maki-uikit-v2'
+import { Flex, Heading, Skeleton } from 'maki-toolkit'
 import getTimePeriods from 'utils/getTimePeriods'
 import Timer from './Timer'
 import useNextEventCountdown from '../../hooks/useNextEventCountdown'

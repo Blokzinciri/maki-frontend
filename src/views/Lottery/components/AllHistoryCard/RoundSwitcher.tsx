@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { IconButton, ArrowForwardIcon, ArrowBackIcon, Flex, Heading, Input } from 'maki-uikit-v2'
+import { IconButton, ArrowForwardIcon, ArrowBackIcon, Flex, Heading, Input } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { ArrowLastIcon } from '../Svg'
 

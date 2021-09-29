@@ -10,7 +10,7 @@ import {
   InfoIcon,
   useTooltip,
   useModal,
-} from 'maki-uikit-v2'
+} from 'maki-toolkit'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { LotteryTicket, LotteryTicketClaimData } from 'config/constants/types'

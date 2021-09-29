@@ -1,5 +1,5 @@
 import React from 'react'
-import { Svg, SvgProps } from 'maki-uikit-v2'
+import { Svg, SvgProps } from 'maki-toolkit'
 
 export const MatchExampleA: React.FC<{ isDark: boolean } & SvgProps> = ({ isDark, ...rest }) => {
   return (

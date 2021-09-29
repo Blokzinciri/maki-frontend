@@ -13,7 +13,7 @@ import {
   Skeleton,
   Button,
   ArrowForwardIcon,
-} from 'maki-uikit-v2'
+} from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
 import { getFullDisplayBalance } from 'utils/formatBalance'

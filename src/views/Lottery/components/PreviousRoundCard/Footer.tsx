@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Flex, ExpandableLabel, CardFooter } from 'maki-uikit-v2'
+import { Flex, ExpandableLabel, CardFooter } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { LotteryRound } from 'state/types'
 import FooterExpanded from './FooterExpanded'

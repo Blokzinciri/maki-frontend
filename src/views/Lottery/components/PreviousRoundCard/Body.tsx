@@ -11,7 +11,7 @@ import {
   useModal,
   CardRibbon,
   useMatchBreakpoints,
-} from 'maki-uikit-v2'
+} from 'maki-toolkit'
 import { LotteryRound } from 'state/types'
 import { useGetUserLotteriesGraphData, useLottery } from 'state/lottery/hooks'
 import { LotteryStatus } from 'config/constants/types'

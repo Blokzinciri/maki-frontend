@@ -12,7 +12,7 @@ import {
   Heading,
   Skeleton,
   Box,
-} from 'maki-uikit-v2'
+} from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { LotteryStatus } from 'config/constants/types'
 import { useGetUserLotteriesGraphData, useLottery } from 'state/lottery/hooks'

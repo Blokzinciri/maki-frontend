@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, FlexProps } from 'maki-uikit-v2'
+import { Flex, FlexProps } from 'maki-toolkit'
 import { random } from 'lodash'
 import uniqueId from 'lodash/uniqueId'
 import { parseRetreivedNumber } from '../helpers'

@@ -13,7 +13,7 @@ import {
   Box,
   CardFooter,
   ExpandableLabel,
-} from 'maki-uikit-v2'
+} from 'maki-toolkit'
 import useTheme from 'hooks/useTheme'
 import { useWeb3React } from '@web3-react/core'
 import { LotteryStatus } from 'config/constants/types'

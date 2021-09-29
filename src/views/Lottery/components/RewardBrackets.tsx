@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
-import { Flex, Text } from 'maki-uikit-v2'
+import { Flex, Text } from 'maki-toolkit'
 import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useTheme from 'hooks/useTheme'

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonMenu, ButtonMenuItem } from 'maki-uikit-v2'
+import { ButtonMenu, ButtonMenuItem } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 
 const ButtonMenuWrapper = styled.div`

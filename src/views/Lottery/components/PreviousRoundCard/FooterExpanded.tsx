@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { Flex, Skeleton, Heading, Box, Text } from 'maki-uikit-v2'
+import { Flex, Skeleton, Heading, Box, Text } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { LotteryRound } from 'state/types'
 import { usePriceMakiHusd } from 'state/hooks'

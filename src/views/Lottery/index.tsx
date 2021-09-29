@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Box, Flex, Heading, Skeleton } from 'maki-uikit-v2'
+import { Box, Flex, Heading, Skeleton } from 'maki-toolkit'
 import { LotteryStatus } from 'config/constants/types'
 import PageSection from 'components/PageSection'
 import { useTranslation } from 'contexts/Localization'
