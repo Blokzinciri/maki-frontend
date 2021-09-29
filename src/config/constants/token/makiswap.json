@@ -241,6 +241,14 @@
       "symbol": "TUSD",
       "decimals": 18,
       "logoURI": "https://s2.coinmarketcap.com/static/img/coins/64x64/2563.png"
+    },
+    {
+      "address": "0x8B70512b5248E7C1f0F6996E2FDE2E952708c4C9",
+      "chainId": 128,
+      "name": "NEXTYPE",
+      "symbol": "NT",
+      "decimals": 18,
+      "logoURI": "https://hecoinfo.com/token/images/nextype_32.png"
     }
   ]
 }

@@ -4208,9 +4208,15 @@
     "@types/node" "*"
 
 "@types/lodash@^4.14.162":
+<<<<<<< HEAD
   version "4.14.172"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.172.tgz#aad774c28e7bfd7a67de25408e03ee5a8c3d028a"
   integrity sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==
+=======
+  version "4.14.173"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.173.tgz#9d3b674c67a26cf673756f6aca7b429f237f91ed"
+  integrity sha512-vv0CAYoaEjCw/mLy96GBTnRoZrSxkGE0BKzKimdR8P3OzrNYNvBgtW7p055A+E8C31vXNUhWKoFCbhq7gbyhFg==
+>>>>>>> develop
 
 "@types/long@^4.0.0", "@types/long@^4.0.1":
   version "4.0.1"
@@ -4338,6 +4344,13 @@
   integrity sha512-8d7nR/fNSqlTFGHti0R3F9WwIertOaaA1UEB8/jr5l5mDMOs4CidEgvvYMw4ivqrBK+vtVLxyTj2P+Pr/dtgzg==
   dependencies:
     "@types/history" "*"
+    "@types/react" "*"
+
+"@types/react-table@^7.7.2":
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.7.2.tgz#434f8230eb011c7eed8f3550fdf25befafebcfac"
+  integrity sha512-NwB78t3YV5pZ1NK3m2vylb/d0DKVyWH4y4GMCtlE4tg2n5ENM4ejzKnT46YKuqG2cPjWc+PIxuRVMd5OYX1z4A==
+  dependencies:
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^17.0.2":
@@ -15449,10 +15462,17 @@ maki-swap-periphery@^3.3.0:
     truffle-hdwallet-provider "^1.0.17"
     truffle-plugin-verify "^0.4.0"
 
+<<<<<<< HEAD
 maki-uikit-v2@^2.4.4:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/maki-uikit-v2/-/maki-uikit-v2-2.5.0.tgz#5b77291295748e73c2477a5ceffc3305d74e143e"
   integrity sha512-lirQV/Dx4r3Y3eu4RbtAdxcaq98w9CGg6F64riFrtb3jzT1vUjSvF5GKxfW160yTjsk82cOchJFFGNgUta6vuQ==
+=======
+maki-toolkit@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/maki-toolkit/-/maki-toolkit-1.0.2.tgz#5e992e3a5f69ea0ef042075fc5d15eea8ab744d1"
+  integrity sha512-j9GaKdmjmVNxecdfWSJ/TlQmnst75LYk+bxjes1edh3J06LL1k/7aPtaBGRsHtVgbkJF8PfwYqor8jlDI2jzjA==
+>>>>>>> develop
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.162"
@@ -19231,6 +19251,11 @@ react-style-singleton@^2.1.0:
     get-nonce "^1.0.0"
     invariant "^2.2.4"
     tslib "^1.0.0"
+
+react-table@^7.7.0:
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.7.0.tgz#e2ce14d7fe3a559f7444e9ecfe8231ea8373f912"
+  integrity sha512-jBlj70iBwOTvvImsU9t01LjFjy4sXEtclBovl3mTiqjz23Reu0DKnRza4zlLtOPACx6j2/7MrQIthIK1Wi+LIA==
 
 react-transition-group@^4.4.1:
   version "4.4.2"

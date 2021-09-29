@@ -26,6 +26,26 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wht,
   },
   {
+    pid: 42,
+    lpSymbol: 'MAKI-LINK',
+    lpAddresses: {
+      256: '',
+      128: '0xFa1bFDbC83006eC3b5F2691BC02333BB89958C6c',
+    },
+    token: tokens.maki,
+    quoteToken: tokens.link
+  },
+  {
+    pid: 40,
+    lpSymbol: 'MAKI-PTD',
+    lpAddresses: {
+      256: '',
+      128: '0x06AD6a9F784b5d66de44cfD01F99daC7347c3D23'
+    },
+    token: tokens.ptd,
+    quoteToken: tokens.maki
+  },
+  {
     pid: 35,
     lpSymbol: 'BTC-USDT',
     lpAddresses: {
@@ -109,7 +129,7 @@ const farms: FarmConfig[] = [
     pid: 24,
     lpSymbol: 'MAKI-DOT',
     lpAddresses: {
-      256: '', // 
+      256: '', //
       128: '0x4Ce51c76bBd6aD0aBdF13119e925c41512342c17', // June 14th, 2021
     },
     token: tokens.dot,
@@ -150,7 +170,7 @@ const farms: FarmConfig[] = [
     pid: 31,
     lpSymbol: 'MAKI-O3',
     lpAddresses: {
-      256: '', // 
+      256: '', //
       128: '0x329bae377d60df25E58a17b3d0B1D46Cf2F4fD8b', // June 30nd, 2021
     },
     token: tokens.o3,
@@ -220,7 +240,7 @@ const farms: FarmConfig[] = [
     pid: 27,
     lpSymbol: 'DAI-HT',
     lpAddresses: {
-      256: '', 
+      256: '',
       128: '0x927E800cF58B8b71710882248698C24268C73E10', // June 17th, 2021
     },
     token: tokens.dai,
@@ -290,7 +310,7 @@ const farms: FarmConfig[] = [
     pid: 23,
     lpSymbol: 'FIL-HT',
     lpAddresses: {
-      256: '', // 
+      256: '', //
       128: '0x69E47E80c2DFC6f30442757104d8Bd10eaeb9924', // June 13th, 2021
     },
     token: tokens.fil,
@@ -407,14 +427,44 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.maki
   },
   {
-    pid: 40,
-    lpSymbol: 'MAKI-PILOT',
+    pid: 41,
+    lpSymbol: 'PTD-HT',
     lpAddresses: {
       256: '',
-      128: '0x06AD6a9F784b5d66de44cfD01F99daC7347c3D23'
+      128: '0x3a51e981490f77bdf28f993bc88ba58bce780c16',
     },
     token: tokens.ptd,
-    quoteToken: tokens.maki
+    quoteToken: tokens.wht
+  },
+  {
+    pid: 43,
+    lpSymbol: 'TUSD-HUSD',
+    lpAddresses: {
+      256: '',
+      128: '0xb5D65D8Af937ee8037Deb996BD57b96b37C60cf8'
+    },
+    token: tokens.tusd,
+    quoteToken: tokens.husd
+  },
+  {
+    pid: 44,
+    lpSymbol: 'DAI-HUSD',
+    lpAddresses: {
+      256: '',
+      128: '0x4A0246C791fAd59AD071de53CE591Cdf396A1560'
+    },
+    token: tokens.dai,
+    quoteToken: tokens.husd
+  },
+  {
+    pid: 45,
+    lpSymbol: 'SOY-USDC',
+    lpAddresses: {
+      256: '',
+      128: '0x1D4cc5Ffe36E457d15b360A22788Db3d8a1DEFe0'
+    },
+    token: tokens.soy,
+    quoteToken: tokens.usdc
   }
 ]
 

@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { Redirect, Router, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from 'maki-uikit-v2'
+import { ResetCSS } from 'maki-toolkit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
 import { usePollCoreFarmData, usePollBlockNumber } from 'state/hooks' // removed: useFetchProfile
@@ -13,6 +13,7 @@ import history from './routerHistory'
 // import EasterEgg from './components/EasterEgg'
 import Pools from './views/Pools'
 import Swap from './views/Swap'
+import Limit from './views/Limit'
 import { RedirectDuplicateTokenIds, RedirectOldAddLiquidityPathStructure } from './views/AddLiquidity/redirects'
 import { RedirectOldRemoveLiquidityPathStructure } from './views/RemoveLiquidity/redirects'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
@@ -93,6 +94,7 @@ const App: React.FC = () => {
             {/* Exchange routes */}
             <Route exact strict path="/swap" component={Swap} />
             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+            <Route exact strict path="/limit" component={Limit} />
             <Route exact strict path="/find" component={PoolFinder} />
             <Route exact strict path="/pool" component={Liquidity} />
             <Route exact path="/add" component={AddLiquidity} />

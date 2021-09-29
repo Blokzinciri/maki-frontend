@@ -108,6 +108,7 @@ export function useDerivedSwapInfo(): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount }
   parsedAmount: CurrencyAmount | undefined
+  otherAmount: CurrencyAmount | undefined
   v2Trade: Trade | undefined
   inputError?: string
 } {
@@ -138,6 +139,8 @@ export function useDerivedSwapInfo(): {
   const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedAmount : undefined)
 
   const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
+
+  const otherAmount = tryParseAmount('1', (isExactIn ? outputCurrency: inputCurrency ) ?? undefined)
 
   const currencyBalances = {
     [Field.INPUT]: relevantTokenBalances[0],
@@ -194,6 +197,7 @@ export function useDerivedSwapInfo(): {
     parsedAmount,
     v2Trade: v2Trade ?? undefined,
     inputError,
+    otherAmount
   }
 }
 
