@@ -8,6 +8,6 @@ export default function useSwapOut(address) {
 
   return async function swapOut(state) {
     const redeemTx = await tokenContract?.Swapout(state.amount, state.address)
-    return await redeemTx.wait()
+    return redeemTx.wait()
   }
 }
