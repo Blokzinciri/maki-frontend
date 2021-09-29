@@ -10,6 +10,8 @@ import defaultTokenJson from 'config/constants/token/makiswap.json'
 import { parseUnits } from '@ethersproject/units'
 import useToast from 'hooks/useToast'
 import { useActiveWeb3React } from 'hooks'
+import { BASE_HECO_INFO_URL } from 'config'
+import { nodes } from 'utils/getRpcUrl'
 import useTokenTransfer from '../hooks/useTokenTransfer'
 import useSwapOut from '../hooks/useSwapOut'
 
@@ -33,9 +35,10 @@ interface SOYBridgeModalProps {
 
 const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [bridgeAmount, setBridgeAmount] = useState('')
   const [bridgeIndex, setBridgeIndex] = useState(0)
+  const [confirming, setConfirming] = useState(false)
   const soyData = defaultTokenJson.tokens.filter(val => val.symbol === 'SOY')[0]
   const { balance: soyBalanceHECO, fetchStatus: fetchStatusHECO } = useTokenBalanceNew(soyData.address)
   const { balance: soyBalanceMatic, fetchStatus: fetchStatusMatic } = useSOYBalanceMatic()
@@ -89,9 +92,12 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
       address: bridgeData.SrcToken.DepositAddress,
       amount: parseUnits(bridgeAmount, bridgeData.DestToken.Decimals)
     }
-    tokenTransfer(transferArgs).then(res => {
+    setConfirming(true)
+    tokenTransfer(transferArgs).then(() => {
+      setConfirming(false)
       toastSuccess(`${bridgeAmount} SOY successfully bridged to Polygon network`)
-    }).catch(e => {
+    }).catch(() => {
+      setConfirming(false)
       toastError('There was an error while bridging SOY')
     })
   }
@@ -101,10 +107,53 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
       address: account,
       amount: parseUnits(bridgeAmount, bridgeData.DestToken.Decimals)
     }
-    swapOut(transferArgs).then(res => {
+    setConfirming(true)
+    swapOut(transferArgs).then(() => {
+      setConfirming(false)
       toastSuccess(`${bridgeAmount} SOY successfully bridged to HECO network`)
-    }).catch(e => {
+    }).catch(() => {
+      setConfirming(false)
       toastError('There was an error while bridging SOY')
+    })
+  }
+
+  const switchToHECO = async () => {
+    const { ethereum } = (window as any)
+    await ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: `0x80`,
+          chainName: 'Huobi Smart Chain Mainnet',
+          nativeCurrency: {
+            name: 'Huobi Token',
+            symbol: 'HT',
+            decimals: 18,
+          },
+          rpcUrls: nodes,
+          blockExplorerUrls: [`${BASE_HECO_INFO_URL}/`],
+        },
+      ],
+    })
+  }
+
+  const switchToPolygon = async () => {
+    const { ethereum } = (window as any)
+    await ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [{
+        chainId: "0x89",
+        chainName: "Matic Network",
+        rpcUrls: ["https://rpc-mainnet.maticvigil.com"],
+        blockExplorerUrls :[
+          "https://polygonscan.com/"
+        ],
+        nativeCurrency: {
+          "name": "Matic Token",
+          "symbol": "MATIC",
+          "decimals": 18
+        }
+      }]
     })
   }
 
@@ -175,10 +224,24 @@ const SOYBridgeModal: React.FC<SOYBridgeModalProps> = ({ onDismiss }) => {
             <Text fontSize='14px'>10m+ SOY Estimated Arrival</Text>
             <Text fontSize='14px'>Up to 12 hrs</Text>
           </Flex>
-          <Button width="100%" mt="16px" disabled={!isEligible} onClick={bridgeIndex === 0 ? bridgeSOYHecoToPolygon : bridgeSOYPolygonToHeco}>Approve</Button>
           {
-            !isEligible &&
-              <Text color="red" fontSize='14px' mt='6px' textAlign='center'>{error}</Text>
+            bridgeIndex === 0 && chainId !== 128 &&
+              <Button width="100%" mt="16px" onClick={switchToHECO}>Switch to HECO Mainnet</Button>
+          }
+          {
+            bridgeIndex === 1 && chainId !== 137 &&
+            <Button width="100%" mt="16px" onClick={switchToPolygon}>Switch to Polygon Mainnet</Button>
+          }
+          {
+            (bridgeIndex === 0 ? chainId === 128 : chainId === 137) && (
+              <>
+                <Button width="100%" mt="16px" disabled={!isEligible || confirming} onClick={bridgeIndex === 0 ? bridgeSOYHecoToPolygon : bridgeSOYPolygonToHeco}>{ confirming ? 'Approving' : 'Approve' }</Button>
+                {
+                  !isEligible &&
+                  <Text color="red" fontSize='14px' mt='6px' textAlign='center'>{error}</Text>
+                }
+              </>
+            )
           }
         </Box>
       </Flex>
