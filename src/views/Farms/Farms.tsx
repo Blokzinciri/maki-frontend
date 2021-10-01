@@ -18,6 +18,7 @@ import { latinise } from 'utils/latinise'
 import PageHeader from 'components/PageHeader'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
+import Column from 'components/Layout/Column'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
@@ -93,7 +94,9 @@ const ViewControls = styled.div`
 `
 // eslint-disable-next-line
 const StyledHeading = styled(Heading)`
-  color: #5f6471;
+  color: #707070;
+  max-width: 300px;
+  font-weight: normal;
 `
 
 const NUMBER_OF_FARMS_VISIBLE = 42
@@ -342,18 +345,16 @@ const Farms: React.FC = () => {
   return (
     <>
       <PageHeader background="url(/images/banner-bg.png) no-repeat">
-        <Flex justifyContent="space-between" flexDirection={isXl ? 'row' : 'column'}>
-          <div>
+        <Flex justifyContent="space-between" flexDirection={isXl ? 'row' : 'column'} width="100%">
+          <Flex flexDirection="column" justifyContent="center" mr="auto">
             <Heading as="h1" scale="xxl" color="secondary" mb={isXl ? '24px' : '10px'}>
               {t('Farms')}
             </Heading>
             <StyledHeading scale="md" color="text">
               {t('Stake Liquidity Pool (LP) for MAKI Rewards.')}
             </StyledHeading>
-          </div>
-          <div>
-            <img src="/images/farms-banner.png" alt="Farms Page Banner" style={{ height: isXl ? 'auto' : '80px' }} />
-          </div>
+          </Flex>
+          <img src="/images/farms-banner.png" alt="Farms Page Banner" style={{ height: isXl ? 'auto' : '80px' }} />
         </Flex>
       </PageHeader>
       <Page>

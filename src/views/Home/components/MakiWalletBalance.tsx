@@ -17,7 +17,7 @@ const MakiWalletBalance = () => {
 
   if (!account) {
     return (
-      <Text color="textDisabled" style={{ lineHeight: '54px' }}>
+      <Text color="text" lineHeight="54px" textTransform="uppercase">
         Locked
       </Text>
     )

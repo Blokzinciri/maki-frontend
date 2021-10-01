@@ -10,7 +10,8 @@ interface ComingSoonProps {
 
 // eslint-disable-next-line
 const StyledHeading = styled(Heading)`
-  color: #5f6471;
+  color: #707070;
+  font-weight: normal;
   font-size: 18px;
   font-weight: 500;
 `

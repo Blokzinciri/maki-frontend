@@ -49,7 +49,8 @@ const ControlStretch = styled(Flex)`
 `
 // eslint-disable-next-line
 const StyledHeading = styled(Heading)`
-  color: #5f6471;
+  color: #707070;
+  font-weight: normal;
 `
 
 const NUMBER_OF_POOLS_VISIBLE = 18
@@ -201,7 +202,7 @@ const Pools: React.FC = () => {
   return (
     <>
       <PageHeader background="url(/images/banner-bg.png) no-repeat">
-        <Flex justifyContent="space-between" flexDirection={isXl ? 'row' : 'column'}>
+        <Flex justifyContent="space-between" flexDirection={isXl ? 'row' : 'column'} width="100%">
           <div>
             <Heading as="h1" scale="xxl" color="secondary" mb={isXl ? '24px' : '5px'}>
               {t('Soy Pools')}

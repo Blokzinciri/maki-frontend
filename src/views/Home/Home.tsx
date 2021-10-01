@@ -79,6 +79,11 @@ const CTACards = styled(BaseLayout)`
 
     & > div {
       grid-column: span 4;
+      height: 100%;
+
+      > div {
+        height: 100%;
+      }
     }
   }
 `
@@ -89,7 +94,7 @@ const Home: React.FC = () => {
   return (
     <Page>
       <Hero>
-        <Heading as="h1" scale="xl" mb="24px" color="secondary">
+        <Heading as="h1" scale="xl" mb="24px" color="primaryDark">
           {t('Makiswap')}
         </Heading>
         <Text>{t('The #1 AMM and yield farm on Huobi ECO Chain.')}</Text>

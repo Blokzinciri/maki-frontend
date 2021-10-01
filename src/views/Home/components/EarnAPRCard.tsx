@@ -13,14 +13,17 @@ const StyledFarmStakingCard = styled(Card)`
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  background: white;
 
   ${({ theme }) => theme.mediaQueries.lg} {
     margin: 0;
     max-width: none;
   }
 `
-const CardMidContent = styled(Heading).attrs({ size: 'xl' })`
-  line-height: 44px;
+const CardMidContent = styled(Heading)`
+  line-height: 1.2;
+  word-spacing: 500px;
+  font-size: 30px;
 `
 const EarnAPRCard = () => {
   const [isFetchingFarmData, setIsFetchingFarmData] = useState(true)
@@ -59,25 +62,25 @@ const EarnAPRCard = () => {
   }, [makiPrice, farmsLP])
 
   const aprText = highestApr || '-'
-  const earnAprText = `Earn up to ${aprText} APR in Farms`
+  const earnAprText = `Earn up to ${aprText} in Farms`
   const [earnUpTo, InFarms] = earnAprText.split(aprText)
 
   return (
     <StyledFarmStakingCard>
       <NavLink exact activeClassName="active" to="/farms" id="farm-apr-cta">
         <CardBody>
-          <Heading color="contrast" scale="lg">
+          <Heading color="text" scale="md">
             {earnUpTo}
           </Heading>
-          <CardMidContent color="#7645d9">
+          <CardMidContent color="primaryDark">
             {highestApr && !isFetchingFarmData ? (
-              `${highestApr}%`
+              `${highestApr}% APR`
             ) : (
               <Skeleton animation="pulse" variant="rect" height="44px" />
             )}
           </CardMidContent>
           <Flex justifyContent="space-between">
-            <Heading color="contrast" scale="lg">
+            <Heading color="text" scale="md">
               {InFarms}
             </Heading>
             <ArrowForwardIcon mt={30} color="primary" />

@@ -12,7 +12,7 @@ import MakiHarvestBalance from './MakiHarvestBalance'
 import MakiWalletBalance from './MakiWalletBalance'
 
 const StyledFarmStakingCard = styled(Card)`
-  background-image: url('/images/farm-bg.svg');
+  background-image: url('/images/farm-bg.png');
   background-repeat: no-repeat;
   background-position: top right;
   min-height: 376px;
@@ -27,8 +27,8 @@ const CardImage = styled.img`
 `
 
 const Label = styled.div`
-  color: ${({ theme }) => theme.colors.textSubtle};
-  font-size: 14px;
+  color: ${({ theme }) => theme.colors.primaryDark};
+  font-size: 16px;
 `
 
 const Actions = styled.div`
@@ -60,7 +60,7 @@ const FarmedStakingCard = () => {
   return (
     <StyledFarmStakingCard>
       <CardBody>
-        <Heading scale="xl" mb="24px">
+        <Heading scale="xl" mb="24px" color="primary">
           {t('Farms & Staking')}
         </Heading>
         <CardImage src="/images/farms-img.svg" alt="maki logo" width={64} height={64} />

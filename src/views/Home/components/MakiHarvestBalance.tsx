@@ -30,7 +30,7 @@ const MakiHarvestBalance = () => {
 
   if (!account) {
     return (
-      <Text color="textDisabled" style={{ lineHeight: '76px' }}>
+      <Text color="text" lineHeight="76px" textTransform="uppercase">
         {t('Locked')}
       </Text>
     )

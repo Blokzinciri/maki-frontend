@@ -8,8 +8,11 @@ const Outer = styled(Box)<{ background?: string }>`
 `
 
 const Inner = styled(Container)`
-  padding-top: 32px;
-  padding-bottom: 32px;
+  height: 200px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+
   @media (max-width: 600px) {
     padding-top: 12px;
     padding-bottom: 12px;

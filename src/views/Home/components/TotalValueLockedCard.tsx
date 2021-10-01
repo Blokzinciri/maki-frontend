@@ -10,6 +10,12 @@ const StyledTotalValueLockedCard = styled(Card)`
   align-items: center;
   display: flex;
   flex: 1;
+  background: white;
+`
+
+const CardMidContent = styled(Heading)`
+  line-height: 1.2;
+  font-size: 30px;
 `
 
 const TotalValueLockedCard = () => {
@@ -51,13 +57,19 @@ const TotalValueLockedCard = () => {
   return (
     <StyledTotalValueLockedCard>
       <CardBody>
-        <Heading scale="lg" mb="24px">
-          {t('Total Value Locked (TVL)')}
+        <Heading scale="md" color="text">
+          {t('Total Value Locked')}
         </Heading>
         {tvl ? (
           <>
-            <Heading scale="xl">{`$${totalValueFormated}`}</Heading>
-            <Text color="textSubtle">{t('Across all LPs and SOY Pools')}</Text>
+            <CardMidContent color="primaryDark">
+              (TVL)
+              <br />
+              {`$${totalValueFormated}`}
+            </CardMidContent>
+            <Heading scale="md" color="text">
+              {t('Across all LPs and farms')}
+            </Heading>
           </>
         ) : (
           <Skeleton height={66} />

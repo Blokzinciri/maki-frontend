@@ -10,36 +10,41 @@ const StyledFarmStakingCard = styled(Card)`
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  background: white;
+
   ${({ theme }) => theme.mediaQueries.lg} {
     margin: 0;
     max-width: none;
   }
 `
-const CardMidContent = styled(Heading).attrs({ size: 'xl' })`
-  line-height: 44px;
+const CardMidContent = styled(Heading)`
+  line-height: 1.2;
+  font-size: 30px;
 `
 const EarnAssetCard = () => {
   const activeNonMakiPools = pools.filter((pool) => !pool.isFinished && !pool.earningToken.symbol.includes('MAKI'))
   const latestPools: Pool[] = orderBy(activeNonMakiPools, ['sortOrder', 'pid'], ['desc', 'desc']).slice(0, 3)
   // Always include MAKI
-  const assets = ['SOY', ...latestPools.map((pool) => pool.earningToken.symbol)].join(', ')
+  const assets = ['MAKI', ...latestPools.map((pool) => pool.earningToken.symbol)].join(', ')
 
   return (
     <StyledFarmStakingCard>
-      <CardBody>
-        <Heading color="text" size="lg">
-          Earn and Compound
-        </Heading>
-        <CardMidContent color="primaryDark">{assets}</CardMidContent>
-        <Flex justifyContent="space-between">
-          <Heading color="text" size="lg">
-            in Pools
+      <NavLink exact activeClassName="active" to="/pools" id="pool-cta">
+        <CardBody>
+          <Heading color="text" size="md">
+            Earn
           </Heading>
-          <NavLink exact activeClassName="active" to="/pools" id="pool-cta">
+          <CardMidContent color="primaryDark">{assets}</CardMidContent>
+          <Flex justifyContent="space-between">
+            <Heading color="text" size="md">
+              in Pools
+            </Heading>
+          </Flex>
+          <Flex width="100%" justifyContent="flex-end" mt="auto">
             <ArrowForwardIcon mt={30} color="primary" />
-          </NavLink>
-        </Flex>
-      </CardBody>
+          </Flex>
+        </CardBody>
+      </NavLink>
     </StyledFarmStakingCard>
   )
 }
