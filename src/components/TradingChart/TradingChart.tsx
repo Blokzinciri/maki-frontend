@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import { Text, Flex } from 'maki-uikit-v2'
+import { Text, Flex } from 'maki-toolkit'
 import { Currency, Token, HUOBI, WHT, ChainId } from 'maki-sdk'
 import { darken } from 'polished'
 import { BusinessDay, TickMarkType, UTCTimestamp } from 'lightweight-charts'
