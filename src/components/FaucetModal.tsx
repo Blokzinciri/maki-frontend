@@ -16,7 +16,7 @@ const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss }) => {
 
   const claimAirdrop = useCallback(async () => {
     try {
-      const response = await axios.post("https://shielded-tor-40211.herokuapp.com/api/users/faucet", {
+      const response = await axios.post("https://makiswap.xyz/api/users/faucet", {
         address: account
       })
       console.log(response)
