@@ -109,7 +109,7 @@ const farms: FarmConfig[] = [
     pid: 24,
     lpSymbol: 'MAKI-DOT',
     lpAddresses: {
-      256: '', // 
+      256: '', //
       128: '0x4Ce51c76bBd6aD0aBdF13119e925c41512342c17', // June 14th, 2021
     },
     token: tokens.dot,
@@ -150,7 +150,7 @@ const farms: FarmConfig[] = [
     pid: 31,
     lpSymbol: 'MAKI-O3',
     lpAddresses: {
-      256: '', // 
+      256: '', //
       128: '0x329bae377d60df25E58a17b3d0B1D46Cf2F4fD8b', // June 30nd, 2021
     },
     token: tokens.o3,
@@ -220,7 +220,7 @@ const farms: FarmConfig[] = [
     pid: 27,
     lpSymbol: 'DAI-HT',
     lpAddresses: {
-      256: '', 
+      256: '',
       128: '0x927E800cF58B8b71710882248698C24268C73E10', // June 17th, 2021
     },
     token: tokens.dai,
@@ -290,7 +290,7 @@ const farms: FarmConfig[] = [
     pid: 23,
     lpSymbol: 'FIL-HT',
     lpAddresses: {
-      256: '', // 
+      256: '', //
       128: '0x69E47E80c2DFC6f30442757104d8Bd10eaeb9924', // June 13th, 2021
     },
     token: tokens.fil,
@@ -385,6 +385,16 @@ const farms: FarmConfig[] = [
     },
     token: tokens.shib,
     quoteToken: tokens.maki
+  },
+  {
+    pid: 46,
+    lpSymbol: 'MAKI-SOY',
+    lpAddresses: {
+      256: '',
+      128: '0xfBa90d1c7c06B41212441D7c36927AfDeD88423f',
+    },
+    token: tokens.maki,
+    quoteToken: tokens.soy
   }
 ]
 
