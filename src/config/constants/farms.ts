@@ -465,6 +465,16 @@ const farms: FarmConfig[] = [
     },
     token: tokens.soy,
     quoteToken: tokens.usdc
+  },
+  {
+    pid: 46,
+    lpSymbol: 'MAKI-SOY',
+    lpAddresses: {
+      256: '',
+      128: '0xfBa90d1c7c06B41212441D7c36927AfDeD88423f',
+    },
+    token: tokens.maki,
+    quoteToken: tokens.soy
   }
 ]
 
