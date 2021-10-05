@@ -38,7 +38,7 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({ type }) => {
         {type === 'unlimited' && <FooterEntry label={t('Additional fee:')} value="0%" />}
         <FooterEntry label={t('Total committed:')} value="~$15,572,834 (2232.19%)" />
         <FooterEntry label={t('Funds to raise:')} value="$750,000" />
-        <FooterEntry label={t('CAKE to burn:')} value="$375,000" />
+        <FooterEntry label={t('MAKI to burn:')} value="$375,000" />
         <FooterEntry label={t('Price per %symbol%:', { symbol: 'HECO' })} value="$2" />
       </>
     )
