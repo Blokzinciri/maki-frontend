@@ -12,7 +12,14 @@ import { useActiveWeb3React } from 'hooks'
 import { CandlePeriod, NumericalCandlestickDatum } from 'config/constants/types'
 import fillCandlestickGaps from 'utils/fillCandlestickGaps'
 import useWindowDimensions from 'hooks/useWindowDimensions'
+import { usePair } from 'data/Reserves'
+import { getHourlyRateData } from 'utils'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import { useBlockNumber } from 'state/application/hooks'
 import TVChart from './kaktana-react-lightweight-charts'
+
+dayjs.extend(utc)
 
 interface ChartProps {
   inputCurrency: Currency | Token | undefined
@@ -120,6 +127,9 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
       : outputCurrency === HUOBI
       ? WHT[chainId || ChainId.MAINNET]?.address
       : ''
+
+  const pair = usePair(inputCurrency, outputCurrency);
+  const pairAddress = pair[1].liquidityToken.address;
 
   // Chart should always show alt/major, e.g. JOE/AVAX.
   // In this case, we want token0 = alt and token1 = major.
@@ -237,7 +247,15 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
     wickDOwnColor: `${theme.colors.failure}`
   }
 
+  const latestBlockNumber = useBlockNumber()
+
   useEffect(() => {
+    (async() => {
+      const currentTime = dayjs.utc()
+      const windowSize = 'week'
+      const startTime = currentTime.subtract(1, windowSize).startOf('hour').unix()
+      const pairChartData = await getHourlyRateData(pairAddress, startTime, latestBlockNumber);
+    })();
     const candleData: NumericalCandlestickDatum[] = [
       { time: 1632661577, open: 173.16, high: 176.43, low: 172.64, close: 176.24 },
       { time: 1632662577, open: 177.98, high: 178.85, low: 175.59, close: 175.88 },
@@ -247,7 +265,7 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
     ]
     const formattedCandleData: NumericalCandlestickDatum[] = fillCandlestickGaps(candleData, candlePeriod)
     setCandlestickSeries([{ data: formattedCandleData }])
-  }, [candlePeriod])
+  }, [candlePeriod, pairAddress, latestBlockNumber])
 
   const hasData = candlestickSeries[0].data.length > 0
   const lastClose = hasData ? candlestickSeries[0].data[candlestickSeries[0].data.length - 1].close : undefined
