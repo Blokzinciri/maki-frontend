@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card, CardBody, Heading, Skeleton, Text } from 'maki-uikit-v2'
+import { Card, CardBody, Heading, Skeleton, Text } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { useTVL } from 'hooks/api' // disabled: useGetStats
 // import BigNumber from 'bignumber.js'

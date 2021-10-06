@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Flex, Input, Text } from 'maki-uikit-v2'
+import { Button, Flex, Input, Text } from 'maki-toolkit'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import QuestionHelper from 'components/QuestionHelper'
 import TranslatedText from 'components/TranslatedText'

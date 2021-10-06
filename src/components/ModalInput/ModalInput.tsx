@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Button, Input, InputProps, Flex, Link } from 'maki-uikit-v2'
+import { Text, Button, Input, InputProps, Flex, Link } from 'maki-toolkit'
 
 interface ModalInputProps {
   max: string

@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { kebabCase } from 'lodash'
-import { Toast, toastTypes } from 'maki-uikit-v2'
+import { Toast, toastTypes } from 'maki-toolkit'
 import { ToastContextApi } from './types'
 
 export const ToastsContext = createContext<ToastContextApi>(undefined)

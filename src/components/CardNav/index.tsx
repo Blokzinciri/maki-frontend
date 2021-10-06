@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link } from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem } from 'maki-uikit-v2'
+import { ButtonMenu, ButtonMenuItem } from 'maki-toolkit'
 
 const Load = keyframes`{
   0% {
@@ -21,18 +21,18 @@ export interface NavProps {
   activeIndex?: number;
 }
 
-export const Nav:React.FC<NavProps> = ({ activeIndex = 0, children }) => 
+export const Nav:React.FC<NavProps> = ({ activeIndex = 0, children }) =>
 (
   <StyledNav>
-    <ButtonMenu 
-    activeIndex={activeIndex} 
-    scale="sm" 
+    <ButtonMenu
+    activeIndex={activeIndex}
+    scale="sm"
     variant="subtle">
       { React.Children.toArray(children) as React.ReactElement[] }
     </ButtonMenu>
   </StyledNav>
 )
-  
+
 
 const CardNav: React.FC<NavProps> =({ activeIndex }) => (
   <Nav activeIndex={activeIndex}>

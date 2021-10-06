@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 // import { Box } from 'rebass/styled-components'
-import { Box } from 'maki-uikit-v2'
+import { Box } from 'maki-toolkit'
 
 const Row = styled(Box)<{ align?: string; padding?: string; border?: string; borderRadius?: string; disabled?: boolean; selected?: boolean }>`
   width: 100%;

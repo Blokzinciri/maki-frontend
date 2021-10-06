@@ -1,6 +1,6 @@
 import React, { useState, MouseEvent, useCallback } from 'react'
 import styled from 'styled-components'
-import { Flex, Text, Button } from 'maki-uikit-v2'
+import { Flex, Text, Button } from 'maki-toolkit'
 
 import Modal from 'components/Modal'
 import { Wrapper, Section, ContentHeader } from 'components/TransactionConfirmationModal/helpers'

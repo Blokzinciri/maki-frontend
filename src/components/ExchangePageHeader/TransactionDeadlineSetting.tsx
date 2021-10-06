@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Input, Text } from 'maki-uikit-v2'
+import { Input, Text } from 'maki-toolkit'
 import { useUserDeadline } from 'state/user/hooks'
 import QuestionHelper from 'components/QuestionHelper'
 

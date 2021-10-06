@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Flex, LinkExternal, Skeleton } from 'maki-uikit-v2'
+import { Text, Flex, LinkExternal, Skeleton } from 'maki-toolkit'
 
 export interface ExpandableSectionProps {
   hecoscanAddress?: string

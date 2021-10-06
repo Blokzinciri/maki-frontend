@@ -4,7 +4,7 @@ import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, HUOBI, Percent, WHT } from 'maki-sdk'
-import { Button, Flex, Text } from 'maki-uikit-v2'
+import { Button, Flex, Text } from 'maki-toolkit'
 import { ArrowDown, Plus } from 'react-feather'
 import { RouteComponentProps } from 'react-router'
 

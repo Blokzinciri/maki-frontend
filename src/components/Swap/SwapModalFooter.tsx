@@ -1,6 +1,6 @@
 import { Trade, TradeType } from 'maki-sdk'
 import React, { useMemo, useState } from 'react'
-import { Text , Button } from 'maki-uikit-v2'
+import { Text , Button } from 'maki-toolkit'
 import { Repeat } from 'react-feather'
 
 import { Field } from 'state/swap/actions'

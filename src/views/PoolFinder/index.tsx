@@ -1,7 +1,7 @@
 import { Currency, HUOBI, JSBI, TokenAmount } from 'maki-sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, ChevronDownIcon, AddIcon, CardBody, Text } from 'maki-uikit-v2'
+import { Button, ChevronDownIcon, AddIcon, CardBody, Text } from 'maki-toolkit'
 import CardNav from 'components/CardNav'
 import { LightCard } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'

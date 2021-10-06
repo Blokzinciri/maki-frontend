@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { connectorLocalStorageKey, ConnectorNames } from 'maki-uikit-v2'
+import { connectorLocalStorageKey, ConnectorNames } from 'maki-toolkit'
 import useAuth from 'hooks/useAuth'
 
 const useEagerConnect = () => {

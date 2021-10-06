@@ -8,7 +8,7 @@ import {
   Flex,
   NotificationDot,
   useMatchBreakpoints,
-} from 'maki-uikit-v2'
+} from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { ViewMode } from 'views/Farms/components/types'
 import ToggleView from './ToggleView/ToggleView'

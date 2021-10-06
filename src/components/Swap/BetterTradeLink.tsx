@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { stringify } from 'qs'
 import { useLocation } from 'react-router'
-import { Text } from 'maki-uikit-v2'
+import { Text } from 'maki-toolkit'
 import useParsedQueryString from 'hooks/useParsedQueryString'
 import { DEFAULT_VERSION, Version } from 'hooks/useToggledVersion'
 import { StyledInternalLink } from "components/Shared"

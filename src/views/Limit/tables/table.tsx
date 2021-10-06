@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable } from 'react-table'
-import { Text } from 'maki-uikit-v2'
+import { Text } from 'maki-toolkit'
 import { convertHexToRGB } from 'utils'
 
 const Styles = styled.div`

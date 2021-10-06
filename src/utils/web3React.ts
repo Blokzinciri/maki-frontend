@@ -1,6 +1,6 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { ConnectorNames } from 'maki-uikit-v2'
+import { ConnectorNames } from 'maki-toolkit'
 import { ethers } from 'ethers'
 import getNodeUrl from './getRpcUrl'
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { JSBI, Pair, Percent } from 'maki-sdk'
-import { Button, Card as UIKitCard, CardBody, Text, Flex } from 'maki-uikit-v2'
+import { Button, Card as UIKitCard, CardBody, Text, Flex } from 'maki-toolkit'
 import { darken } from 'polished'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { Link } from 'react-router-dom'

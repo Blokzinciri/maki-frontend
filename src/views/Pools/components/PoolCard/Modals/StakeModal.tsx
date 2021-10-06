@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Modal, Text, Flex, Image, Button, BalanceInput, AutoRenewIcon, Link } from 'maki-uikit-v2'
+import { Modal, Text, Flex, Image, Button, BalanceInput, AutoRenewIcon, Link } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import { BASE_EXCHANGE_URL } from 'config'
 import { useSousStake } from 'hooks/useStake'

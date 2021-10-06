@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, {keyframes} from 'styled-components'
-import { Card } from 'maki-uikit-v2'
+import { Card } from 'maki-toolkit'
 
 const Load = keyframes`{
   0% {

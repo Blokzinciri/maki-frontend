@@ -1,6 +1,6 @@
 import { Token } from 'maki-sdk'
 import { transparentize } from 'polished'
-import { Button, Text } from 'maki-uikit-v2'
+import { Button, Text } from 'maki-toolkit'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AlertTriangle } from 'react-feather'

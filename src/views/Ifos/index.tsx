@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card, CardHeader, CardBody, Flex, Heading, Text, useMatchBreakpoints } from 'maki-uikit-v2'
+import { Card, CardHeader, CardBody, Flex, Heading, Text, useMatchBreakpoints } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import PageHeader from 'components/PageHeader'
 

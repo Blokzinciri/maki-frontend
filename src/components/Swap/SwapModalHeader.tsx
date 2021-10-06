@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Trade, TradeType } from 'maki-sdk'
-import { Button, Text } from 'maki-uikit-v2'
+import { Button, Text } from 'maki-toolkit'
 import { ArrowDown, AlertTriangle } from 'react-feather'
 
 import { Field } from 'state/swap/actions'
