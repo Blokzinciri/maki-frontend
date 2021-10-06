@@ -225,9 +225,8 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
         const startTime = currentTime.subtract(timeAmount, timeType).startOf(startType).unix()
         const pairChartData = await getHourlyRateData(pairAddress.toLowerCase(), startTime, startType, latestBlockNumber);
         const dataIndex = 0;
-        const candleData: NumericalCandlestickDatum[] = pairChartData[dataIndex].map((item: any) => { return { time: Number(item.timestamp), open: item.open, high: Math.max(item.open, item.close), low: Math.min(item.open, item.close), close: item.close } })
+        const candleData: NumericalCandlestickDatum[] = pairChartData[dataIndex].map((item: any) => { return { time: Number(item.timestamp), open: item.open, high: Math.max(item.open, item.close) * 1.003, low: Math.min(item.open, item.close) * 0.997, close: item.close } })
         const formattedCandleData: NumericalCandlestickDatum[] = fillCandlestickGaps(candleData, candlePeriod)
-        console.log('ccc', formattedCandleData)
         setCandlestickSeries([{ data: formattedCandleData }])  
       }
     })();
