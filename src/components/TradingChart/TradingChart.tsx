@@ -129,7 +129,7 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
       : ''
 
   const pair = usePair(inputCurrency, outputCurrency);
-  const pairAddress = pair[1].liquidityToken.address;
+  const pairAddress = pair && pair.length > 1 ? pair[1].liquidityToken.address : '';
 
   // Chart should always show alt/major, e.g. JOE/AVAX.
   // In this case, we want token0 = alt and token1 = major.
@@ -252,9 +252,12 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
   useEffect(() => {
     (async() => {
       const currentTime = dayjs.utc()
-      const windowSize = 'week'
-      const startTime = currentTime.subtract(1, windowSize).startOf('hour').unix()
-      const pairChartData = await getHourlyRateData(pairAddress, startTime, latestBlockNumber);
+      const timeType = candlePeriod === CandlePeriod.FiveMinutes || candlePeriod === CandlePeriod.FifteenMinutes ? 'minute' : candlePeriod === CandlePeriod.OneHour || candlePeriod === CandlePeriod.FourHours ? 'hour' : candlePeriod === CandlePeriod.OneDay ? 'day' : 'week'
+      const startType = candlePeriod === CandlePeriod.FiveMinutes || candlePeriod === CandlePeriod.FifteenMinutes ? 'second' : candlePeriod === CandlePeriod.OneHour || candlePeriod === CandlePeriod.FourHours ? 'minute' : 'hour'
+      const startTime = currentTime.subtract(5, timeType).startOf(startType).unix()
+      console.log('bbb', startTime, ' ', currentTime.unix())
+      const pairChartData = await getHourlyRateData(pairAddress.toLowerCase(), startTime, startType, latestBlockNumber);
+      console.log('ccc', pairChartData)
     })();
     const candleData: NumericalCandlestickDatum[] = [
       { time: 1632661577, open: 173.16, high: 176.43, low: 172.64, close: 176.24 },
@@ -273,89 +276,86 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
 
   return (
     <div style={{ padding: '1rem' }}>
-      {/*
-       * TODO: show empty state if insufficient data
-       *
-       */}
-
-      <FlexColumnWrapper>
-        <ChartHeaderWrapper>
-          {altCurrency ? (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CurrencyLogo currency={altCurrency} size='30px' />
-              <Text style={{ marginLeft: '0.5rem' }}>{altCurrency?.symbol}</Text>
-            </div>
-          ) : (
-            <></>
+      {pairAddress !== '' &&
+        <FlexColumnWrapper>
+          <ChartHeaderWrapper>
+            {altCurrency ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <CurrencyLogo currency={altCurrency} size='30px' />
+                <Text style={{ marginLeft: '0.5rem' }}>{altCurrency?.symbol}</Text>
+              </div>
+            ) : (
+              <></>
+            )}
+  
+            {altCurrency && majorCurrency ? (
+              <Text style={{ margin: '0 1rem' }}>/</Text>
+            ) : (
+              <div />
+            )}
+  
+            {majorCurrency ? (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <CurrencyLogo currency={majorCurrency} size='30px' />
+                <Text style={{ marginLeft: '0.5rem' }}>{majorCurrency?.symbol}</Text>
+              </div>
+            ) : (
+              <></>
+            )}
+          </ChartHeaderWrapper>
+          <ChartSubHeader>
+            <LastPriceHeaderWrapper>{fmtLastClose}</LastPriceHeaderWrapper>
+  
+            <CandlePeriodsWrapper>
+              <CandlePeriodButton
+                className={candlePeriod === CandlePeriod.FiveMinutes ? 'selected' : ''}
+                onClick={() => setCandlePeriod(CandlePeriod.FiveMinutes)}
+              >
+                5m
+              </CandlePeriodButton>
+              <CandlePeriodButton
+                className={candlePeriod === CandlePeriod.FifteenMinutes ? 'selected' : ''}
+                onClick={() => setCandlePeriod(CandlePeriod.FifteenMinutes)}
+              >
+                15m
+              </CandlePeriodButton>
+              <CandlePeriodButton
+                className={candlePeriod === CandlePeriod.OneHour ? 'selected' : ''}
+                onClick={() => setCandlePeriod(CandlePeriod.OneHour)}
+              >
+                1H
+              </CandlePeriodButton>
+              <CandlePeriodButton
+                className={candlePeriod === CandlePeriod.FourHours ? 'selected' : ''}
+                onClick={() => setCandlePeriod(CandlePeriod.FourHours)}
+              >
+                4H
+              </CandlePeriodButton>
+              <CandlePeriodButton
+                className={candlePeriod === CandlePeriod.OneDay ? 'selected' : ''}
+                onClick={() => setCandlePeriod(CandlePeriod.OneDay)}
+              >
+                1D
+              </CandlePeriodButton>
+              <CandlePeriodButton
+                className={candlePeriod === CandlePeriod.OneWeek ? 'selected' : ''}
+                onClick={() => setCandlePeriod(CandlePeriod.OneWeek)}
+              >
+                1W
+              </CandlePeriodButton>
+            </CandlePeriodsWrapper>
+          </ChartSubHeader>
+          <ChartWrapper hasData={hasData}>
+            <TVChart options={chartOptions} candlestickSeries={candlestickSeries} />
+          </ChartWrapper>
+          {!hasData && (
+            <Text
+              fontSize='14px'
+              textAlign='center'
+            >Unforunately, this pair doesn&rsquo;t have enough data.</Text>
           )}
-
-          {altCurrency && majorCurrency ? (
-            <Text style={{ margin: '0 1rem' }}>/</Text>
-          ) : (
-            <div />
-          )}
-
-          {majorCurrency ? (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CurrencyLogo currency={majorCurrency} size='30px' />
-              <Text style={{ marginLeft: '0.5rem' }}>{majorCurrency?.symbol}</Text>
-            </div>
-          ) : (
-            <></>
-          )}
-        </ChartHeaderWrapper>
-        <ChartSubHeader>
-          <LastPriceHeaderWrapper>{fmtLastClose}</LastPriceHeaderWrapper>
-
-          <CandlePeriodsWrapper>
-            <CandlePeriodButton
-              className={candlePeriod === CandlePeriod.FiveMinutes ? 'selected' : ''}
-              onClick={() => setCandlePeriod(CandlePeriod.FiveMinutes)}
-            >
-              5m
-            </CandlePeriodButton>
-            <CandlePeriodButton
-              className={candlePeriod === CandlePeriod.FifteenMinutes ? 'selected' : ''}
-              onClick={() => setCandlePeriod(CandlePeriod.FifteenMinutes)}
-            >
-              15m
-            </CandlePeriodButton>
-            <CandlePeriodButton
-              className={candlePeriod === CandlePeriod.OneHour ? 'selected' : ''}
-              onClick={() => setCandlePeriod(CandlePeriod.OneHour)}
-            >
-              1H
-            </CandlePeriodButton>
-            <CandlePeriodButton
-              className={candlePeriod === CandlePeriod.FourHours ? 'selected' : ''}
-              onClick={() => setCandlePeriod(CandlePeriod.FourHours)}
-            >
-              4H
-            </CandlePeriodButton>
-            <CandlePeriodButton
-              className={candlePeriod === CandlePeriod.OneDay ? 'selected' : ''}
-              onClick={() => setCandlePeriod(CandlePeriod.OneDay)}
-            >
-              1D
-            </CandlePeriodButton>
-            <CandlePeriodButton
-              className={candlePeriod === CandlePeriod.OneWeek ? 'selected' : ''}
-              onClick={() => setCandlePeriod(CandlePeriod.OneWeek)}
-            >
-              1W
-            </CandlePeriodButton>
-          </CandlePeriodsWrapper>
-        </ChartSubHeader>
-        <ChartWrapper hasData={hasData}>
-          <TVChart options={chartOptions} candlestickSeries={candlestickSeries} />
-        </ChartWrapper>
-        {!hasData && (
-          <Text
-            fontSize='14px'
-            textAlign='center'
-          >Unforunately, this pair doesn&rsquo;t have enough data.</Text>
-        )}
-      </FlexColumnWrapper>
+        </FlexColumnWrapper>      
+      }
     </div>
   )
 }

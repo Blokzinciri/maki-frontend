@@ -170,16 +170,17 @@ export async function splitQuery(query, localClient, vars, list, skipCount = 100
   return fetchedData
 }
 
-export const getHourlyRateData = async (pairAddress, startTime, latestBlock) => {
+export const getHourlyRateData = async (pairAddress, startTime, startType, latestBlock) => {
   try {
     const utcEndTime = dayjs.utc()
     let time = startTime
 
     // create an array of hour start times until we reach current hour
     const timestamps = []
-    while (time <= utcEndTime.unix() - 3600) {
+    const timeDuration = startType === 'second' ? 2 : startType === 'minute' ? 60 : 3600
+    while (time <= utcEndTime.unix() - timeDuration) {
       timestamps.push(time)
-      time += 3600
+      time += timeDuration
     }
 
     // backout if invalid timestamp format
@@ -204,7 +205,6 @@ export const getHourlyRateData = async (pairAddress, startTime, latestBlock) => 
     }
 
     const result = await splitQuery(HOURLY_PAIR_RATES, client, [pairAddress], blocks, 100)
-    console.log('bbb', result);
     // format token HT price results
     const values = []
     Object.keys(result).forEach(row => {
