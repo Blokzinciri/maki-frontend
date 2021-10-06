@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { Modal, Text, LinkExternal, Flex, Box, Button, Input } from 'maki-uikit-v2'
+import { Modal, Text, LinkExternal, Flex, Box, Button, Input } from 'maki-toolkit'
 import { useTranslation } from 'contexts/Localization'
 import axios from 'axios'
 import Loader from 'components/Loader'
