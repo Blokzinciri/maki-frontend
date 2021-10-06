@@ -1,8 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Modal, Text, LinkExternal, Flex, Box, Button, Input } from 'maki-uikit-v2'
 import { useTranslation } from 'contexts/Localization'
 import axios from 'axios'
+import Loader from 'components/Loader'
+import { ThemeContext } from 'styled-components'
 
 interface ClaimModalProps {
   onDismiss?: () => void
@@ -13,15 +15,20 @@ const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss }) => {
   const { account } = useWeb3React()
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const theme = useContext(ThemeContext)
 
   const claimAirdrop = useCallback(async () => {
+    setLoading(true)
     try {
-      const response = await axios.post("https://makiswap.xyz/api/users/faucet", {
+      await axios.post("https://makiswap.xyz/api/users/faucet", {
         address: account
       })
-      console.log(response)
+      setMessage("Claim successful!")
+      setLoading(false)
     } catch (e) {
       setError(e.response.data)
+      setLoading(false)
     }
     // setMessage(response)
   }, [account])
@@ -35,7 +42,9 @@ const ClaimModal: React.FC<ClaimModalProps> = ({ onDismiss }) => {
           </Text>
           <Text color="red">{error}</Text>
           <Text color="green">{message}</Text>
-          <Button width="100%" mt="16px" onClick={claimAirdrop}>Claim HT</Button>
+          <Button width="100%" mt="16px" color={theme.colors.background} onClick={claimAirdrop}>
+            {loading ? <Loader stroke="white" /> : "Claim HT"}
+          </Button>
         </Box>
       </Flex>
     </Modal>
