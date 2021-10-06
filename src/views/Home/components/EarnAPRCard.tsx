@@ -9,7 +9,6 @@ import { useFarms, usePriceMakiHusd } from 'state/hooks'
 import { fetchFarmsPublicDataAsync, nonArchivedFarms } from 'state/farms'
 import { getFarmApr } from 'utils/apr'
 
-
 const StyledFarmStakingCard = styled(Card)`
   margin-left: auto;
   margin-right: auto;

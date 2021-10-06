@@ -8,7 +8,7 @@ export const ToastsContext = createContext<ToastContextApi>(undefined)
 
 const StyledToastContainer = styled.div`
   & .enter-done > div {
-    background-color: #CADDF7;
+    background-color: #caddf7;
   }
 `
 
@@ -56,9 +56,7 @@ export const ToastsProvider: React.FC = ({ children }) => {
 
   return (
     <ToastsContext.Provider value={{ toasts, clear, remove, toastError, toastInfo, toastSuccess, toastWarning }}>
-      <StyledToastContainer>
-        {children}
-      </StyledToastContainer>
+      <StyledToastContainer>{children}</StyledToastContainer>
     </ToastsContext.Provider>
   )
 }

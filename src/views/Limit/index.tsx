@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { CurrencyAmount, JSBI, Token, Trade } from 'maki-sdk'
+import { CurrencyAmount, Currency, JSBI, Token, Trade } from 'maki-sdk'
 import { useDispatch, useSelector } from 'react-redux'
 import { ArrowDown } from 'react-feather'
 import { CardBody, ArrowDownIcon, Button, IconButton, Text } from 'maki-toolkit'
@@ -29,7 +29,13 @@ import { ApprovalState, useApproveCallbackFromTrade } from 'hooks/useApproveCall
 import { useSwapCallback } from 'hooks/useSwapCallback'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { Field } from 'state/swap/actions'
-import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState, tryParseAmount } from 'state/swap/hooks'
+import {
+  useDefaultsFromURLSearch,
+  useDerivedSwapInfo,
+  useSwapActionHandlers,
+  useSwapState,
+  tryParseAmount,
+} from 'state/swap/hooks'
 import { useExpertModeManager, useUserDeadline, useUserSlippageTolerance } from 'state/user/hooks'
 import { LinkStyledButton } from 'components/Shared'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
@@ -69,7 +75,7 @@ const Limit = () => {
   const dispatch = useDispatch()
   const [openCancelModal, setOpenCancelModal] = useState(false)
   const makiPriceUsd = useHusdPriceFromPid(3)
-  const makiData = defaultTokenJson.tokens.filter(val => val.symbol === 'MAKI')[0]
+  const makiData = defaultTokenJson.tokens.filter((val) => val.symbol === 'MAKI')[0]
   const makiToken = new Token(makiData.chainId, makiData.address, makiData.decimals, makiData.symbol, makiData.name)
 
   // token warning stuff
@@ -82,7 +88,7 @@ const Limit = () => {
   const [syrupTransactionType, setSyrupTransactionType] = useState<string>('')
   const urlLoadedTokens: Token[] = useMemo(
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
-    [loadedInputCurrency, loadedOutputCurrency]
+    [loadedInputCurrency, loadedOutputCurrency],
   )
   const handleConfirmTokenWarning = useCallback(() => {
     setDismissTokenWarning(true)
@@ -104,38 +110,43 @@ const Limit = () => {
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
-  const { v2Trade, currencyBalances, parsedAmount, otherAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
-  const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
-    currencies[Field.INPUT],
-    currencies[Field.OUTPUT],
-    typedValue
-  )
-  const [token0, token1] = [useTokenBySymbolOrName(currencies[Field.INPUT]?.symbol)?.[0],
-  useTokenBySymbolOrName(currencies[Field.OUTPUT]?.symbol)?.[0]]
+  const {
+    v2Trade,
+    currencyBalances,
+    parsedAmount,
+    otherAmount,
+    currencies,
+    inputError: swapInputError,
+  } = useDerivedSwapInfo()
+  const {
+    wrapType,
+    execute: onWrap,
+    inputError: wrapInputError,
+  } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
+  const [token0, token1] = [
+    useTokenBySymbolOrName(currencies[Field.INPUT]?.symbol)?.[0],
+    useTokenBySymbolOrName(currencies[Field.OUTPUT]?.symbol)?.[0],
+  ]
 
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const trade = showWrap ? undefined : v2Trade
   //   const { address: recipientAddress } = useENSAddress(recipient)
   const parsedAmounts = showWrap
     ? {
-      [Field.INPUT]: parsedAmount,
-      [Field.OUTPUT]: parsedAmount,
-    }
+        [Field.INPUT]: parsedAmount,
+        [Field.OUTPUT]: parsedAmount,
+      }
     : {
-      // [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-      [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : otherAmount,
+        // [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
+        [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : otherAmount,
 
-      [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
-    }
+        [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
+      }
 
-  const {
-    status,
-    feeStake,
-    feeExecutor,
-    gasPrice,
-    selectedOrder,
-    readContractAddress
-  } = useSelector<AppState, AppState['limit']>((s) => s.limit)
+  const { status, feeStake, feeExecutor, gasPrice, selectedOrder, readContractAddress } = useSelector<
+    AppState,
+    AppState['limit']
+  >((s) => s.limit)
 
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
   const isValid = !swapInputError
@@ -145,13 +156,13 @@ const Limit = () => {
     (value: string) => {
       onUserInput(Field.INPUT, value)
     },
-    [onUserInput]
+    [onUserInput],
   )
   const handleTypeOutput = useCallback(
     (value: string) => {
       onUserInput(Field.OUTPUT, value)
     },
-    [onUserInput]
+    [onUserInput],
   )
 
   // modal and loading
@@ -179,15 +190,17 @@ const Limit = () => {
 
   const [price1, setPrice1] = useState('')
   const [amount1, setAmount1] = useState(0)
+  const [prevInputCurrency, setPrevInputCurrency] = useState<Currency | undefined>()
+  const [prevOutputCurrency, setPrevOutputCurrency] = useState<Currency | undefined>()
 
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
-    currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
+    currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0)),
   )
   const noRoute = !route
 
   // check whether the user has approved the router on the input token
-  const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, false);
+  const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, false)
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
   const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
@@ -207,7 +220,7 @@ const Limit = () => {
     trade,
     allowedSlippage,
     deadline,
-    recipient
+    recipient,
   )
 
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
@@ -276,7 +289,7 @@ const Limit = () => {
         setSyrupTransactionType(purchaseType)
       }
     },
-    [setIsSyrup, setSyrupTransactionType]
+    [setIsSyrup, setSyrupTransactionType],
   )
 
   const handleInputSelect = useCallback(
@@ -287,10 +300,7 @@ const Limit = () => {
         checkForSyrup(inputCurrency.symbol.toLowerCase(), 'Selling')
       }
     },
-    [
-      onCurrencySelection,
-      setApprovalSubmitted,
-      checkForSyrup]
+    [onCurrencySelection, setApprovalSubmitted, checkForSyrup],
   )
 
   const handleMaxInput = useCallback(() => {
@@ -306,15 +316,24 @@ const Limit = () => {
         checkForSyrup(outputCurrency.symbol.toLowerCase(), 'Buying')
       }
     },
-    [onCurrencySelection, checkForSyrup]
+    [onCurrencySelection, checkForSyrup],
   )
   useEffect(() => {
     const _inputAmount = Number(formattedAmounts[Field.INPUT] ?? 0)
     const _outputAmount = Number(formattedAmounts[Field.OUTPUT] ?? 0)
-    if (_inputAmount > 0) {
+    if (
+      _inputAmount > 0 &&
+      _outputAmount > 0 &&
+      (!prevInputCurrency ||
+        !prevOutputCurrency ||
+        prevInputCurrency.symbol !== currencies[Field.INPUT].symbol ||
+        prevOutputCurrency.symbol !== currencies[Field.OUTPUT].symbol)
+    ) {
       setPrice1((_outputAmount / _inputAmount).toString())
+      setAmount1(_outputAmount)
+      setPrevInputCurrency(currencies[Field.INPUT])
+      setPrevOutputCurrency(currencies[Field.OUTPUT])
     }
-    setAmount1(_outputAmount)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formattedAmounts[Field.INPUT], formattedAmounts[Field.OUTPUT]])
 
@@ -329,8 +348,12 @@ const Limit = () => {
   const parsedAmountOutPut = tryParseAmount('1', currencies[Field.OUTPUT])
   const tradeOutput = useTradeExactIn(parsedAmountOutPut, makiToken)
 
-  const inputUSD = Number(makiPriceUsd) * (tradeInput ? Number(tradeInput.executionPrice.toSignificant()) : 0) * Number(formattedAmounts[Field.INPUT] ?? 0)
-  const outputUSD = Number(makiPriceUsd) * (tradeOutput ? Number(tradeOutput.executionPrice.toSignificant()) : 0) * Number(amount1)
+  const inputUSD =
+    Number(makiPriceUsd) *
+    (tradeInput ? Number(tradeInput.executionPrice.toSignificant()) : 0) *
+    Number(formattedAmounts[Field.INPUT] ?? 0)
+  const outputUSD =
+    Number(makiPriceUsd) * (tradeOutput ? Number(tradeOutput.executionPrice.toSignificant()) : 0) * Number(amount1)
 
   // const handleTypeOutput2 = useCallback(
   //   (value: string) => {
@@ -361,20 +384,25 @@ const Limit = () => {
         isOpen={openCancelModal}
         onConfirm={() => {
           if (selectedOrder && account && status !== 'idle') {
-            dispatch(updateStatus({
-              status: 'loading'
-            }))
+            dispatch(
+              updateStatus({
+                status: 'loading',
+              }),
+            )
             cancelOrder(selectedOrder.id, account, gasPrice, readContractAddress, library!)
               .then(() => {
                 console.log('cancel order success!')
                 dispatch(remOrder(selectedOrder.id))
               })
-              .catch(e => {
+              .catch((e) => {
                 console.error('cancel order error: ', e)
-              }).finally(() => {
-                dispatch(updateStatus({
-                  status: 'succeeded'
-                }))
+              })
+              .finally(() => {
+                dispatch(
+                  updateStatus({
+                    status: 'succeeded',
+                  }),
+                )
               })
           }
           setOpenCancelModal(false)
@@ -400,14 +428,14 @@ const Limit = () => {
           <PageHeader
             title="Limit Order"
             description="Trade tokens in an instant"
-          // displayIcons={false}
+            // displayIcons={false}
           />
           <CardBody>
             <AutoColumn gap="md">
               <Text fontSize="14px">You Pay</Text>
               <InputWrapper>
                 <CurrencyInputPanel
-                  label='Amount'
+                  label="Amount"
                   value={formattedAmounts[Field.INPUT]}
                   showMaxButton={!atMaxAmountInput}
                   currency={currencies[Field.INPUT]}
@@ -417,16 +445,16 @@ const Limit = () => {
                   otherCurrency={currencies[Field.OUTPUT]}
                   id="swap-currency-input"
                 />
-                <p>~${ inputUSD.toLocaleString() }</p>
+                <p>~${inputUSD.toLocaleString()}</p>
               </InputWrapper>
-              <Text fontSize="14px">
-                {`${currencies[Field.INPUT]?.name?.toUpperCase()} Price`}
-              </Text>
+              <Text fontSize="14px">{`${currencies[Field.INPUT]?.name?.toUpperCase()} Price`}</Text>
               <PriceInput
                 // label={`${currencies[Field.INPUT]?.name} Price`}
-                id='price-input'
+                id="price-input"
                 value={price1}
-                onChange={(value) => { setPrice1( value) }}
+                onChange={(value) => {
+                  setPrice1(value)
+                }}
                 currency={currencies[Field.OUTPUT]}
               />
               <AutoColumn justify="space-between">
@@ -455,14 +483,14 @@ const Limit = () => {
                 <CurrencyInputPanel
                   value={Number(amount1 ?? 0).toString()}
                   onUserInput={handleTypeOutput}
-                  label='You Receive'
+                  label="You Receive"
                   showMaxButton={false}
                   currency={currencies[Field.OUTPUT]}
                   onCurrencySelect={handleOutputSelect}
                   otherCurrency={currencies[Field.INPUT]}
                   id="swap-currency-output"
                 />
-                <p style={{ top: 33 }}>~${ outputUSD.toLocaleString() }</p>
+                <p style={{ top: 33 }}>~${outputUSD.toLocaleString()}</p>
               </InputWrapper>
               {recipient !== null && !showWrap ? (
                 <>
@@ -533,7 +561,7 @@ const Limit = () => {
                     onClick={() => {
                       if (
                         [currencies[Field.INPUT], currencies[Field.OUTPUT]]
-                          .map(currency => {
+                          .map((currency) => {
                             return currency?.name && currency.symbol && currency.decimals
                           })
                           .reduce((ac, cu) => Boolean(ac && cu), true)
@@ -545,7 +573,7 @@ const Limit = () => {
                           symbol: token0.symbol!,
                           address: token0?.address,
                           chainId: chainId?.valueOf() ?? -1,
-                          derivedETH: 0
+                          derivedETH: 0,
                         }
                         const _token1: IToken = {
                           name: token1.name!,
@@ -554,7 +582,7 @@ const Limit = () => {
                           symbol: token1.symbol!,
                           address: token1?.address,
                           chainId: chainId?.valueOf() ?? -1,
-                          derivedETH: 0
+                          derivedETH: 0,
                         }
                         createOrder(
                           account,
@@ -566,28 +594,27 @@ const Limit = () => {
                           BigNumber.from(feeStake),
                           BigNumber.from(feeExecutor),
                           readContractAddress,
-                          library!
+                          library!,
                         )
                           .then(() => {
                             console.log('create order success!')
                             dispatch(
                               updateStatus({
                                 status: 'succeeded',
-                                error: undefined
-                              })
+                                error: undefined,
+                              }),
                             )
                           })
-                          .catch(e => {
+                          .catch((e) => {
                             console.error('cancel order error: ', e)
                             dispatch(
                               updateStatus({
                                 status: 'failed',
-                                error: e
-                              })
+                                error: e,
+                              }),
                             )
                           })
                       }
-
                     }}
                     id="swap-button"
                     disabled={
@@ -606,7 +633,7 @@ const Limit = () => {
                   onClick={() => {
                     if (
                       [currencies[Field.INPUT], currencies[Field.OUTPUT]]
-                        .map(currency => {
+                        .map((currency) => {
                           return currency?.name && currency.symbol && currency.decimals
                         })
                         .reduce((ac, cu) => Boolean(ac && cu), true)
@@ -618,7 +645,7 @@ const Limit = () => {
                         symbol: token0.symbol!,
                         address: token0?.address,
                         chainId: chainId?.valueOf() ?? -1,
-                        derivedETH: 0
+                        derivedETH: 0,
                       }
                       const _token1: IToken = {
                         name: token1.name!,
@@ -627,7 +654,7 @@ const Limit = () => {
                         symbol: token1.symbol!,
                         address: token1?.address,
                         chainId: chainId?.valueOf() ?? -1,
-                        derivedETH: 0
+                        derivedETH: 0,
                       }
                       createOrder(
                         account,
@@ -639,24 +666,24 @@ const Limit = () => {
                         BigNumber.from(feeStake),
                         BigNumber.from(feeExecutor),
                         readContractAddress,
-                        library!
+                        library!,
                       )
                         .then(() => {
                           console.log('create order success!')
                           dispatch(
                             updateStatus({
                               status: 'succeeded',
-                              error: undefined
-                            })
+                              error: undefined,
+                            }),
                           )
                         })
-                        .catch(e => {
+                        .catch((e) => {
                           console.error('cancel order error: ', e)
                           dispatch(
                             updateStatus({
                               status: 'failed',
-                              error: e
-                            })
+                              error: e,
+                            }),
                           )
                         })
                     }
@@ -687,9 +714,7 @@ const Limit = () => {
         </Wrapper>
       </AppBody>
       {/* <AdvancedSwapDetailsDropdown trade={trade} /> */}
-      <TableOrders
-        modalAction={() => setOpenCancelModal(true)}
-      />
+      <TableOrders modalAction={() => setOpenCancelModal(true)} />
     </ExchangePage>
   )
 }

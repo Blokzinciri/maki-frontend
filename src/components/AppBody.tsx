@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, {keyframes} from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { Card } from 'maki-toolkit'
 
 const Load = keyframes`{
@@ -9,7 +9,7 @@ const Load = keyframes`{
   100% {
     opacity: 100%;
   }
-}`;
+}`
 
 export const BodyWrapper = styled(Card)`
   position: relative;

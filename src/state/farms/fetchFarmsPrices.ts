@@ -12,7 +12,7 @@ const getFarmFromTokenSymbol = (farms: Farm[], tokenSymbol: string, preferredQuo
 const getFarmBaseTokenPrice = (farm: Farm, quoteTokenFarm: Farm, htPriceHusd: BigNumber): BigNumber => {
   const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
 
-  if (farm.quoteToken.symbol === 'HUSD') {
+  if (farm.quoteToken.symbol === 'HUSD' || farm.quoteToken.symbol === 'USDC') {
     return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
   }
 
@@ -49,7 +49,7 @@ const getFarmBaseTokenPrice = (farm: Farm, quoteTokenFarm: Farm, htPriceHusd: Bi
 }
 
 const getFarmQuoteTokenPrice = (farm: Farm, quoteTokenFarm: Farm, htPriceHusd: BigNumber): BigNumber => {
-  if (farm.quoteToken.symbol === 'HUSD') {
+  if (farm.quoteToken.symbol === 'HUSD' || farm.quoteToken.symbol === 'USDC') {
     return BIG_ONE
   }
 
@@ -80,6 +80,8 @@ const fetchFarmsPrices = async (farms) => {
     const quoteTokenFarm = getFarmFromTokenSymbol(farms, farm.quoteToken.symbol)
     const baseTokenPrice = getFarmBaseTokenPrice(farm, quoteTokenFarm, htPriceHusd)
     const quoteTokenPrice = getFarmQuoteTokenPrice(farm, quoteTokenFarm, htPriceHusd)
+    if (farm.pid === 45)
+      console.log('farm', quoteTokenFarm, baseTokenPrice.toString(), quoteTokenPrice.toString())
     const token = { ...farm.token, husdPrice: baseTokenPrice.toJSON() }
     const quoteToken = { ...farm.quoteToken, husdPrice: quoteTokenPrice.toJSON() }
     return { ...farm, token, quoteToken }

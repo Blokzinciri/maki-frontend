@@ -66,10 +66,10 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
             <AutoColumn gap="12px">
               <FixedHeightRow>
                 <RowFixed>
-                <Flex justifyContent="center">
-                  <Text style={{ textTransform: 'uppercase', fontWeight: 600 }} fontSize="14px" color="textSubtle">
-                    LP Tokens in your Wallet
-                  </Text>
+                  <Flex justifyContent="center">
+                    <Text style={{ textTransform: 'uppercase', fontWeight: 600 }} fontSize="14px" color="textSubtle">
+                      LP Tokens in your Wallet
+                    </Text>
                   </Flex>
                 </RowFixed>
               </FixedHeightRow>

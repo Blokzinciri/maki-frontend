@@ -457,6 +457,16 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.husd
   },
   {
+    pid: 45,
+    lpSymbol: 'SOY-USDC',
+    lpAddresses: {
+      256: '',
+      128: '0x1D4cc5Ffe36E457d15b360A22788Db3d8a1DEFe0'
+    },
+    token: tokens.soy,
+    quoteToken: tokens.usdc
+  },
+  {
     pid: 46,
     lpSymbol: 'MAKI-SOY',
     lpAddresses: {

@@ -9,7 +9,6 @@ const useEagerConnect = () => {
     const connectorId = window.localStorage.getItem(connectorLocalStorageKey) as ConnectorNames
 
     if (connectorId) {
-
       login(connectorId)
     }
   }, [login])

@@ -4,7 +4,7 @@ import { Nav, NavProps } from 'components/CardNav'
 import { ButtonMenuItem } from 'maki-toolkit'
 
 type TableNavProps = NavProps
- const TableNav: FC<TableNavProps> = ({ activeIndex }) => {
+const TableNav: FC<TableNavProps> = ({ activeIndex }) => {
   return (
     <Nav activeIndex={activeIndex}>
       <ButtonMenuItem id="table-my-orders-link" to="/limit?table=my-orders" as={Link}>

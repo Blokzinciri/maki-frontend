@@ -43,7 +43,7 @@ const activeClassName = 'ACTIVE'
 // `
 
 const StyledNavLink = styled(NavLink).attrs({
-  activeClassName
+  activeClassName,
 })`
   display: flex;
   flex-flow: row nowrap;

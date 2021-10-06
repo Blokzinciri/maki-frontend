@@ -2,7 +2,7 @@ import { MenuEntry } from 'maki-toolkit'
 import { ContextApi } from 'contexts/Localization/types'
 
 const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
-    {
+  {
     label: t('Home'),
     icon: 'HomeIcon',
     href: '/',
@@ -11,20 +11,20 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     label: t('Trade'),
     icon: 'TradeIcon',
     href: 'https://exchange.makiswap.com',
-      items: [
-        {
-          label: t('Exchange'),
-          href: '/swap',
-        },
-        {
-          label: t('Liquidity'),
-          href: '/pool',
-        },
-        {
-          label: t('Limit'),
-          href: '/limit',
-        },
-      ],
+    items: [
+      {
+        label: t('Exchange'),
+        href: '/swap',
+      },
+      {
+        label: t('Liquidity'),
+        href: '/pool',
+      },
+      {
+        label: t('Limit'),
+        href: '/limit',
+      },
+    ],
   },
   {
     label: t('Farms'),
@@ -79,31 +79,36 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   {
     label: 'IFO',
     icon: 'IfoIcon',
-    href: '/ifo'
+    href: '/ifo',
   },
   {
-     label: t('Info'),
-     icon: 'InfoIcon',
-     items: [
-       {
-         label: t('Overview'),
-         href: 'https://info.makiswap.com',
-       },
-       {
-         label: t('Tokens'),
-         href: 'https://info.makiswap.com/tokens',
-       },
-       {
-         label: t('Pairs'),
-         href: 'https://info.makiswap.com/pairs',
-       },
-       {
-         label: t('Accounts'),
-         href: 'https://info.makiswap.com/accounts',
-       },
-     ],
-   },
-   {
+    label: t('Bridge'),
+    icon: 'BridgeIcon',
+    href: 'https://bridge.makiswap.com/bridge',
+  },
+  {
+    label: t('Info'),
+    icon: 'InfoIcon',
+    items: [
+      {
+        label: t('Overview'),
+        href: 'https://info.makiswap.com',
+      },
+      {
+        label: t('Tokens'),
+        href: 'https://info.makiswap.com/tokens',
+      },
+      {
+        label: t('Pairs'),
+        href: 'https://info.makiswap.com/pairs',
+      },
+      {
+        label: t('Accounts'),
+        href: 'https://info.makiswap.com/accounts',
+      },
+    ],
+  },
+  {
     label: t('More'),
     icon: 'MoreIcon',
     items: [
@@ -119,8 +124,8 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
         label: t('Contact'),
         href: 'https://docs.makiswap.com/jiro-ono/contact-us/business-and-partnerships',
       },
-    ]
-   }
+    ],
+  },
 ]
 
 export default config

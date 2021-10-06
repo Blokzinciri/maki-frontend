@@ -26,7 +26,7 @@ const RecentMakiProfitCountdownRow = () => {
 
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Text fontSize="14px">{`${('Recent MAKI profit')}:`}</Text>
+      <Text fontSize="14px">{`${'Recent MAKI profit'}:`}</Text>
       {hasAutoEarnings && (
         <RecentMakiProfitBalance
           makiToDisplay={autoMakiToDisplay}

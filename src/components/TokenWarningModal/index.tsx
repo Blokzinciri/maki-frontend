@@ -107,8 +107,8 @@ export default function TokenWarningModal({
             <Text color="failure">Imported Token</Text>
           </AutoRow>
           <Text>
-            Anyone can create an HRC20 token on HECO with <em>any</em> name, including creating fake versions of existing
-            tokens and tokens that claim to represent projects that do not have a token.
+            Anyone can create an HRC20 token on HECO with <em>any</em> name, including creating fake versions of
+            existing tokens and tokens that claim to represent projects that do not have a token.
           </Text>
           <Text>
             This interface can load arbitrary tokens by token addresses. Please take extra caution and do your research

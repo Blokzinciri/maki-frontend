@@ -56,9 +56,7 @@ const TransactionDeadlineSetting = () => {
   return (
     <StyledTransactionDeadlineSetting>
       <Label>
-        <Text style={{ fontWeight: 600 }}>
-          Deadline
-        </Text>
+        <Text style={{ fontWeight: 600 }}>Deadline</Text>
         <QuestionHelper text="Your transaction will revert if it is pending for more than this long." />
       </Label>
       <Field>

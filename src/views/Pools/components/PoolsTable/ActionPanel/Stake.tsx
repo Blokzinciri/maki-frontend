@@ -221,10 +221,7 @@ const Staked: React.FunctionComponent<StakedActionProps> = ({ pool, userDataLoad
                 </Button>
               </span>
             ) : (
-              <Button
-                onClick={stakingTokenBalance.gt(0) ? onStake : onPresentTokenRequired}
-                disabled={isFinished}
-              >
+              <Button onClick={stakingTokenBalance.gt(0) ? onStake : onPresentTokenRequired} disabled={isFinished}>
                 <AddIcon color="white" width="20px" />
               </Button>
             )}

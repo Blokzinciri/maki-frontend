@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Heading, IconButton, CloseIcon } from 'maki-toolkit'
 import { AutoColumn, ColumnCenter } from 'components/Column'
 
-
 export const Wrapper = styled.div`
   width: 100%;
   overflow-y: auto;

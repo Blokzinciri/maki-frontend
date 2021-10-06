@@ -27,4 +27,3 @@ export const getLibrary = (provider): ethers.providers.Web3Provider => {
   library.pollingInterval = POLLING_INTERVAL
   return library
 }
-

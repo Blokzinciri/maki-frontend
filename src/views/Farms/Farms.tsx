@@ -93,7 +93,7 @@ const ViewControls = styled.div`
 `
 // eslint-disable-next-line
 const StyledHeading = styled(Heading)`
-  color: #5F6471;
+  color: #5f6471;
 `
 
 const NUMBER_OF_FARMS_VISIBLE = 42
@@ -342,9 +342,9 @@ const Farms: React.FC = () => {
   return (
     <>
       <PageHeader background="url(/images/banner-bg.png) no-repeat">
-        <Flex justifyContent="space-between" flexDirection={ isXl ? 'row' : 'column'}>
+        <Flex justifyContent="space-between" flexDirection={isXl ? 'row' : 'column'}>
           <div>
-            <Heading as="h1" scale="xxl" color="secondary" mb={ isXl ? '24px' : '10px'}>
+            <Heading as="h1" scale="xxl" color="secondary" mb={isXl ? '24px' : '10px'}>
               {t('Farms')}
             </Heading>
             <StyledHeading scale="md" color="text">
