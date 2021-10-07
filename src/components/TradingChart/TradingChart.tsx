@@ -51,6 +51,7 @@ const ChartSubHeader = styled(Flex)`
 
 const LastPriceHeaderWrapper = styled.div`
   font-size: 46px;
+  color: ${({ theme }) => theme.colors.text};
 `
 
 const CandlePeriodsWrapper = styled.div`

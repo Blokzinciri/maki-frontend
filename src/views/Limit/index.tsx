@@ -371,6 +371,11 @@ const Limit = () => {
   const outputUSD =
     Number(makiPriceUsd) * (tradeOutput ? Number(tradeOutput.executionPrice.toSignificant()) : 0) * Number(amount1)
 
+  useEffect(() => {
+    const makiToken1 = new Token(makiData.chainId, makiData.address, makiData.decimals, makiData.symbol, makiData.name)
+    onCurrencySelection(Field.OUTPUT, makiToken1)
+  }, [makiData, onCurrencySelection])
+
   // const handleTypeOutput2 = useCallback(
   //   (value: string) => {
   //     const _outputAmount = Number.isNaN(Number(value)) ? 0 : Number(value)
