@@ -226,7 +226,8 @@ export const getHourlyRateData = async (pairAddress, inputCurrency, startTime, s
 
     // for each hour, construct the open and close price
     for (let i = 0; i < values.length - 1; i++) {
-      if ((values[i].symbol0 === 'WHT' && inputCurrency.symbol === 'HT') || (values[i].address0.toLowerCase() === inputCurrency.address.toLowerCase())) {
+      const isRate1 = inputCurrency.address ? values[i].address0.toLowerCase() === inputCurrency.address.toLowerCase() : values[i].symbol0 === 'WHT' && inputCurrency.symbol === 'HT'
+      if (isRate1) {
         formattedHistoryRate.push({
           timestamp: values[i].timestamp,
           open: parseFloat(values[i].rate1),

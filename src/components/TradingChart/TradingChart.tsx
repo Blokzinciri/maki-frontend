@@ -216,6 +216,7 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
   const latestBlockNumber = useBlockNumber()
 
   useEffect(() => {
+    setCandlestickSeries([{ data: [] }]);
     (async() => {
       if (pairAddress !== '') {
         const currentTime = dayjs.utc()
@@ -233,7 +234,7 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
 
   const hasData = candlestickSeries[0].data.length > 0
   const lastClose = hasData ? candlestickSeries[0].data[candlestickSeries[0].data.length - 1].close : undefined
-  const fmtLastClose = lastClose ? formatNumber(lastClose) : 'N/A'
+  const fmtLastClose = lastClose ? lastClose < 0.01 ? formatNumber(lastClose, 5, 5) : formatNumber(lastClose) : 'N/A'
 
   return (
     <div style={{ padding: '1rem' }}>
@@ -242,7 +243,7 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
           {inputCurrency ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <CurrencyLogo currency={inputCurrency} size='30px' />
-              <Text style={{ marginLeft: '0.5rem' }}>{inputCurrency?.symbol}</Text>
+              <Text style={{ marginLeft: '0.5rem' }}>{inputCurrency.symbol}</Text>
             </div>
           ) : (
             <></>
@@ -257,7 +258,7 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
           {outputCurrency ? (
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <CurrencyLogo currency={outputCurrency} size='30px' />
-              <Text style={{ marginLeft: '0.5rem' }}>{outputCurrency?.symbol}</Text>
+              <Text style={{ marginLeft: '0.5rem' }}>{outputCurrency.symbol}</Text>
             </div>
           ) : (
             <></>
