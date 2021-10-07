@@ -7,6 +7,12 @@ import { abi as IMakiswapRouterABI } from 'maki-swap-periphery/build/IMakiswapRo
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, HUOBI } from 'maki-sdk'
 import { TokenAddressMap } from 'state/lists/hooks'
 import { ROUTER_ADDRESS } from 'config/constants'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import { client, blockClient } from 'apollo/client'
+import { HOURLY_PAIR_RATES, GET_BLOCKS } from 'apollo/queries'
+
+dayjs.extend(utc)
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -112,4 +118,133 @@ export function convertHexToRGB(hexColor: string): string[] | null {
     return aRgbHex.map(str => parseInt(str, 16).toString())
   }
   return aRgbHex;
+}
+
+export async function getBlocksFromTimestamps(timestamps, skipCount = 500) {
+  if (timestamps?.length === 0) {
+    return []
+  }
+
+  const fetchedData = await splitQuery(GET_BLOCKS, blockClient, [], timestamps, skipCount)
+  const blocks = [];
+  if (fetchedData) {
+    Object.keys(fetchedData).forEach(t => {
+      if(fetchedData[t].length > 0) {
+        blocks.push({
+          timestamp: t.split('t')[1],
+          number: fetchedData[t][0].number,
+        });
+      }
+    })
+  }
+
+  return blocks
+}
+
+export async function splitQuery(query, localClient, vars, list, skipCount = 100) {
+  let fetchedData = {}
+  let allFound = false
+  let skip = 0
+
+  while (!allFound) {
+    let end = list.length
+    if (skip + skipCount < list.length) {
+      end = skip + skipCount
+    }
+    const sliced = list.slice(skip, end)
+    const result = await localClient.query({
+      query: query(...vars, sliced),
+      fetchPolicy: 'cache-first',
+    })
+    fetchedData = {
+      ...fetchedData,
+      ...result.data,
+    }
+    if (Object.keys(result.data).length < skipCount || skip + skipCount > list.length) {
+      allFound = true
+    } else {
+      skip += skipCount
+    }
+  }
+
+  return fetchedData
+}
+
+export const getHourlyRateData = async (pairAddress, inputCurrency, startTime, startType, latestBlock) => {
+  try {
+    const utcEndTime = dayjs.utc()
+    let time = startTime
+
+    // create an array of hour start times until we reach current hour
+    const timestamps = []
+    const timeDuration = startType === 'second' ? 2 : startType === 'minute' ? 60 : 3600
+    while (time <= utcEndTime.unix() - timeDuration) {
+      timestamps.push(time)
+      time += timeDuration
+    }
+
+    // backout if invalid timestamp format
+    if (timestamps.length === 0) {
+      return []
+    }
+
+    // once you have all the timestamps, get the blocks for each timestamp in a bulk query
+    let blocks
+
+    blocks = await getBlocksFromTimestamps(timestamps, 100)
+
+    // catch failing case
+    if (!blocks || blocks?.length === 0) {
+      return []
+    }
+
+    if (latestBlock) {
+      blocks = blocks.filter((b) => {
+        return parseFloat(b.number) <= parseFloat(latestBlock)
+      })
+    }
+
+    const result = await splitQuery(HOURLY_PAIR_RATES, client, [pairAddress], blocks, 100)
+    // format token HT price results
+    const values = []
+    Object.keys(result).forEach(row => {
+      const timestamp = row.split('t')[1]
+      if (timestamp) {
+        values.push({
+          timestamp,
+          rate0: parseFloat(result[row]?.token0Price),
+          rate1: parseFloat(result[row]?.token1Price),
+          symbol0: result[row]?.token0.symbol,
+          symbol1: result[row]?.token1.symbol,
+          address0: result[row]?.token0.id,
+          address1: result[row]?.token1.id
+        })
+      }
+    });
+
+    const formattedHistoryRate = []
+
+    // for each hour, construct the open and close price
+    for (let i = 0; i < values.length - 1; i++) {
+      const isRate1 = inputCurrency.address ? values[i].address0.toLowerCase() === inputCurrency.address.toLowerCase() : values[i].symbol0 === 'WHT' && inputCurrency.symbol === 'HT'
+      if (isRate1) {
+        formattedHistoryRate.push({
+          timestamp: values[i].timestamp,
+          open: parseFloat(values[i].rate1),
+          close: parseFloat(values[i + 1].rate1),
+        })  
+      } else {
+        formattedHistoryRate.push({
+          timestamp: values[i].timestamp,
+          open: parseFloat(values[i].rate0),
+          close: parseFloat(values[i + 1].rate0),
+        })          
+      }
+    }
+
+    return formattedHistoryRate
+  } catch (e) {
+    console.log(e)
+    return []
+  }
 }
