@@ -9,16 +9,17 @@ export const HOURLY_PAIR_RATES = (pairAddress, blocks) => {
         token1Price
         token0 {
           id
+          symbol
         }
         token1 {
           id
+          symbol
         }
       }
     `
   )
 
   queryString += '}'
-  console.log('ccc', queryString)
   return gql(queryString)
 }
 

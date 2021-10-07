@@ -223,14 +223,13 @@ export default function TradingChart({ inputCurrency, outputCurrency }: ChartPro
         const startType = candlePeriod === CandlePeriod.FiveMinutes || candlePeriod === CandlePeriod.FifteenMinutes ? 'second' : candlePeriod === CandlePeriod.OneHour || candlePeriod === CandlePeriod.FourHours ? 'minute' : 'hour'
         const timeAmount = candlePeriod === CandlePeriod.FiveMinutes ? 5 : candlePeriod === CandlePeriod.FifteenMinutes ? 15 : candlePeriod === CandlePeriod.FourHours ? 4 : 1
         const startTime = currentTime.subtract(timeAmount, timeType).startOf(startType).unix()
-        const pairChartData = await getHourlyRateData(pairAddress.toLowerCase(), startTime, startType, latestBlockNumber);
-        const dataIndex = 0;
-        const candleData: NumericalCandlestickDatum[] = pairChartData[dataIndex].map((item: any) => { return { time: Number(item.timestamp), open: item.open, high: Math.max(item.open, item.close) * 1.003, low: Math.min(item.open, item.close) * 0.997, close: item.close } })
+        const pairChartData = await getHourlyRateData(pairAddress.toLowerCase(), inputCurrency, startTime, startType, latestBlockNumber);
+        const candleData: NumericalCandlestickDatum[] = pairChartData.map((item: any) => { return { time: Number(item.timestamp), open: item.open, high: Math.max(item.open, item.close), low: Math.min(item.open, item.close), close: item.close } })
         const formattedCandleData: NumericalCandlestickDatum[] = fillCandlestickGaps(candleData, candlePeriod)
         setCandlestickSeries([{ data: formattedCandleData }])  
       }
     })();
-  }, [candlePeriod, pairAddress, latestBlockNumber])
+  }, [candlePeriod, pairAddress, latestBlockNumber, inputCurrency])
 
   const hasData = candlestickSeries[0].data.length > 0
   const lastClose = hasData ? candlestickSeries[0].data[candlestickSeries[0].data.length - 1].close : undefined

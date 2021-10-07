@@ -170,7 +170,7 @@ export async function splitQuery(query, localClient, vars, list, skipCount = 100
   return fetchedData
 }
 
-export const getHourlyRateData = async (pairAddress, startTime, startType, latestBlock) => {
+export const getHourlyRateData = async (pairAddress, inputCurrency, startTime, startType, latestBlock) => {
   try {
     const utcEndTime = dayjs.utc()
     let time = startTime
@@ -214,30 +214,36 @@ export const getHourlyRateData = async (pairAddress, startTime, startType, lates
           timestamp,
           rate0: parseFloat(result[row]?.token0Price),
           rate1: parseFloat(result[row]?.token1Price),
+          symbol0: result[row]?.token0.symbol,
+          symbol1: result[row]?.token1.symbol,
+          address0: result[row]?.token0.id,
+          address1: result[row]?.token1.id
         })
       }
     });
 
-    const formattedHistoryRate0 = []
-    const formattedHistoryRate1 = []
+    const formattedHistoryRate = []
 
     // for each hour, construct the open and close price
     for (let i = 0; i < values.length - 1; i++) {
-      formattedHistoryRate0.push({
-        timestamp: values[i].timestamp,
-        open: parseFloat(values[i].rate0),
-        close: parseFloat(values[i + 1].rate0),
-      })
-      formattedHistoryRate1.push({
-        timestamp: values[i].timestamp,
-        open: parseFloat(values[i].rate1),
-        close: parseFloat(values[i + 1].rate1),
-      })
+      if ((values[i].symbol0 === 'WHT' && inputCurrency.symbol === 'HT') || (values[i].address0.toLowerCase() === inputCurrency.address.toLowerCase())) {
+        formattedHistoryRate.push({
+          timestamp: values[i].timestamp,
+          open: parseFloat(values[i].rate1),
+          close: parseFloat(values[i + 1].rate1),
+        })  
+      } else {
+        formattedHistoryRate.push({
+          timestamp: values[i].timestamp,
+          open: parseFloat(values[i].rate0),
+          close: parseFloat(values[i + 1].rate0),
+        })          
+      }
     }
 
-    return [formattedHistoryRate0, formattedHistoryRate1]
+    return formattedHistoryRate
   } catch (e) {
     console.log(e)
-    return [[], []]
+    return []
   }
 }
